@@ -6,7 +6,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 export default function Navbar () {
     return (
-        <div className='flex flex-row items-center justify-between mx-6 px-6 py-2 border-b-gray-100' style={{borderBottomWidth: 1.2}}>
+        <div className='flex flex-row items-center justify-between mx-6 px-6 py-2 border-b-gray-200' style={{borderBottomWidth: 1.2}}>
             <div>
                 <img src={logo} style={{maxHeight: '60px', pointerEvents: 'none'}} alt="logo"/>
             </div>
