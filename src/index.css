@@ -32,6 +32,10 @@ code {
   );
 }
 
+.homeContainer {
+    height: calc(100vh - 77px);
+}
+
 .homeContainer::before, .homeContainer::after {
   content: '';
   position: absolute;
