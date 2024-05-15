@@ -4,20 +4,21 @@ import logo from '../../assets/tourcentral.png'
 import LoginIcon from '@mui/icons-material/Login';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import {Link} from "react-router-dom";
+import {Bookmarks, Explore, Person} from "@mui/icons-material";
 
 export default function Navbar () {
     return (
         <div className='flex flex-row items-center justify-between mx-6 px-6 py-2 border-b-gray-200' style={{borderBottomWidth: 1.2}}>
-            <div>
+            <Link to='/'>
                 <img src={logo} style={{maxHeight: '60px', pointerEvents: 'none'}} alt="logo"/>
-            </div>
+            </Link>
             <ul className='flex flex-row gap-12'>
                 <li className='flex flex-row items-center'>
                     <Link to='/offers'
                     >
                         <Button
                             variant='text'
-                            endIcon={<ArrowDropDownIcon style={{color: '#333'}}/>}
+                            startIcon={<Explore style={{color: '#333'}}/>}
                             style={{color: '#333'}}
                         >
                             Offers
@@ -27,10 +28,19 @@ export default function Navbar () {
                 <li className='flex flex-row items-center'>
                     <Button
                         variant='text'
-                        endIcon={<ArrowDropDownIcon style={{color: '#333'}}/>}
+                        startIcon={<Bookmarks style={{color: '#333'}}/>}
                         style={{color: '#333'}}
                     >
-                        Destinations
+                        Reservations
+                    </Button>
+                </li>
+                <li className='flex flex-row items-center'>
+                    <Button
+                        variant='text'
+                        startIcon={<Person style={{color: '#333'}}/>}
+                        style={{color: '#333'}}
+                    >
+                        Account
                     </Button>
                 </li>
 
