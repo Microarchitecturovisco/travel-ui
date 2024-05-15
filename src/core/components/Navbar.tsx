@@ -3,6 +3,7 @@ import {Button} from "@mui/material";
 import logo from '../../assets/tourcentral.png'
 import LoginIcon from '@mui/icons-material/Login';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import {Link} from "react-router-dom";
 
 export default function Navbar () {
     return (
@@ -12,13 +13,16 @@ export default function Navbar () {
             </div>
             <ul className='flex flex-row gap-12'>
                 <li className='flex flex-row items-center'>
-                    <Button
-                        variant='text'
-                        endIcon={<ArrowDropDownIcon style={{color: '#333'}}/>}
-                        style={{color: '#333'}}
+                    <Link to='/offers'
                     >
-                        Offers
-                    </Button>
+                        <Button
+                            variant='text'
+                            endIcon={<ArrowDropDownIcon style={{color: '#333'}}/>}
+                            style={{color: '#333'}}
+                        >
+                            Offers
+                        </Button>
+                    </Link>
                 </li>
                 <li className='flex flex-row items-center'>
                     <Button
