@@ -5,18 +5,22 @@ import NotFound from "./core/screens/NotFound";
 import Navbar from './core/components/Navbar';
 import Home from "./core/screens/Home";
 import OfferDetails from "./offers/screens/OfferDetails";
+import {LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 
 function App() {
     return (
-        <Router>
-            <Navbar/>
-            <Routes>
-                <Route path='/' element={<Home/>}/>
-                <Route path='/offers' element={<Offers/>}/>
-                <Route path='/offerDetails' element={<OfferDetails/>}/>
-                <Route path="*" element={<NotFound />} />
-            </Routes>
-        </Router>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Router>
+                <Navbar/>
+                <Routes>
+                    <Route path='/' element={<Home/>}/>
+                    <Route path='/offers' element={<Offers/>}/>
+                    <Route path='/offerDetails' element={<OfferDetails/>}/>
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+            </Router>
+        </LocalizationProvider>
     );
 }
 
