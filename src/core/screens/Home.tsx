@@ -1,11 +1,53 @@
 
 import SearchIcon from '@mui/icons-material/Search';
-import {Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select} from "@mui/material";
-import {useState} from "react";
+import {
+    Button, ClickAwayListener,
+    FormControl, IconButton,
+    InputLabel,
+    MenuItem,
+    Popper,
+    Select
+} from "@mui/material";
+import React, {useEffect, useState} from "react";
+import {ArrowDropDown} from "@mui/icons-material";
+import SearchDestinationsPopper from "../../home/components/SearchDestinationsPopper";
+import {ApiRequests} from "../apiConfig";
 
 export default function Home () {
 
     const [destination, setDestination] = useState('');
+
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [anchorType, setAnchorType] = useState('');
+
+    const [arrivals, setArrivals] = useState([]);
+    const [departures, setDepartures] = useState({
+        plane: [],
+        bus: []
+    });
+
+    const handleClick = (event: React.MouseEvent<HTMLElement>, type: string) => {
+        setAnchorEl(anchorEl ? null : event.currentTarget);
+        setAnchorType(type);
+    };
+
+    const getAvailableDestinations = async () => {
+        await ApiRequests.getAvailableDestinations()
+            .then(response => {
+                setDepartures({
+                    plane: response.data.departures.plane,
+                    bus: response.data.departures.bus
+                })
+                setArrivals(response.data.arrivals);
+            })
+            .catch(e => {
+                console.log(e);
+            })
+    }
+
+    useEffect(() => {
+        getAvailableDestinations().then(r => r);
+    }, []);
 
     return(
         <div
@@ -32,9 +74,37 @@ export default function Home () {
                     </Select>
                 </FormControl>
 
-                <span className='text-lg'>Guests</span>
-                <span className='text-lg'>When</span>
-                <span className='text-lg'>From</span>
+                <Button variant='outlined' size='large' onClick={event => handleClick(event, 'guests')} endIcon={<ArrowDropDown/>}>
+                    Guests
+                </Button>
+                <Button
+                    variant='outlined'
+                    size='large'
+                    onClick={event => handleClick(event, 'when')}
+                    endIcon={<ArrowDropDown/>}
+                >
+                    When
+                </Button>
+
+                <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
+                    <div>
+                        <Button
+                            variant='outlined'
+                            size='large'
+                            sx={Boolean(anchorEl) && anchorType == 'from' ? {backgroundColor: '#556cd6', color: '#fff', '&:hover': {backgroundColor: '#556cd6'}} : {}}
+                            onClick={event => handleClick(event, 'from')}
+                            endIcon={<ArrowDropDown/>}
+                        >
+                            From
+                        </Button>
+                        <Popper open={Boolean(anchorEl) && anchorType == 'from' } anchorEl={anchorEl}>
+                            <SearchDestinationsPopper
+                                destinations={departures}
+                            />
+                        </Popper>
+                    </div>
+                </ClickAwayListener>
+
                 <IconButton color='default' aria-label='search'>
                     <SearchIcon style={{fontSize: 28}}/>
                 </IconButton>
