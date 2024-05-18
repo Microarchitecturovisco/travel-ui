@@ -7,6 +7,8 @@ export default function Offers () {
 
     const [offers, setOffers] = useState<GetOffersBySearchQueryOffer[]>([]);
 
+    const [noResults, setNoResults] = useState(false);
+
     useEffect(() => {
         const searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
 
@@ -15,6 +17,7 @@ export default function Offers () {
         ApiRequests.getOffersBySearchQuery(searchParams)
             .then(response => {
                 setOffers(response.data);
+                setNoResults(response.data.length === 0);
             })
             .catch(e => {
                 console.log(e);
@@ -41,7 +44,7 @@ export default function Offers () {
                 />
             ))}
 
-            {offers.length === 0 &&
+            {noResults &&
                 <div className='flex flex-col gap-4 mt-12'>
                     <div className='flex flex-row items-center gap-2'>
                         <SentimentVeryDissatisfied style={{fontSize: 36}}/>
