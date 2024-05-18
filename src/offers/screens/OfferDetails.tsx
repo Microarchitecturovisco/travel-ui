@@ -7,7 +7,8 @@ import { useNavigate } from 'react-router-dom';
 const OfferDetails = () => {
 
     const location = useLocation();
-    const {name, hotelLocation, rating, pricePerPerson, photoURL} = location.state || {name: null, hotelLocation: null, rating: null, pricePerPerson: null, photoURL: null};
+    const {name, hotelLocation, rating, pricePerPerson, photoURL} =
+        location.state || {name: null, hotelLocation: null, rating: null, pricePerPerson: null, photoURL: null};
 
     const navigate = useNavigate();
 

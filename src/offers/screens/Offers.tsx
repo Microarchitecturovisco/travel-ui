@@ -1,20 +1,54 @@
-import Offer from "../components/Offer";
+import OfferComponent from "../components/OfferComponent";
+import {useEffect, useState} from "react";
+import {ApiRequests, GetOffersBySearchQueryOffer} from "../../core/apiConfig";
 
 export default function Offers () {
+
+    const [offers, setOffers] = useState<GetOffersBySearchQueryOffer[]>([]);
+
+    useEffect(() => {
+        const searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
+
+        ApiRequests.getOffersBySearchQuery(searchParams)
+            .then(response => {
+                setOffers(response.data);
+                console.log(response.data);
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    }, []);
+
+    useEffect(() => {
+        console.log(offers.length)
+    }, [offers]);
+
     return(
         <div className='flex flex-col py-16 px-[28rem] justify-center'>
             <div className='offersHeaderContainer'>
                 <h1 className='text-2xl mb-12'>Excellent offers just for you!</h1>
             </div>
 
-            <Offer
+            {offers.map((offer, index) => (
+                <OfferComponent
+                    name={offer.hotelName}
+                    key={offer.hotelName}
+                    location={offer.destination}
+                    rating='4.1/5'
+                    pricePerPerson={offer.price}
+                    photoURL={offer.imageUrl}
+                    bestSeller={index < 3}
+                />
+            ))}
+
+            <OfferComponent
                 name='Ibiza Gwiździny'
                 location='Polska, Nowe Miasto Lubawskie'
                 rating='4.1/5'
                 pricePerPerson={1399}
             />
 
-            <Offer
+            <OfferComponent
                 name='Hotel Brzeźno'
                 location='Polska, Gdańsk'
                 rating='4.4/5'
@@ -22,7 +56,7 @@ export default function Offers () {
                 photoURL='https://picsum.photos/id/853/400/200'
             />
 
-            <Offer
+            <OfferComponent
                 name='Odysee Resort'
                 location='Tunezja, Tunis'
                 rating='4.7/5'

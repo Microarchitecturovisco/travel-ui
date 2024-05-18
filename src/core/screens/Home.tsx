@@ -49,6 +49,20 @@ export default function Home () {
 
     useEffect(() => {
         getAvailableDestinations().then(r => r);
+
+        localStorage.setItem('searchParams',
+            JSON.stringify({
+                departurePlane: ['ac958654-7ee6-3111-acb0-6591ee210130', 'a1f10135-6d1d-363d-9674-4d0fb6159cce', '60d2f38a-bb6c-3151-b2ea-5d6749a2fc9d'],
+                departureBus: ['415fe550-5cfd-3ebe-b4a3-3049331af08b'],
+                arrivals: ['ecb36e0f-199f-309a-82e2-fa300aaf247d', '8c1a6667-9f9b-3f3c-953b-7de3ffd2027c', '99e5acab-0602-36b0-a4f4-4f673deea1ce',
+                    '1876d5cf-e722-3b11-b31a-bea0a6145ccf', '505f8cbb-c1d4-38e9-85f6-b5552b2b06c2', '82d41af4-b281-3d89-901b-14b39b8024b2'],
+                dateFrom: '2024-05-02',
+                dateTo: '2024-05-08',
+                adults: 2,
+                teens: 0,
+                kids: 0,
+                infants: 0,
+            }));
     }, []);
 
     return(
