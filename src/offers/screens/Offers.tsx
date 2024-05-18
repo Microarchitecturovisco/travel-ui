@@ -9,6 +9,8 @@ export default function Offers () {
     useEffect(() => {
         const searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
 
+        console.log(searchParams);
+
         ApiRequests.getOffersBySearchQuery(searchParams)
             .then(response => {
                 setOffers(response.data);
