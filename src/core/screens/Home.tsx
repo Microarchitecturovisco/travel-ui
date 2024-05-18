@@ -136,8 +136,8 @@ export default function Home () {
                     arrivals: [arrivals.at(1).idLocation, arrivals.at(5).idLocation, arrivals.at(6).idLocation, arrivals.at(4).idLocation,
                         // @ts-ignore
                         arrivals.at(10).idLocation, arrivals.at(13).idLocation, arrivals.at(17).idLocation, arrivals.at(23).idLocation],
-                    dateFrom: '2024-05-02',
-                    dateTo: '2024-05-08',
+                    dateFrom: '2024-05-01',
+                    dateTo: '2024-05-03',
                     adults: 2,
                     teens: 0,
                     kids: 0,
