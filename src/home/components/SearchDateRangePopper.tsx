@@ -1,8 +1,10 @@
 import {useState} from "react";
 import {Paper} from "@mui/material";
 import {DatePicker} from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
-const SearchDateRangePopper = () => {
+// @ts-ignore
+const SearchDateRangePopper = ({selectedDateFrom, selectedDateTo, onSelection}) => {
 
     const [dateFrom, setDateFrom] = useState(new Date());
     const [dateTo, setDateTo] = useState(() => {
@@ -16,9 +18,17 @@ const SearchDateRangePopper = () => {
             <div className='flex flex-col gap-4'>
                 <h3 className='text-gray-700'>Plan Your trip</h3>
 
-                <DatePicker label="Departure date"/>
+                <DatePicker
+                    label="Departure date"
+                    value={dayjs(selectedDateFrom)}
+                    onChange={(value) => onSelection(value, 'FROM')}
+                />
 
-                <DatePicker label="Return date"/>
+                <DatePicker
+                    label="Return date"
+                    value={dayjs(selectedDateTo)}
+                    onChange={(value) => onSelection(value, 'TO')}
+                />
             </div>
         </Paper>
     );

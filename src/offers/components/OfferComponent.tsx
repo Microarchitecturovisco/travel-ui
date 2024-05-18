@@ -7,12 +7,13 @@ import {Link} from "react-router-dom";
 interface OfferProps {
     name: string;
     location: string;
-    rating: string;
+    rating: number;
     pricePerPerson: number;
     photoURL?: string;
+    bestSeller?: boolean;
 }
 
-const Offer: React.FC<OfferProps> = ({name, location, rating, pricePerPerson, photoURL}) => {
+const OfferComponent: React.FC<OfferProps> = ({name, location, rating, pricePerPerson, photoURL, bestSeller}) => {
     return (
         <Card sx={{ display: 'flex', marginBottom: 2, borderRadius: 2, borderColor: 'grey.300', borderWidth: 1, borderStyle: 'solid'}}>
             <div className='relative pointer-events-none'>
@@ -22,12 +23,14 @@ const Offer: React.FC<OfferProps> = ({name, location, rating, pricePerPerson, ph
                     image={photoURL ?? require('../../assets/holiday-assets/dahee-son-tMffGE7u1bI-unsplash.jpg')}
                     alt="Ibiza Gwiździny"
                 />
-                <Paper elevation={2} className='absolute top-3 right-3'>
-                    <div className='flex flex-row rounded-xl items-center bg-white px-1.5 py-0.5'>
-                        <SentimentVerySatisfied style={{fontSize: 20}}/>
-                        <p className='text-sm ml-1 mr-0.5'>BESTSELLER</p>
-                    </div>
-                </Paper>
+                {bestSeller &&
+                    <Paper elevation={2} className='absolute top-3 right-3'>
+                        <div className='flex flex-row rounded-xl items-center bg-white px-1.5 py-0.5'>
+                            <SentimentVerySatisfied style={{fontSize: 20}}/>
+                            <p className='text-sm ml-1 mr-0.5'>BESTSELLER</p>
+                        </div>
+                    </Paper>
+                }
             </div>
             <div className='flex flex-1 flex-col justify-between px-8 py-6'>
                 <Link
@@ -47,7 +50,7 @@ const Offer: React.FC<OfferProps> = ({name, location, rating, pricePerPerson, ph
                 <Box sx={{display: 'flex', alignItems: 'center'}}>
                     <StarIcon sx={{color: 'gold', mr: 0.5}}/>
                     <p className='text-sm text-gray-600'>
-                        {rating} - Amazing
+                        {rating}
                     </p>
                 </Box>
             </div>
@@ -72,4 +75,4 @@ const Offer: React.FC<OfferProps> = ({name, location, rating, pricePerPerson, ph
     );
 }
 
-export default Offer;
+export default OfferComponent;
