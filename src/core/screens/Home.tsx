@@ -33,6 +33,13 @@ export default function Home () {
     const [selectedPlaneDepartures, setSelectedPlaneDepartures] = useState<Location[]>([]);
     const [selectedBusDepartures, setSelectedBusDepartures] = useState<Location[]>([]);
 
+    const [selectedGuests, setSelectedGuests] = useState({
+        adults: 2,
+        teens: 0,
+        kids: 0,
+        infants: 0,
+    });
+
     const handleClick = (event: React.MouseEvent<HTMLElement>, type: string) => {
         setAnchorEl(event.currentTarget);
         setAnchorType(type);
@@ -81,6 +88,20 @@ export default function Home () {
         else {
             setSelectedBusDepartures(newSelectedList);
         }
+    }
+
+    const onGuestsSelection = (key: 'adults' | 'teens' | 'kids' | 'infants', type: 'INC' | 'DEC') => {
+        setSelectedGuests(prevState => {
+            const newState = { ...prevState };
+            if (type === 'INC') {
+                newState[key] = (prevState[key] || 0) + 1;
+            } else {
+                if (prevState[key] > 0) {
+                    newState[key] = prevState[key] - 1;
+                }
+            }
+            return newState;
+        });
     }
 
     useEffect(() => {
@@ -140,7 +161,10 @@ export default function Home () {
                         Guests
                     </Button>
                     <Popper open={Boolean(anchorEl) && anchorType == 'guests'} anchorEl={anchorEl}>
-                        <SearchGuestQuantityPopper />
+                        <SearchGuestQuantityPopper
+                            onGuestsSelection={onGuestsSelection}
+                            selectedGuests={selectedGuests}
+                        />
                     </Popper>
 
                     <Button
