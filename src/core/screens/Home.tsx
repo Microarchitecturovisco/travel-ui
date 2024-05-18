@@ -15,6 +15,7 @@ import {ApiRequests} from "../apiConfig";
 import SearchDateRangePopper from "../../home/components/SearchDateRangePopper";
 import SearchDeparturesPopper from "../../home/components/SearchDeparturesPopper";
 import {Location} from "../domain/DomainInterfaces";
+import {useNavigate} from "react-router-dom";
 
 export default function Home () {
 
@@ -40,12 +41,8 @@ export default function Home () {
         infants: 0,
     });
 
-    const [selectedDateFrom, setSelectedDateFrom] = useState(new Date());
-    const [selectedDateTo, setSelectedDateTo] = useState(() => {
-        const date = new Date();
-        date.setDate(date.getDate() + 5);
-        return date;
-    });
+    const [selectedDateFrom, setSelectedDateFrom] = useState(new Date(2024, 4, 1,));
+    const [selectedDateTo, setSelectedDateTo] = useState(() => new Date(2024, 4, 3));
 
     const handleClick = (event: React.MouseEvent<HTMLElement>, type: string) => {
         setAnchorEl(event.currentTarget);
@@ -146,6 +143,33 @@ export default function Home () {
         }
     }, [departures, arrivals]);
 
+    function formatDate(date: Date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+        const day = String(date.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+    }
+
+    const navigate = useNavigate();
+
+    const handleSearch = () => {
+        localStorage.setItem('searchParams',
+            JSON.stringify({
+                departurePlane: selectedPlaneDepartures.map(dpt => dpt.idLocation),
+                departureBus: selectedBusDepartures.map(dpt => dpt.idLocation),
+                arrivals: selectedDestinations.map(dst => dst.idLocation),
+                dateFrom: formatDate(selectedDateFrom),
+                dateTo: formatDate(selectedDateTo),
+                adults: selectedGuests.adults,
+                teens: selectedGuests.teens,
+                kids: selectedGuests.kids,
+                infants: selectedGuests.infants,
+            }));
+
+        navigate('/offers');
+    }
+
     return(
         <div
             className='flex flex-col px-20 py-32 items-center homeContainer'
@@ -226,7 +250,7 @@ export default function Home () {
                         />
                     </Popper>
 
-                    <IconButton color='default' aria-label='search'>
+                    <IconButton color='default' aria-label='search' onClick={handleSearch}>
                         <SearchIcon style={{fontSize: 28}}/>
                     </IconButton>
                 </div>

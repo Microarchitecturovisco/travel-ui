@@ -21,13 +21,13 @@ const SearchDateRangePopper = ({selectedDateFrom, selectedDateTo, onSelection}) 
                 <DatePicker
                     label="Departure date"
                     value={dayjs(selectedDateFrom)}
-                    onChange={(value) => onSelection(value, 'FROM')}
+                    onChange={(value) => onSelection(value?.toDate(), 'FROM')}
                 />
 
                 <DatePicker
                     label="Return date"
                     value={dayjs(selectedDateTo)}
-                    onChange={(value) => onSelection(value, 'TO')}
+                    onChange={(value) => onSelection(value?.toDate(), 'TO')}
                 />
             </div>
         </Paper>
