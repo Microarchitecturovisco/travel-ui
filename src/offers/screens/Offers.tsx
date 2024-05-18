@@ -12,16 +12,11 @@ export default function Offers () {
         ApiRequests.getOffersBySearchQuery(searchParams)
             .then(response => {
                 setOffers(response.data);
-                console.log(response.data);
             })
             .catch(e => {
                 console.log(e);
             });
     }, []);
-
-    useEffect(() => {
-        console.log(offers.length)
-    }, [offers]);
 
     return(
         <div className='flex flex-col py-16 px-[28rem] justify-center'>

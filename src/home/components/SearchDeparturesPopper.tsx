@@ -5,7 +5,7 @@ import {ApiRequests} from "../../core/apiConfig";
 
 
 // @ts-ignore
-const SearchDeparturesPopper = ({destinations}) => {
+const SearchDeparturesPopper = ({departures, selectedPlaneDepartures, selectedBusDepartures, onSelection}) => {
 
     return (
         <Paper className='px-10 py-5 mt-2'>
@@ -17,8 +17,10 @@ const SearchDeparturesPopper = ({destinations}) => {
                     </div>
 
                     <FormGroup>
-                        {destinations.plane.map((destination: any, index: number) => (
-                            <FormControlLabel key={index} control={<Checkbox defaultChecked={index == 0} />} label={destination.region} />
+                        {departures.plane.map((depr: any, index: number) => (
+                            <FormControlLabel key={index} control={
+                                <Checkbox checked={selectedPlaneDepartures.indexOf(depr) >= 0} onChange={() => onSelection(depr, 'PLANE')} />
+                            } label={depr.region} />
                         ))}
                     </FormGroup>
                 </div>
@@ -29,8 +31,10 @@ const SearchDeparturesPopper = ({destinations}) => {
                     </div>
                     <FormGroup>
                         <FormGroup>
-                            {destinations.bus.map((destination: any, index: number) => (
-                                <FormControlLabel key={index} control={<Checkbox defaultChecked={index == 0} />} label={destination.region} />
+                            {departures.bus.map((depr: any, index: number) => (
+                                <FormControlLabel key={index} control={
+                                    <Checkbox checked={selectedBusDepartures.indexOf(depr) >= 0} onChange={() => onSelection(depr, 'BUS')} />
+                                } label={depr.region} />
                             ))}
                         </FormGroup>
                     </FormGroup>

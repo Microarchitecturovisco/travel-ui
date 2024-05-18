@@ -14,6 +14,7 @@ import SearchGuestQuantityPopper from "../../home/components/SearchGuestQuantity
 import {ApiRequests} from "../apiConfig";
 import SearchDateRangePopper from "../../home/components/SearchDateRangePopper";
 import SearchDeparturesPopper from "../../home/components/SearchDeparturesPopper";
+import {Location} from "../domain/DomainInterfaces";
 
 export default function Home () {
 
@@ -27,6 +28,10 @@ export default function Home () {
         plane: [],
         bus: []
     });
+
+    const [selectedDestinations, setSelectedDestinations] = useState<Location[]>([]);
+    const [selectedPlaneDepartures, setSelectedPlaneDepartures] = useState<Location[]>([]);
+    const [selectedBusDepartures, setSelectedBusDepartures] = useState<Location[]>([]);
 
     const handleClick = (event: React.MouseEvent<HTMLElement>, type: string) => {
         setAnchorEl(event.currentTarget);
@@ -45,6 +50,37 @@ export default function Home () {
             .catch(e => {
                 console.log(e);
             })
+    }
+
+    const onDestinationSelection = (destination: any) => {
+        let newSelectedList;
+        const itemIndex = selectedDestinations.indexOf(destination);
+        if (itemIndex >= 0) {
+            newSelectedList = selectedDestinations.filter((item, index) => index !== itemIndex);
+        } else {
+            newSelectedList = [...selectedDestinations, destination];
+        }
+        setSelectedDestinations(newSelectedList);
+    }
+
+    const onDepartureSelection = (depr: Location, type: 'PLANE' | 'BUS') => {
+        let newSelectedList;
+
+        const searchList = type === 'PLANE' ? selectedPlaneDepartures : selectedBusDepartures;
+
+        const itemIndex = searchList.indexOf(depr);
+        if (itemIndex >= 0) {
+            newSelectedList = searchList.filter((_, index) => index !== itemIndex);
+        } else {
+            newSelectedList = [...searchList, depr];
+        }
+
+        if (type == 'PLANE') {
+            setSelectedPlaneDepartures(newSelectedList);
+        }
+        else {
+            setSelectedBusDepartures(newSelectedList);
+        }
     }
 
     useEffect(() => {
@@ -87,7 +123,11 @@ export default function Home () {
                         Destinations
                     </Button>
                     <Popper open={Boolean(anchorEl) && anchorType == 'destination'} anchorEl={anchorEl}>
-                        <SearchDestinationsPopper destinations={arrivals} />
+                        <SearchDestinationsPopper
+                            destinations={arrivals}
+                            selectedDestinations={selectedDestinations}
+                            onSelection={onDestinationSelection}
+                        />
                     </Popper>
 
                     <Button
@@ -127,7 +167,10 @@ export default function Home () {
                     </Button>
                     <Popper open={Boolean(anchorEl) && anchorType == 'from'} anchorEl={anchorEl}>
                         <SearchDeparturesPopper
-                            destinations={departures}
+                            departures={departures}
+                            selectedPlaneDepartures={selectedPlaneDepartures}
+                            selectedBusDepartures={selectedBusDepartures}
+                            onSelection={onDepartureSelection}
                         />
                     </Popper>
 
