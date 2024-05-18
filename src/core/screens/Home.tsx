@@ -1,25 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-import {
-    Button, ClickAwayListener,
-    IconButton, Popper
-} from "@mui/material";
+import { Button, ClickAwayListener, IconButton, Popper } from "@mui/material";
 import { ArrowDropDown } from "@mui/icons-material";
 import SearchDestinationsPopper from "../../home/components/SearchDestinationsPopper";
 import { ApiRequests } from "../apiConfig";
 import SearchDateRangePopper from "../../home/components/SearchDateRangePopper";
 import SearchGuestQuantityPopper from "../../home/components/SearchGuestQuantityPopper"; // Import the new component
 
-export default function Home() {
+interface Destination {
+    region: string;
+}
 
+export default function Home() {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [anchorType, setAnchorType] = useState('');
 
-    const [arrivals, setArrivals] = useState([]);
-    const [departures, setDepartures] = useState({
-        plane: [],
-        bus: []
-    });
+    const [arrivals, setArrivals] = useState<Destination[]>([]);
+    const [departures, setDepartures] = useState<{ plane: Destination[], bus: Destination[] }>({ plane: [], bus: [] });
 
     const handleClick = (event: React.MouseEvent<HTMLElement>, type: string) => {
         setAnchorEl(event.currentTarget);
@@ -27,21 +24,20 @@ export default function Home() {
     };
 
     const getAvailableDestinations = async () => {
-        await ApiRequests.getAvailableDestinations()
-            .then(response => {
-                setDepartures({
-                    plane: response.data.departures.plane,
-                    bus: response.data.departures.bus
-                })
-                setArrivals(response.data.arrivals);
-            })
-            .catch(e => {
-                console.log(e);
-            })
-    }
+        try {
+            const response = await ApiRequests.getAvailableDestinations();
+            setDepartures({
+                plane: response.data.departures.plane,
+                bus: response.data.departures.bus
+            });
+            setArrivals(response.data.arrivals);
+        } catch (e) {
+            console.log(e);
+        }
+    };
 
     useEffect(() => {
-        getAvailableDestinations().then(r => r);
+        getAvailableDestinations();
     }, []);
 
     return (
@@ -52,7 +48,7 @@ export default function Home() {
             </div>
 
             <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
-                <div className='bg-white flex items-center gap-14 rounded-xl border-gray-400 px-8 py-2.5 mb-32' style={{ borderWidth: 1, }}>
+                <div className='bg-white flex items-center gap-14 rounded-xl border-gray-400 px-8 py-2.5 mb-32' style={{ borderWidth: 1 }}>
                     <Button
                         variant='outlined'
                         size='large'
@@ -63,7 +59,7 @@ export default function Home() {
                         Destinations
                     </Button>
                     <Popper open={Boolean(anchorEl) && anchorType === 'destination'} anchorEl={anchorEl}>
-
+                        <SearchDestinationsPopper destinations={departures.plane.concat(departures.bus)} />
                     </Popper>
 
                     <Button
@@ -102,7 +98,7 @@ export default function Home() {
                         From
                     </Button>
                     <Popper open={Boolean(anchorEl) && anchorType === 'from'} anchorEl={anchorEl}>
-                        <SearchDestinationsPopper destinations={departures} />
+                        <SearchDestinationsPopper destinations={departures.plane.concat(departures.bus)} />
                     </Popper>
 
                     <IconButton color='default' aria-label='search'>
