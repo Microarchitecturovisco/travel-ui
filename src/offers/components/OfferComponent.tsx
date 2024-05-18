@@ -7,7 +7,7 @@ import {Link} from "react-router-dom";
 interface OfferProps {
     name: string;
     location: string;
-    rating: string;
+    rating: number;
     pricePerPerson: number;
     photoURL?: string;
     bestSeller?: boolean;
@@ -50,7 +50,7 @@ const OfferComponent: React.FC<OfferProps> = ({name, location, rating, pricePerP
                 <Box sx={{display: 'flex', alignItems: 'center'}}>
                     <StarIcon sx={{color: 'gold', mr: 0.5}}/>
                     <p className='text-sm text-gray-600'>
-                        {rating} - Amazing
+                        {rating}
                     </p>
                 </Box>
             </div>

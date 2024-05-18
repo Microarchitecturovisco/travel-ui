@@ -17,7 +17,7 @@ const SearchDestinationsPopper: React.FC<SearchDestinationsPopperProps> = ({ des
                     <div className='flex flex-row gap-2 items-center mb-2 ml-0.5'>
                         {/* Add a title or icon here if necessary */}
                     </div>
-                    <FormGroup>
+                    <FormGroup className=''>
                         {destinations.map((destination, index) => (
                             <FormControlLabel key={index} className='select-none' control={
                                 <Checkbox

@@ -28,6 +28,7 @@ export interface GetOffersBySearchQueryOffer {
     description: string,
     price: number,
     destination: string,
+    rating: number,
     imageUrl: string,
 }
 

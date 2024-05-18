@@ -29,7 +29,7 @@ export default function Offers () {
                     name={offer.hotelName}
                     key={offer.hotelName}
                     location={offer.destination}
-                    rating='4.1/5'
+                    rating={offer.rating}
                     pricePerPerson={offer.price}
                     photoURL={offer.imageUrl}
                     bestSeller={index < 3}
@@ -39,14 +39,14 @@ export default function Offers () {
             <OfferComponent
                 name='Ibiza Gwiździny'
                 location='Polska, Nowe Miasto Lubawskie'
-                rating='4.1/5'
+                rating={4.1}
                 pricePerPerson={1399}
             />
 
             <OfferComponent
                 name='Hotel Brzeźno'
                 location='Polska, Gdańsk'
-                rating='4.4/5'
+                rating={4.4}
                 pricePerPerson={799}
                 photoURL='https://picsum.photos/id/853/400/200'
             />
@@ -54,7 +54,7 @@ export default function Offers () {
             <OfferComponent
                 name='Odysee Resort'
                 location='Tunezja, Tunis'
-                rating='4.7/5'
+                rating={5.3}
                 pricePerPerson={2199}
                 photoURL='https://picsum.photos/id/386/400/200'
             />
