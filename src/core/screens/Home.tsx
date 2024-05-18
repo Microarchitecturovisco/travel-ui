@@ -40,6 +40,13 @@ export default function Home () {
         infants: 0,
     });
 
+    const [selectedDateFrom, setSelectedDateFrom] = useState(new Date());
+    const [selectedDateTo, setSelectedDateTo] = useState(() => {
+        const date = new Date();
+        date.setDate(date.getDate() + 5);
+        return date;
+    });
+
     const handleClick = (event: React.MouseEvent<HTMLElement>, type: string) => {
         setAnchorEl(event.currentTarget);
         setAnchorType(type);
@@ -102,6 +109,15 @@ export default function Home () {
             }
             return newState;
         });
+    }
+
+    const onDateSelection = (date: Date, type: 'FROM' | 'TO') => {
+        if (type === 'FROM') {
+            setSelectedDateFrom(date);
+        }
+        else {
+            setSelectedDateTo(date);
+        }
     }
 
     useEffect(() => {
@@ -177,7 +193,11 @@ export default function Home () {
                         When
                     </Button>
                     <Popper open={Boolean(anchorEl) && anchorType == 'when'} anchorEl={anchorEl}>
-                        <SearchDateRangePopper/>
+                        <SearchDateRangePopper
+                            selectedDateFrom={selectedDateFrom}
+                            selectedDateTo={selectedDateTo}
+                            onSelection={onDateSelection}
+                        />
                     </Popper>
 
                     <Button
@@ -203,31 +223,6 @@ export default function Home () {
                     </IconButton>
                 </div>
             </ClickAwayListener>
-
-            {/*<div className='bg-white flex items-center gap-14 rounded-xl border-gray-400 px-8 py-2.5 mb-32' style={{borderWidth: 1,}}>*/}
-            {/*    <FormControl style={{minWidth: 280}}>*/}
-            {/*        <InputLabel id="home-select-destinations-label">Destination</InputLabel>*/}
-            {/*        <Select*/}
-            {/*            label="Destination"*/}
-            {/*            labelId='home-select-destinations-label'*/}
-            {/*            value={destination}*/}
-            {/*            onChange={(event) => setDestination(event.target.value)}*/}
-            {/*        >*/}
-            {/*            <MenuItem value={1}>Kair, Egipt</MenuItem>*/}
-            {/*            <MenuItem value={2}>Tunis, Tunezja</MenuItem>*/}
-            {/*            <MenuItem value={3}>Florencja, Włochy</MenuItem>*/}
-            {/*        </Select>*/}
-            {/*    </FormControl>*/}
-
-
-            {/*    <ClickAwayListener onClickAway={() => setAnchorEl(null)}>*/}
-            {/*        <div>*/}
-
-            {/*        </div>*/}
-            {/*    </ClickAwayListener>*/}
-
-
-            {/*</div>*/}
 
             <div className='flex items-center gap-4'>
                 <img src={require('../../assets/holiday-assets/aleks-marinkovic-jDFO3AvTLFw-unsplash.jpg')} alt=''
