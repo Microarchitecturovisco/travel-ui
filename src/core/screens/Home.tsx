@@ -1,4 +1,3 @@
-
 import SearchIcon from '@mui/icons-material/Search';
 import {
     Button, ClickAwayListener,
@@ -11,8 +10,10 @@ import {
 import React, {useEffect, useState} from "react";
 import {ArrowDropDown} from "@mui/icons-material";
 import SearchDestinationsPopper from "../../home/components/SearchDestinationsPopper";
+import SearchGuestQuantityPopper from "../../home/components/SearchGuestQuantityPopper";
 import {ApiRequests} from "../apiConfig";
 import SearchDateRangePopper from "../../home/components/SearchDateRangePopper";
+import SearchDeparturesPopper from "../../home/components/SearchDeparturesPopper";
 
 export default function Home () {
 
@@ -72,7 +73,7 @@ export default function Home () {
                         Destinations
                     </Button>
                     <Popper open={Boolean(anchorEl) && anchorType == 'destination'} anchorEl={anchorEl}>
-
+                        <SearchDestinationsPopper destinations={arrivals} />
                     </Popper>
 
                     <Button
@@ -85,7 +86,7 @@ export default function Home () {
                         Guests
                     </Button>
                     <Popper open={Boolean(anchorEl) && anchorType == 'guests'} anchorEl={anchorEl}>
-
+                        <SearchGuestQuantityPopper />
                     </Popper>
 
                     <Button
@@ -111,7 +112,7 @@ export default function Home () {
                         From
                     </Button>
                     <Popper open={Boolean(anchorEl) && anchorType == 'from'} anchorEl={anchorEl}>
-                        <SearchDestinationsPopper
+                        <SearchDeparturesPopper
                             destinations={departures}
                         />
                     </Popper>
