@@ -19,12 +19,12 @@ const SearchGuestQuantityPopper = ({selectedGuests, onGuestsSelection}) => {
                     { label: 'Infants', key: 'infants', value: infants, setter: setInfants }
                 ].map(({ label, key, setter }) => (
                     <div key={label} className='flex items-center justify-between gap-6'>
-                        <Typography>{label}</Typography>
+                        <Typography className='select-none'>{label}</Typography>
                         <div className='flex items-center'>
                             <IconButton onClick={() => onGuestsSelection(key, 'DEC')}>
                                 <Remove />
                             </IconButton>
-                            <Typography>{selectedGuests[key]}</Typography>
+                            <Typography className='select-none'>{selectedGuests[key]}</Typography>
                             <IconButton onClick={() => onGuestsSelection(key, 'INC')}>
                                 <Add />
                             </IconButton>

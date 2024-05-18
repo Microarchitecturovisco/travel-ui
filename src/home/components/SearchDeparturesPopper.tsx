@@ -18,7 +18,7 @@ const SearchDeparturesPopper = ({departures, selectedPlaneDepartures, selectedBu
 
                     <FormGroup>
                         {departures.plane.map((depr: any, index: number) => (
-                            <FormControlLabel key={index} control={
+                            <FormControlLabel key={index} className='select-none' control={
                                 <Checkbox checked={selectedPlaneDepartures.indexOf(depr) >= 0} onChange={() => onSelection(depr, 'PLANE')} />
                             } label={depr.region} />
                         ))}
@@ -32,7 +32,7 @@ const SearchDeparturesPopper = ({departures, selectedPlaneDepartures, selectedBu
                     <FormGroup>
                         <FormGroup>
                             {departures.bus.map((depr: any, index: number) => (
-                                <FormControlLabel key={index} control={
+                                <FormControlLabel key={index} className='select-none' control={
                                     <Checkbox checked={selectedBusDepartures.indexOf(depr) >= 0} onChange={() => onSelection(depr, 'BUS')} />
                                 } label={depr.region} />
                             ))}
