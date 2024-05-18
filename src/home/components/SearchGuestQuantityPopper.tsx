@@ -27,7 +27,7 @@ const SearchGuestQuantityPopper = () => {
                     { label: 'Kids', value: kids, setter: setKids },
                     { label: 'Infants', value: infants, setter: setInfants }
                 ].map(({ label, value, setter }) => (
-                    <div key={label} className='flex items-center justify-between'>
+                    <div key={label} className='flex items-center justify-between gap-6'>
                         <Typography>{label}</Typography>
                         <div className='flex items-center'>
                             <IconButton onClick={() => handleDecrement(setter, value)}>
