@@ -24,7 +24,7 @@ const SearchGuestQuantityPopper = () => {
                 {[
                     { label: 'Adults', value: adults, setter: setAdults },
                     { label: 'Teen', value: teen, setter: setTeen },
-                    { label: 'Kids', value: kids, setter: setInfants },
+                    { label: 'Kids', value: kids, setter: setKids },
                     { label: 'Infants', value: infants, setter: setInfants }
                 ].map(({ label, value, setter }) => (
                     <div key={label} className='flex items-center justify-between'>
