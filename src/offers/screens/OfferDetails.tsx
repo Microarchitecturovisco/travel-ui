@@ -1,13 +1,16 @@
 import {useLocation} from "react-router-dom";
-import {Button, CardMedia, Paper} from "@mui/material";
+import {Button, CardMedia, IconButton, Paper, Typography} from "@mui/material";
 import React, {useEffect, useState} from "react";
-import {ArrowBack, Bookmark, Close, Lens, Place} from "@mui/icons-material";
+import {Add, ArrowBack, Bookmark, Close, Lens, Place, Remove} from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import {ApiRequests} from "../../core/apiConfig";
 import {CateringOption, Location, Offer, Room, Transport} from "../../core/domain/DomainInterfaces";
 import {formatDate} from "../../core/utils";
 import LoginIcon from "@mui/icons-material/Login";
+import {DatePicker} from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
+// @ts-ignore
 const OfferDetails = () => {
 
     const location = useLocation();
@@ -32,6 +35,57 @@ const OfferDetails = () => {
         possibleTransports: [],
     });
 
+    interface Category {
+        label: string,
+        key: 'adults' | 'teens' | 'kids' | 'infants'
+    }
+
+    const [selectedGuests, setSelectedGuests] = useState({
+        adults: 2,
+        teens: 0,
+        kids: 0,
+        infants: 0,
+    });
+
+    const [selectedDateFrom, setSelectedDateFrom] = useState(new Date(2024, 4, 1,));
+    const [selectedDateTo, setSelectedDateTo] = useState(() => new Date(2024, 4, 3));
+
+    const onGuestsSelection = (key: 'adults' | 'teens' | 'kids' | 'infants', type: 'INC' | 'DEC') => {
+        setSelectedGuests(prevState => {
+            const newState = { ...prevState };
+            if (type === 'INC') {
+                newState[key] = (prevState[key] || 0) + 1;
+            } else {
+                if (prevState[key] > 0) {
+                    newState[key] = prevState[key] - 1;
+                }
+            }
+            return newState;
+        });
+    }
+
+    const onDateSelection = (date: Date, type: 'FROM' | 'TO') => {
+        if (type === 'FROM') {
+            setSelectedDateFrom(date);
+        }
+        else {
+            setSelectedDateTo(date);
+        }
+    }
+
+    const loadDataFromStorage = () => {
+        const searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
+
+        setSelectedGuests({
+            adults: searchParams.adults,
+            teens: searchParams.teens,
+            kids: searchParams.kids,
+            infants: searchParams.infants,
+        });
+        setSelectedDateFrom(new Date(searchParams.dateFrom));
+        setSelectedDateTo(new Date(searchParams.dateTo));
+    }
+
     const fetchOfferDetails = async () => {
         let searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
 
@@ -54,11 +108,13 @@ const OfferDetails = () => {
 
     useEffect(() => {
         fetchOfferDetails().then(r => r);
+        loadDataFromStorage();
     }, []);
 
     useEffect(() => {
         console.log(offerDetails);
     }, [offerDetails]);
+
 
     return(
         <div className='flex flex-row justify-around px-96'>
@@ -100,6 +156,7 @@ const OfferDetails = () => {
                     <div className='grid gap-3'>
                         {offerDetails.imageUrls.slice(1, offerDetails.imageUrls.length).map((url, index) => (
                             <CardMedia
+                                key={index}
                                 component="img"
                                 className='rounded-lg pointer-events-none'
                                 sx={{width: 720, height: 240}}
@@ -110,14 +167,82 @@ const OfferDetails = () => {
                 </div>
             </div>
             <div className='flex px-8 mt-28'>
-                <div className='sticky bg-indigo-50 top-16 h-[600px] px-8 py-4 rounded-lg'>
+                <Paper className='sticky top-16 h-[600px] px-8 py-8 rounded-lg' elevation={1}>
+                    {/* dates */}
+                    <div className='flex flex-col gap-4 mb-4'>
 
-                    <div>
+                        <DatePicker
+                            label="Departure date"
+                            value={dayjs(selectedDateFrom)}
+                            onChange={(value) => onDateSelection(value ? value.toDate() : new Date(), 'FROM')}
+                        />
+
+                        <DatePicker
+                            label="Return date"
+                            value={dayjs(selectedDateTo)}
+                            onChange={(value) => onDateSelection(value ? value.toDate() : new Date(), 'TO')}
+                        />
+                    </div>
+
+                    {/* people selection */}
+                    <div className='flex flex-col pl-2 mb-8'>
+                        <div className='flex items-center justify-between gap-6'>
+                            <Typography className='select-none'>Adults</Typography>
+                            <div className='flex items-center'>
+                                <IconButton onClick={() => onGuestsSelection('adults', 'DEC')}>
+                                    <Remove/>
+                                </IconButton>
+                                <Typography className='select-none'>{selectedGuests.adults}</Typography>
+                                <IconButton onClick={() => onGuestsSelection('adults', 'INC')}>
+                                    <Add/>
+                                </IconButton>
+                            </div>
+                        </div>
+                        <div className='flex items-center justify-between gap-6'>
+                            <Typography className='select-none'>Teens</Typography>
+                            <div className='flex items-center'>
+                                <IconButton onClick={() => onGuestsSelection('teens', 'DEC')}>
+                                    <Remove/>
+                                </IconButton>
+                                <Typography className='select-none'>{selectedGuests.teens}</Typography>
+                                <IconButton onClick={() => onGuestsSelection('teens', 'INC')}>
+                                    <Add/>
+                                </IconButton>
+                            </div>
+                        </div>
+                        <div className='flex items-center justify-between gap-6'>
+                            <Typography className='select-none'>Kids</Typography>
+                            <div className='flex items-center'>
+                                <IconButton onClick={() => onGuestsSelection('kids', 'DEC')}>
+                                    <Remove/>
+                                </IconButton>
+                                <Typography className='select-none'>{selectedGuests.kids}</Typography>
+                                <IconButton onClick={() => onGuestsSelection('kids', 'INC')}>
+                                    <Add/>
+                                </IconButton>
+                            </div>
+                        </div>
+                        <div className='flex items-center justify-between gap-6'>
+                            <Typography className='select-none'>Infants</Typography>
+                            <div className='flex items-center'>
+                                <IconButton onClick={() => onGuestsSelection('infants', 'DEC')}>
+                                    <Remove/>
+                                </IconButton>
+                                <Typography className='select-none'>{selectedGuests.infants}</Typography>
+                                <IconButton onClick={() => onGuestsSelection('infants', 'INC')}>
+                                    <Add/>
+                                </IconButton>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div className=''>
                         <Button variant='contained' startIcon={<Bookmark/>}>
                             Book and buy offer
                         </Button>
                     </div>
-                </div>
+                </Paper>
             </div>
         </div>
     );

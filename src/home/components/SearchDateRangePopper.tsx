@@ -6,13 +6,6 @@ import dayjs from "dayjs";
 // @ts-ignore
 const SearchDateRangePopper = ({selectedDateFrom, selectedDateTo, onSelection}) => {
 
-    const [dateFrom, setDateFrom] = useState(new Date());
-    const [dateTo, setDateTo] = useState(() => {
-        const date = new Date();
-        date.setDate(date.getDate() + 5);
-        return date;
-    });
-
     return(
         <Paper className='px-10 py-8 mt-2'>
             <div className='flex flex-col gap-4'>
