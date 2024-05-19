@@ -7,8 +7,13 @@ import Home from "./core/screens/Home";
 import OfferDetails from "./offers/screens/OfferDetails";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {useEffect} from "react";
 
 function App() {
+    useEffect(() => {
+        document.title = 'Tour Central'
+    }, []);
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Router>

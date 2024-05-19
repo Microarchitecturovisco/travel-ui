@@ -1,7 +1,7 @@
 import {useLocation} from "react-router-dom";
 import {Button, CardMedia, Paper} from "@mui/material";
 import React, {useEffect, useState} from "react";
-import {ArrowBack, Bookmark, Close, Place} from "@mui/icons-material";
+import {ArrowBack, Bookmark, Close, Lens, Place} from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import {ApiRequests} from "../../core/apiConfig";
 import {CateringOption, Location, Offer, Room, Transport} from "../../core/domain/DomainInterfaces";
@@ -62,7 +62,7 @@ const OfferDetails = () => {
 
     return(
         <div className='flex flex-row justify-around px-96'>
-            <div className='flex flex-1 flex-col py-16 justify-center'>
+            <div className='flex flex-1 flex-col py-16 mx-8 justify-center'>
                 <div className='flex flex-row items-center mb-6 hover:text-gray-700 hover:cursor-pointer'
                      onClick={() => navigate(-1)}>
                     <ArrowBack style={{fontSize: 20}}/>
@@ -79,7 +79,7 @@ const OfferDetails = () => {
                     </Paper>
                 </div>
 
-                <div className='flex flex-col gap-2'>
+                <div className='flex flex-col gap-2 mb-8'>
                     <div className='flex flex-row items-center'>
                         <Place style={{fontSize: 18}} className='group-hover:text-gray-700'/>
                         <h4 className='ml-1 group-hover:text-gray-700'>
@@ -88,14 +88,35 @@ const OfferDetails = () => {
                     </div>
                     <h1 className='text-4xl'>{offerDetails.hotelName ?? ''}</h1>
                 </div>
-            </div>
-            <div className='flex sticky px-8 bg-amber-50'>
-                <p>test</p>
 
-                <div>
-                    <Button variant='contained' startIcon={<Bookmark/>}>
-                        Book and buy offer
-                    </Button>
+                <div className='flex flex-col gap-3 mb-12'>
+                    {offerDetails.description.split(/[.!]+/).map((item, index) => (
+                        <p key={index}>{item}</p>
+                    ))}
+                </div>
+
+                <div className=''>
+                    <h3 className='text-2xl mb-2'>Gallery</h3>
+                    <div className='grid gap-3'>
+                        {offerDetails.imageUrls.slice(1, offerDetails.imageUrls.length).map((url, index) => (
+                            <CardMedia
+                                component="img"
+                                className='rounded-lg pointer-events-none'
+                                sx={{width: 720, height: 240}}
+                                image={url}
+                            />
+                        ))}
+                    </div>
+                </div>
+            </div>
+            <div className='flex px-8 mt-28'>
+                <div className='sticky bg-indigo-50 top-16 h-[600px] px-8 py-4 rounded-lg'>
+
+                    <div>
+                        <Button variant='contained' startIcon={<Bookmark/>}>
+                            Book and buy offer
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>
