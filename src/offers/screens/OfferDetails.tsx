@@ -1,16 +1,48 @@
 import {useLocation} from "react-router-dom";
 import {CardMedia, Paper} from "@mui/material";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {ArrowBack, Place} from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
+import {ApiRequests} from "../../core/apiConfig";
+import {Location} from "../../core/domain/DomainInterfaces";
+import {formatDate} from "../../core/utils";
 
 const OfferDetails = () => {
 
     const location = useLocation();
-    const {name, hotelLocation, rating, pricePerPerson, photoURL} =
-        location.state || {name: null, hotelLocation: null, rating: null, pricePerPerson: null, photoURL: null};
 
     const navigate = useNavigate();
+
+    const [offerDetails, setOfferDetails] = useState({
+        idHotel: location.state.idHotel,
+        name: location.state.name,
+        location: location.state.hotelLocation,
+        photoURL: location.state.photoURL
+    });
+
+    const fetchOfferDetails = async () => {
+        let searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
+
+        searchParams = {...searchParams,
+            idHotel: offerDetails.idHotel,
+            departurePlane: searchParams.departurePlane ? searchParams.departurePlane.map((dpt: Location) => dpt.idLocation) : [],
+            departureBus: searchParams.departureBus ? searchParams.departureBus.map((dpt: Location) => dpt.idLocation) : [],
+            dateFrom: formatDate(searchParams.dateFrom ? new Date(searchParams.dateFrom) : new Date()),
+            dateTo: formatDate(searchParams.dateFrom ? new Date(searchParams.dateTo) : new Date()),
+        }
+
+        await ApiRequests.getOfferDetails(searchParams)
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
+    useEffect(() => {
+        fetchOfferDetails().then(r => r);
+    }, []);
 
     return(
         <div className='flex flex-col py-16 px-48 justify-center'>
@@ -24,7 +56,7 @@ const OfferDetails = () => {
                         component="img"
                         className='rounded-lg pointer-events-none'
                         sx={{width: 480, height: 280}}
-                        image={photoURL ?? require('../../assets/holiday-assets/dahee-son-tMffGE7u1bI-unsplash.jpg')}
+                        image={offerDetails.photoURL ?? require('../../assets/holiday-assets/dahee-son-tMffGE7u1bI-unsplash.jpg')}
                         alt="Ibiza Gwiździny"
                     />
                 </Paper>
@@ -33,7 +65,7 @@ const OfferDetails = () => {
                         component="img"
                         className='rounded-lg pointer-events-none'
                         sx={{width: 480, height: 280}}
-                        image={photoURL ?? require('../../assets/holiday-assets/dahee-son-tMffGE7u1bI-unsplash.jpg')}
+                        image={offerDetails.photoURL ?? require('../../assets/holiday-assets/dahee-son-tMffGE7u1bI-unsplash.jpg')}
                         alt="Ibiza Gwiździny"
                     />
                 </Paper>
@@ -42,7 +74,7 @@ const OfferDetails = () => {
                         component="img"
                         className='rounded-lg pointer-events-none'
                         sx={{width: 480, height: 280}}
-                        image={photoURL ?? require('../../assets/holiday-assets/dahee-son-tMffGE7u1bI-unsplash.jpg')}
+                        image={offerDetails.photoURL ?? require('../../assets/holiday-assets/dahee-son-tMffGE7u1bI-unsplash.jpg')}
                         alt="Ibiza Gwiździny"
                     />
                 </Paper>
@@ -52,10 +84,10 @@ const OfferDetails = () => {
                 <div className='flex flex-row items-center'>
                     <Place style={{fontSize: 18}} className='group-hover:text-gray-700'/>
                     <h4 className='ml-1 group-hover:text-gray-700'>
-                        {hotelLocation}
+                        {offerDetails.location ?? ''}
                     </h4>
                 </div>
-                <h1 className='text-4xl'>{name}</h1>
+                <h1 className='text-4xl'>{offerDetails.name ?? ''}</h1>
             </div>
         </div>
     );

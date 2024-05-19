@@ -5,6 +5,7 @@ import {Place, Recommend, SentimentVerySatisfied, ThumbUp} from "@mui/icons-mate
 import {Link} from "react-router-dom";
 
 interface OfferProps {
+    idHotel: string,
     name: string;
     location: string;
     rating: number;
@@ -13,7 +14,7 @@ interface OfferProps {
     bestSeller?: boolean;
 }
 
-const OfferComponent: React.FC<OfferProps> = ({name, location, rating, pricePerPerson, photoURL, bestSeller}) => {
+const OfferComponent: React.FC<OfferProps> = ({idHotel, name, location, rating, pricePerPerson, photoURL, bestSeller}) => {
     return (
         <Card sx={{ display: 'flex', marginBottom: 2, borderRadius: 2, borderColor: 'grey.300', borderWidth: 1, borderStyle: 'solid'}}>
             <div className='relative pointer-events-none'>
@@ -65,7 +66,7 @@ const OfferComponent: React.FC<OfferProps> = ({name, location, rating, pricePerP
                 </div>
                 <Link
                     to='/offerDetails'
-                    state={{name: name, hotelLocation: location, rating: rating, pricePerPerson: pricePerPerson, photoURL: photoURL}}>
+                    state={{idHotel: idHotel, name: name, hotelLocation: location, rating: rating, pricePerPerson: pricePerPerson, photoURL: photoURL}}>
                     <Button variant="contained" color="primary">
                         Check Details
                     </Button>

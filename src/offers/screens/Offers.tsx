@@ -1,24 +1,16 @@
 import OfferComponent from "../components/OfferComponent";
 import {useEffect, useState} from "react";
 import {ApiRequests, GetOffersBySearchQueryOffer} from "../../core/apiConfig";
-import {Close, SentimentVeryDissatisfied} from "@mui/icons-material";
+import {SentimentVeryDissatisfied} from "@mui/icons-material";
 import SearchBar from "../../home/components/SearchBar";
-import {Button} from "@mui/material";
 import {Location} from "../../core/domain/DomainInterfaces";
+import {formatDate} from "../../core/utils";
 
 export default function Offers () {
 
     const [offers, setOffers] = useState<GetOffersBySearchQueryOffer[]>([]);
 
     const [noResults, setNoResults] = useState(false);
-
-    function formatDate(date: Date) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-        const day = String(date.getDate()).padStart(2, '0');
-
-        return `${year}-${month}-${day}`;
-    }
 
     const searchOffers = async () => {
         let searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
@@ -35,6 +27,7 @@ export default function Offers () {
             .then(response => {
                 setOffers(response.data);
                 setNoResults(response.data.length === 0);
+                console.log(response.data);
             })
             .catch(e => {
                 console.log(e);
@@ -59,6 +52,7 @@ export default function Offers () {
 
             {offers.map((offer, index) => (
                 <OfferComponent
+                    idHotel={offer.idHotel}
                     name={offer.hotelName}
                     key={offer.hotelName}
                     location={offer.destination}
