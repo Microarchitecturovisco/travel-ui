@@ -5,7 +5,7 @@ export interface Offer {
     description: string,
     price: number,
     destination: Location,
-    imageURLs: string[],
+    imageUrls: string[],
 
     roomConfiguration: Room[],
     possibleRoomConfigurations: Room[][],

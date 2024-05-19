@@ -36,7 +36,7 @@ const OfferComponent: React.FC<OfferProps> = ({idHotel, name, location, rating, 
             <div className='flex flex-1 flex-col justify-between px-8 py-6'>
                 <Link
                     to='/offerDetails'
-                    state={{name: name, hotelLocation: location, rating: rating, pricePerPerson: pricePerPerson, photoURL: photoURL}}
+                    state={{idHotel: idHotel, name: name, hotelLocation: location, rating: rating, pricePerPerson: pricePerPerson, photoURL: photoURL}}
                     className='flex flex-col gap-3 group'>
                     <div className='flex flex-row items-center'>
                         <Place style={{fontSize: 18}} className='group-hover:text-gray-700'/>
