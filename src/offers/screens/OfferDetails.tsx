@@ -1,14 +1,15 @@
 import {useLocation} from "react-router-dom";
-import {Button, CardMedia, IconButton, Paper, Typography} from "@mui/material";
+import {Box, Button, CardMedia, Checkbox, FormControlLabel, IconButton, Paper, Typography} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {Add, ArrowBack, Bookmark, Close, Lens, Place, Remove} from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import {ApiRequests} from "../../core/apiConfig";
 import {CateringOption, Location, Offer, Room, Transport} from "../../core/domain/DomainInterfaces";
-import {formatDate} from "../../core/utils";
+import {cateringToString, formatDate} from "../../core/utils";
 import LoginIcon from "@mui/icons-material/Login";
 import {DatePicker} from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import StarIcon from "@mui/icons-material/Star";
 
 // @ts-ignore
 const OfferDetails = () => {
@@ -28,7 +29,7 @@ const OfferDetails = () => {
         roomConfiguration: [],
         possibleRoomConfigurations: [[]],
 
-        cateringOption: [],
+        cateringOptions: [],
 
         departure: {idTransport: '', departureDate: new Date(), capacity: 0, pricePerAdult: 0,
             course: {idTransportCourse: '', type: 'PLANE', arrivalTo: {idLocation: '', region: '', country: ''}, departureFrom: {idLocation: '', region: '', country: ''}}},
@@ -151,7 +152,7 @@ const OfferDetails = () => {
                     ))}
                 </div>
 
-                <div className=''>
+                <div className='mb-12'>
                     <h3 className='text-2xl mb-2'>Gallery</h3>
                     <div className='grid gap-3'>
                         {offerDetails.imageUrls.slice(1, offerDetails.imageUrls.length).map((url, index) => (
@@ -165,6 +166,69 @@ const OfferDetails = () => {
                         ))}
                     </div>
                 </div>
+
+                <div className='mb-8'>
+                    <h3 className='text-2xl mb-2'>Room configurations</h3>
+
+                    <div className='mb-6'>
+                        <FormControlLabel className='select-none' control={
+                            <Checkbox checked={true} onChange={() => {
+                            }}/>
+                        } label={'Configuration 1'}/>
+
+                        <div className='flex flex-col gap-2'>
+                            {offerDetails.roomConfiguration.map((room, index) => (
+                                <div>
+                                    <h3 className='mb-1'>{room.name}</h3>
+                                    <p className='text-xs'>{room.description}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className='flex flex-col gap-6'>
+                        {offerDetails.possibleRoomConfigurations.map((item, index) => (
+                            <div key={index} className=''>
+                                <FormControlLabel className='select-none' control={
+                                    <Checkbox checked={index === 0} onChange={() => {
+                                    }}/>
+                                } label={'Configuration ' + (index + 2)}/>
+
+                                <div className='flex flex-col gap-2'>
+                                    {item.map((room, index) => (
+                                        <div>
+                                            <h3 className='mb-1'>{room.name}</h3>
+                                            <p className='text-xs'>{room.description}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className='mb-8'>
+                    <h3 className='text-2xl mb-2'>Catering</h3>
+                    <div className=''>
+                        {offerDetails.cateringOptions.map((item, index) => (
+                            <div key={index} className='flex flex-row gap-3'>
+                                <FormControlLabel className='select-none' control={
+                                    <Checkbox checked={index === 0} onChange={() => {
+                                    }}/>
+                                } label={cateringToString(item.type)}/>
+
+                                <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                    <StarIcon sx={{color: 'gold', mr: 0.5, fontSize: 20}}/>
+                                    <p className='text-sm text-gray-600'>
+                                        {item.rating}
+                                    </p>
+                                </Box>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+
             </div>
             <div className='flex px-8 mt-28'>
                 <Paper className='sticky top-16 h-[600px] px-8 py-8 rounded-lg' elevation={1}>

@@ -10,7 +10,7 @@ export interface Offer {
     roomConfiguration: Room[],
     possibleRoomConfigurations: Room[][],
 
-    cateringOption: CateringOption[],
+    cateringOptions: CateringOption[],
 
     departure: Transport,
     possibleTransports: Transport[],
