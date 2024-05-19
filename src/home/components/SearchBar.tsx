@@ -108,7 +108,13 @@ const SearchBar = ({onSearch, hideClearSearch = false}) => {
     }
 
     const loadDataFromStorage = () => {
-        const searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
+        const searchParamsString = localStorage.getItem("searchParams") ?? 'notfound';
+        if (searchParamsString === 'notfound') {
+            clearSearchParameters();
+            return;
+        }
+
+        const searchParams = JSON.parse(searchParamsString);
 
         setSelectedDestinations(searchParams.arrivals);
         setSelectedPlaneDepartures(searchParams.departurePlane);
@@ -122,10 +128,6 @@ const SearchBar = ({onSearch, hideClearSearch = false}) => {
         setSelectedDateFrom(new Date(searchParams.dateFrom));
         setSelectedDateTo(new Date(searchParams.dateTo));
     }
-
-    useEffect(() => {
-        console.log(selectedDestinations);
-    }, [selectedDestinations]);
 
     useEffect(() => {
         getAvailableDestinations().then(r => r);

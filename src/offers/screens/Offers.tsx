@@ -27,7 +27,6 @@ export default function Offers () {
             .then(response => {
                 setOffers(response.data);
                 setNoResults(response.data.length === 0);
-                console.log(response.data);
             })
             .catch(e => {
                 console.log(e);
