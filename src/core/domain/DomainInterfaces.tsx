@@ -13,7 +13,7 @@ export interface Offer {
     cateringOptions: CateringOption[],
 
     departure: Transport,
-    possibleTransports: Transport[],
+    possibleDepartures: Transport[],
 }
 
 export interface Location {
@@ -42,12 +42,12 @@ export interface Transport {
     capacity: number,
     pricePerAdult: number,
 
-    course: TransportCourse
+    transportCourse: TransportCourse
 }
 
 export interface TransportCourse {
     idTransportCourse: string,
     type: 'PLANE' | 'BUS',
-    departureFrom: Location,
-    arrivalTo: Location,
+    departureFromLocation: Location,
+    arrivalToLocation: Location,
 }

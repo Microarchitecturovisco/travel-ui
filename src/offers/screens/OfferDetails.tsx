@@ -32,8 +32,8 @@ const OfferDetails = () => {
         cateringOptions: [],
 
         departure: {idTransport: '', departureDate: new Date(), capacity: 0, pricePerAdult: 0,
-            course: {idTransportCourse: '', type: 'PLANE', arrivalTo: {idLocation: '', region: '', country: ''}, departureFrom: {idLocation: '', region: '', country: ''}}},
-        possibleTransports: [],
+            transportCourse: {idTransportCourse: '', type: 'PLANE', arrivalToLocation: {idLocation: '', region: '', country: ''}, departureFromLocation: {idLocation: '', region: '', country: ''}}},
+        possibleDepartures: [],
     });
 
     interface Category {
@@ -178,7 +178,7 @@ const OfferDetails = () => {
 
                         <div className='flex flex-col gap-2'>
                             {offerDetails.roomConfiguration.map((room, index) => (
-                                <div>
+                                <div key={index}>
                                     <h3 className='mb-1'>{room.name}</h3>
                                     <p className='text-xs'>{room.description}</p>
                                 </div>
@@ -190,7 +190,7 @@ const OfferDetails = () => {
                         {offerDetails.possibleRoomConfigurations.map((item, index) => (
                             <div key={index} className=''>
                                 <FormControlLabel className='select-none' control={
-                                    <Checkbox checked={index === 0} onChange={() => {
+                                    <Checkbox checked={false} onChange={() => {
                                     }}/>
                                 } label={'Configuration ' + (index + 2)}/>
 
@@ -230,8 +230,8 @@ const OfferDetails = () => {
 
 
             </div>
-            <div className='flex px-8 mt-28'>
-                <Paper className='sticky top-16 h-[600px] px-8 py-8 rounded-lg' elevation={1}>
+            <div className='px-8 mt-28'>
+                <Paper className='sticky top-16 px-8 py-8 rounded-lg' elevation={1}>
                     {/* dates */}
                     <div className='flex flex-col gap-4 mb-4'>
 
@@ -249,7 +249,7 @@ const OfferDetails = () => {
                     </div>
 
                     {/* people selection */}
-                    <div className='flex flex-col pl-2 mb-8'>
+                    <div className='flex flex-col pl-2 mb-4'>
                         <div className='flex items-center justify-between gap-6'>
                             <Typography className='select-none'>Adults</Typography>
                             <div className='flex items-center'>
@@ -298,6 +298,31 @@ const OfferDetails = () => {
                                 </IconButton>
                             </div>
                         </div>
+                    </div>
+
+                    <div className='mb-8'>
+                        <h3>Departure</h3>
+
+                        <FormControlLabel className='select-none' control={
+                            <Checkbox checked={true} onChange={() => {
+                            }}/>
+                        } label={offerDetails.departure.transportCourse.departureFromLocation.region}/>
+
+                        <div className='flex flex-col'>
+                            {offerDetails.possibleDepartures.map((item, index) => (
+                                <div key={index} className='flex flex-row gap-1 items-center'>
+                                    <FormControlLabel className='select-none' control={
+                                        <Checkbox checked={false} onChange={() => {
+                                        }}/>
+                                    } label={item.transportCourse.departureFromLocation.region}/>
+
+                                    <p className='text-sm'>
+                                        + {Math.ceil(item.pricePerAdult - offerDetails.departure.pricePerAdult)} zł
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+
                     </div>
 
 
