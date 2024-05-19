@@ -6,13 +6,6 @@ import dayjs from "dayjs";
 // @ts-ignore
 const SearchDateRangePopper = ({selectedDateFrom, selectedDateTo, onSelection}) => {
 
-    const [dateFrom, setDateFrom] = useState(new Date());
-    const [dateTo, setDateTo] = useState(() => {
-        const date = new Date();
-        date.setDate(date.getDate() + 5);
-        return date;
-    });
-
     return(
         <Paper className='px-10 py-8 mt-2'>
             <div className='flex flex-col gap-4'>
@@ -21,13 +14,13 @@ const SearchDateRangePopper = ({selectedDateFrom, selectedDateTo, onSelection}) 
                 <DatePicker
                     label="Departure date"
                     value={dayjs(selectedDateFrom)}
-                    onChange={(value) => onSelection(value, 'FROM')}
+                    onChange={(value) => onSelection(value?.toDate(), 'FROM')}
                 />
 
                 <DatePicker
                     label="Return date"
                     value={dayjs(selectedDateTo)}
-                    onChange={(value) => onSelection(value, 'TO')}
+                    onChange={(value) => onSelection(value?.toDate(), 'TO')}
                 />
             </div>
         </Paper>

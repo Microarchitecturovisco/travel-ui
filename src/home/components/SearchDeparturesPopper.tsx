@@ -1,7 +1,6 @@
 import {Checkbox, FormControlLabel, FormGroup, Paper} from "@mui/material";
 import {DirectionsBus, Flight} from "@mui/icons-material";
-import {useEffect, useState} from "react";
-import {ApiRequests} from "../../core/apiConfig";
+import {Location} from "../../core/domain/DomainInterfaces";
 
 
 // @ts-ignore
@@ -17,9 +16,9 @@ const SearchDeparturesPopper = ({departures, selectedPlaneDepartures, selectedBu
                     </div>
 
                     <FormGroup>
-                        {departures.plane.map((depr: any, index: number) => (
+                        {departures.plane.map((depr: Location, index: number) => (
                             <FormControlLabel key={index} className='select-none' control={
-                                <Checkbox checked={selectedPlaneDepartures.indexOf(depr) >= 0} onChange={() => onSelection(depr, 'PLANE')} />
+                                <Checkbox checked={selectedPlaneDepartures.some((loc: Location) => loc.idLocation === depr.idLocation)} onChange={() => onSelection(depr, 'PLANE')} />
                             } label={depr.region} />
                         ))}
                     </FormGroup>
@@ -31,9 +30,9 @@ const SearchDeparturesPopper = ({departures, selectedPlaneDepartures, selectedBu
                     </div>
                     <FormGroup>
                         <FormGroup>
-                            {departures.bus.map((depr: any, index: number) => (
+                            {departures.bus.map((depr: Location, index: number) => (
                                 <FormControlLabel key={index} className='select-none' control={
-                                    <Checkbox checked={selectedBusDepartures.indexOf(depr) >= 0} onChange={() => onSelection(depr, 'BUS')} />
+                                    <Checkbox checked={selectedBusDepartures.some((loc: Location) => loc.idLocation === depr.idLocation)} onChange={() => onSelection(depr, 'BUS')} />
                                 } label={depr.region} />
                             ))}
                         </FormGroup>

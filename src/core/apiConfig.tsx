@@ -20,10 +20,14 @@ export class ApiRequests {
     static getOffersBySearchQuery = async (params: GetOffersBySearchQueryParams) => {
         return await axiosInstance.get(`offers/?departureBus=${params.departureBus}&departurePlane=${params.departurePlane}&arrivals=${params.arrivals}&date_from=${params.dateFrom}&date_to=${params.dateTo}&adults=${params.adults}&teens=${params.teens}&kids=${params.kids}&infants=${params.infants}`);
     }
+
+    static getOfferDetails = async (params: GetOfferDetailsParams) => {
+        return await axiosInstance.get(`offers/${params.idHotel}?departure_buses=${params.departureBus}&departure_planes=${params.departurePlane}&date_from=${params.dateFrom}&date_to=${params.dateTo}&adults=${params.adults}&teens=${params.teens}&kids=${params.kids}&infants=${params.infants}`)
+    }
 }
 
 export interface GetOffersBySearchQueryOffer {
-    idOffer: string,
+    idHotel: string,
     hotelName: string,
     description: string,
     price: number,
@@ -36,6 +40,18 @@ export interface GetOffersBySearchQueryParams {
     departurePlane: string[],
     departureBus: string[],
     arrivals: string[],
+    dateFrom: string,
+    dateTo: string,
+    adults: number,
+    teens: number,
+    kids: number,
+    infants: number,
+}
+
+export interface GetOfferDetailsParams {
+    idHotel: string,
+    departurePlane: string[],
+    departureBus: string[],
     dateFrom: string,
     dateTo: string,
     adults: number,

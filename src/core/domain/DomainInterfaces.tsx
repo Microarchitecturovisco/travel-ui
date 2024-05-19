@@ -5,15 +5,15 @@ export interface Offer {
     description: string,
     price: number,
     destination: Location,
-    imageURLs: string[],
+    imageUrls: string[],
 
     roomConfiguration: Room[],
     possibleRoomConfigurations: Room[][],
 
-    cateringOption: CateringOption[],
+    cateringOptions: CateringOption[],
 
     departure: Transport,
-    possibleTransports: Transport[],
+    possibleDepartures: Transport[],
 }
 
 export interface Location {
@@ -42,12 +42,12 @@ export interface Transport {
     capacity: number,
     pricePerAdult: number,
 
-    course: TransportCourse
+    transportCourse: TransportCourse
 }
 
 export interface TransportCourse {
     idTransportCourse: string,
     type: 'PLANE' | 'BUS',
-    departureFrom: Location,
-    arrivalTo: Location,
+    departureFromLocation: Location,
+    arrivalToLocation: Location,
 }
