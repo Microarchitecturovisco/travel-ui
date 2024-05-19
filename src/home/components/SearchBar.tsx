@@ -132,29 +132,6 @@ const SearchBar = ({onSearch, hideClearSearch = false}) => {
         loadDataFromStorage();
     }, []);
 
-    // useEffect(() => {
-    //     if (departures.plane.length > 0 && arrivals.length > 0) {
-    //         localStorage.setItem('searchParams',
-    //             JSON.stringify({
-    //                 // @ts-ignore
-    //                 departurePlane: [departures.plane.at(4).idLocation, departures.plane.at(3).idLocation, departures.plane.at(1).idLocation, departures.plane.at(2).idLocation, departures.plane.at(5).idLocation],
-    //                 // @ts-ignore
-    //                 departureBus: [departures.bus.at(3).idLocation, departures.bus.at(5).idLocation],
-    //                 // @ts-ignore
-    //                 arrivals: [arrivals.at(1).idLocation, arrivals.at(5).idLocation, arrivals.at(6).idLocation, arrivals.at(4).idLocation,
-    //                     // @ts-ignore
-    //                     arrivals.at(10).idLocation, arrivals.at(13).idLocation, arrivals.at(17).idLocation, arrivals.at(23).idLocation],
-    //                 dateFrom: '2024-05-01',
-    //                 dateTo: '2024-05-03',
-    //                 adults: 2,
-    //                 teens: 0,
-    //                 kids: 0,
-    //                 infants: 0,
-    //             }));
-    //     }
-    // }, [departures, arrivals]);
-
-
     const clearSearchParameters = () => {
         localStorage.setItem('searchParams',
             JSON.stringify({
