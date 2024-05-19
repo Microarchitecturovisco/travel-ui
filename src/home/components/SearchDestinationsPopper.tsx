@@ -23,7 +23,7 @@ const SearchDestinationsPopper: React.FC<SearchDestinationsPopperProps> = ({ des
                                 <FormControlLabel key={index} className='select-none' control={
                                     <Checkbox
                                         onChange={() => onSelection(destination)}
-                                        checked={selectedDestinations.indexOf(destination) >= 0}
+                                        checked={selectedDestinations.some(location => location.idLocation === destination.idLocation)}
                                     />
                                 } label={destination.region} />
                             ))}

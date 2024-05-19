@@ -1,7 +1,10 @@
 import OfferComponent from "../components/OfferComponent";
 import {useEffect, useState} from "react";
 import {ApiRequests, GetOffersBySearchQueryOffer} from "../../core/apiConfig";
-import {SentimentVeryDissatisfied} from "@mui/icons-material";
+import {Close, SentimentVeryDissatisfied} from "@mui/icons-material";
+import SearchBar from "../../home/components/SearchBar";
+import {Button} from "@mui/material";
+import {Location} from "../../core/domain/DomainInterfaces";
 
 export default function Offers () {
 
@@ -9,10 +12,24 @@ export default function Offers () {
 
     const [noResults, setNoResults] = useState(false);
 
-    useEffect(() => {
-        const searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
+    function formatDate(date: Date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+        const day = String(date.getDate()).padStart(2, '0');
 
-        console.log(searchParams);
+        return `${year}-${month}-${day}`;
+    }
+
+    const searchOffers = async () => {
+        let searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
+
+        searchParams = {...searchParams,
+            departurePlane: searchParams.departurePlane ? searchParams.departurePlane.map((dpt: Location) => dpt.idLocation) : [],
+            departureBus: searchParams.departureBus ? searchParams.departureBus.map((dpt: Location) => dpt.idLocation) : [],
+            arrivals: searchParams.arrivals ? searchParams.arrivals.map((dst: Location) => dst.idLocation) : [],
+            dateFrom: formatDate(searchParams.dateFrom ? new Date(searchParams.dateFrom) : new Date()),
+            dateTo: formatDate(searchParams.dateFrom ? new Date(searchParams.dateTo) : new Date()),
+        }
 
         ApiRequests.getOffersBySearchQuery(searchParams)
             .then(response => {
@@ -22,15 +39,23 @@ export default function Offers () {
             .catch(e => {
                 console.log(e);
             });
+    }
+
+    useEffect(() => {
+        searchOffers().then(r => r);
     }, []);
 
     return(
         <div className='flex flex-col py-16 px-[28rem] justify-center'>
             {offers.length > 0 &&
                 <div className='offersHeaderContainer'>
-                    <h1 className='text-2xl mb-12'>Excellent offers just for you!</h1>
+                    <h1 className='text-2xl mb-8'>Excellent offers just for you!</h1>
                 </div>
             }
+
+            <SearchBar
+                onSearch={searchOffers}
+            />
 
             {offers.map((offer, index) => (
                 <OfferComponent
