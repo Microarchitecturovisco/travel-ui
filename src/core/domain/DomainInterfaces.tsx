@@ -1,6 +1,6 @@
 
 export interface Offer {
-    idOffer: string,
+    idHotel: string,
     hotelName: string,
     description: string,
     price: number,
