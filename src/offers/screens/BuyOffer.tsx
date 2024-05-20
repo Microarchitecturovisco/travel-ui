@@ -21,6 +21,7 @@ const BuyOffer = () => {
     const [selectedRooms, setSelectedRooms] = useState<Room[]>(location.state.selectedRooms);
     const [selectedCatering, setSelectedCatering] = useState<CateringOption>(location.state.selectedCatering);
     const [selectedTransport, setSelectedTransport] = useState<Transport>(location.state.selectedTransport);
+    const [selectedReturnTransport, setSelectedReturnTransport] = useState<Transport>(location.state.selectedReturnTransport);
 
     const [transactionSuccessful, setTransactionSuccessful] = useState('IN_PROGRESS');
 
@@ -103,10 +104,17 @@ const BuyOffer = () => {
                     <h3>Transport</h3>
 
                     <div className='flex flex-row gap-3 items-center ml-4'>
-                        <p>{selectedTransport.transportCourse.type}</p>
+                        <p>{selectedTransport.transportCourse.type === 'PLANE' ? 'Samolot' : 'Bus'}</p>
                         <p>z: {selectedTransport.transportCourse.departureFromLocation.region}</p>
                         <p>do: {selectedTransport.transportCourse.arrivalAtLocation.region}, {selectedTransport.transportCourse.arrivalAtLocation.country}</p>
                         <p className='text-xs'>{selectedTransport.idTransport}</p>
+                    </div>
+
+                    <div className='flex flex-row gap-3 items-center ml-4'>
+                        <p>{selectedReturnTransport.transportCourse.type === 'PLANE' ? 'Samolot' : 'Bus'}</p>
+                        <p>z: {selectedReturnTransport.transportCourse.departureFromLocation.region}, {selectedReturnTransport.transportCourse.departureFromLocation.country}</p>
+                        <p>do: {selectedReturnTransport.transportCourse.arrivalAtLocation.region}</p>
+                        <p className='text-xs'>{selectedReturnTransport.idTransport}</p>
                     </div>
                 </div>
 

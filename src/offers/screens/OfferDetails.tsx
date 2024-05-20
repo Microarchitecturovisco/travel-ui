@@ -31,15 +31,12 @@ const OfferDetails = () => {
 
         cateringOptions: [],
 
-        departure: {idTransport: '', departureDate: new Date(), capacity: 0, pricePerAdult: 0,
+        departure: [{idTransport: '', departureDate: new Date(), capacity: 0, pricePerAdult: 0,
             transportCourse: {idTransportCourse: '', type: 'PLANE', arrivalAtLocation: {idLocation: '', region: '', country: ''}, departureFromLocation: {idLocation: '', region: '', country: ''}}},
-        possibleDepartures: [],
+            {idTransport: '', departureDate: new Date(), capacity: 0, pricePerAdult: 0,
+                transportCourse: {idTransportCourse: '', type: 'PLANE', arrivalAtLocation: {idLocation: '', region: '', country: ''}, departureFromLocation: {idLocation: '', region: '', country: ''}}}],
+        possibleDepartures: [[], []],
     });
-
-    interface Category {
-        label: string,
-        key: 'adults' | 'teens' | 'kids' | 'infants'
-    }
 
     const [selectedGuests, setSelectedGuests] = useState({
         adults: 2,
@@ -63,6 +60,25 @@ const OfferDetails = () => {
         {idTransport: '', departureDate: new Date(), capacity: 0, pricePerAdult: 0,
             transportCourse: {idTransportCourse: '', type: 'PLANE', arrivalAtLocation: {idLocation: '', region: '', country: ''}, departureFromLocation: {idLocation: '', region: '', country: ''}}},
     );
+    const [selectedReturnTransport, setSelectedReturnTransport] = useState<Transport>(
+        {idTransport: '', departureDate: new Date(), capacity: 0, pricePerAdult: 0,
+            transportCourse: {idTransportCourse: '', type: 'PLANE', arrivalAtLocation: {idLocation: '', region: '', country: ''}, departureFromLocation: {idLocation: '', region: '', country: ''}}},
+    );
+
+    useEffect(() => {
+        console.log(offerDetails);
+
+        if (offerDetails.possibleDepartures[0])
+
+        offerDetails.possibleDepartures[0].forEach(
+            (t, index) => {
+                console.log(t.transportCourse.departureFromLocation.region + ' '
+                    + t.transportCourse.arrivalAtLocation.region + ' ... ' +
+                    offerDetails.possibleDepartures[1][index].transportCourse.departureFromLocation.region + ' '
+                    + offerDetails.possibleDepartures[1][index].transportCourse.arrivalAtLocation.region)
+            }
+        )
+    }, [offerDetails]);
 
     const onRoomSelection = (roomConfiguration: any) => {
         setSelectedRooms(roomConfiguration);
@@ -72,8 +88,12 @@ const OfferDetails = () => {
         setSelectedCatering(cateringOption);
     }
 
-    const onTransportSelection = (transport: Transport) => {
+    const onTransportSelection = (transport: Transport, returnTransport: Transport) => {
+        console.log('on selection');
         setSelectedTransport(transport);
+        setSelectedReturnTransport(returnTransport);
+        console.log(transport.transportCourse);
+        console.log(returnTransport.transportCourse);
     }
 
     const onGuestsSelection = (key: 'adults' | 'teens' | 'kids' | 'infants', type: 'INC' | 'DEC') => {
@@ -126,9 +146,8 @@ const OfferDetails = () => {
         await ApiRequests.getOfferDetails(searchParams)
             .then(response => {
                 setOfferDetails(response.data);
-
                 setSelectedRooms(response.data.roomConfiguration);
-                setSelectedTransport(response.data.departure);
+                setSelectedTransport(response.data.departure[0]);
                 setSelectedCatering(response.data.cateringOptions[0]);
             })
             .catch(err => {
@@ -341,28 +360,27 @@ const OfferDetails = () => {
                         <div className='flex flex-row gap-1 items-center'>
                             <FormControlLabel className='select-none' control={
                                 <Checkbox
-                                    checked={selectedTransport === offerDetails.departure}
-                                    onChange={() => {onTransportSelection(offerDetails.departure)}}
+                                    checked={selectedTransport === offerDetails.departure[0]}
+                                    onChange={() => {onTransportSelection(offerDetails.departure[0], offerDetails.departure[1])}}
                                 />
-                            } label={offerDetails.departure.transportCourse.departureFromLocation.region}/>
+                            } label={offerDetails.departure[0].transportCourse.departureFromLocation.region}/>
 
-                            {offerDetails.departure.transportCourse.type === 'PLANE' &&
+                            {offerDetails.departure[0].transportCourse.type === 'PLANE' &&
                                 <Flight style={{fontSize: 16}}/>
                             }
-                            {offerDetails.departure.transportCourse.type === 'BUS' &&
+                            {offerDetails.departure[0].transportCourse.type === 'BUS' &&
                                 <DirectionsBus style={{fontSize: 16}}/>
                             }
                         </div>
 
 
-
                         <div className='flex flex-col'>
-                            {offerDetails.possibleDepartures.map((item, index) => (
+                            {offerDetails.possibleDepartures[0].map((item, index) => (
                                 <div key={index} className='flex flex-row gap-1 items-center'>
                                     <FormControlLabel className='select-none' control={
                                         <Checkbox
                                             checked={selectedTransport === item}
-                                            onChange={() => {onTransportSelection(item)}}
+                                            onChange={() => {onTransportSelection(item, offerDetails.possibleDepartures[1][index])}}
                                         />
                                     } label={item.transportCourse.departureFromLocation.region}/>
 
@@ -374,14 +392,13 @@ const OfferDetails = () => {
                                     }
 
                                     <p className='text-sm'>
-                                        + {Math.ceil(item.pricePerAdult - offerDetails.departure.pricePerAdult)} zł / os
+                                        + {Math.ceil(item.pricePerAdult - offerDetails.departure[0].pricePerAdult)} zł / os
                                     </p>
                                 </div>
                             ))}
                         </div>
 
                     </div>
-
 
                     <Link to='/buyOffer' state={{
                         idHotel: offerDetails.idHotel,
@@ -390,6 +407,7 @@ const OfferDetails = () => {
                         selectedDateTo: selectedDateTo,
                         selectedRooms: selectedRooms,
                         selectedTransport: selectedTransport,
+                        selectedReturnTransport: selectedReturnTransport,
                         selectedGuests: selectedGuests,
                         selectedCatering: selectedCatering,
                     }}>

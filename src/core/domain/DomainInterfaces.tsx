@@ -12,8 +12,8 @@ export interface Offer {
 
     cateringOptions: CateringOption[],
 
-    departure: Transport,
-    possibleDepartures: Transport[],
+    departure: Transport[],
+    possibleDepartures: Transport[][],
 }
 
 export interface Location {

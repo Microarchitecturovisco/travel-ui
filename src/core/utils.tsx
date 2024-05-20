@@ -8,9 +8,9 @@ export function formatDate(date: Date) {
 
 export function cateringToString (type: 'ALL_INCLUSIVE' | 'THREE_COURSES' | 'TWO_COURSES' | 'BREAKFAST' | 'NO_CATERING' | 'ACCORDING_TO_PROGRAMME',) {
     if (type === 'ALL_INCLUSIVE') return 'All inclusive';
-    if (type === 'THREE_COURSES') return 'Three courses';
-    if (type === 'TWO_COURSES') return 'Two courses';
-    if (type === 'BREAKFAST') return 'Breakfast';
-    if (type === 'NO_CATERING') return 'No catering';
-    if (type === 'ACCORDING_TO_PROGRAMME') return 'According to programme';
+    if (type === 'THREE_COURSES') return 'Trzy dania';
+    if (type === 'TWO_COURSES') return 'Dwa dania';
+    if (type === 'BREAKFAST') return 'Śniadanie';
+    if (type === 'NO_CATERING') return 'Bez cateringu';
+    if (type === 'ACCORDING_TO_PROGRAMME') return 'Zgodnie z programem';
 }
