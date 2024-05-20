@@ -4,7 +4,7 @@ import Countdown from "react-countdown";
 import {CateringOption, Location, Room, Transport} from "../../core/domain/DomainInterfaces";
 import {ApiRequests} from "../../core/apiConfig";
 import {Button} from "@mui/material";
-import {Bookmark, CreditCard} from "@mui/icons-material";
+import {CreditCard} from "@mui/icons-material";
 import {formatDate} from "../../core/utils";
 
 const BuyOffer = () => {
@@ -23,7 +23,7 @@ const BuyOffer = () => {
 
     const [transactionEnded, setTransactionEnded] = useState(false);
 
-    console.log(location.state);
+    const [transactionSuccessful, setTransactionSuccessful] = useState(false);
 
     const reserveOfferRequest = async () => {
         let searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
@@ -55,7 +55,15 @@ const BuyOffer = () => {
             transportReservationsIds: [selectedTransport.idTransport],
             userId: '',
         })
-            .then(response => console.log(response))
+            .then(response => {
+                console.log(response);
+                if (response === 0) {
+                    setTimeout(() => {
+                        setTransactionSuccessful(true);
+                        setTransactionEnded(true);
+                    }, 1000);
+                }
+            })
             .catch(e => console.log(e));
     }
 
@@ -113,8 +121,15 @@ const BuyOffer = () => {
                 </div>
             }
 
-            {transactionEnded &&
+            {transactionEnded && !transactionSuccessful &&
                 <p className='text-xl mt-2 text-red-500'>Time for the transaction has ended!</p>
+            }
+
+            {transactionEnded && transactionSuccessful &&
+                <div>
+                    <p className='text-xl mt-2 text-green-400'>Transaction successful</p>
+                    <p>You can view your trip in the Reservations tab</p>
+                </div>
             }
         </div>
     );

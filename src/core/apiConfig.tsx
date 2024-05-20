@@ -26,6 +26,8 @@ export class ApiRequests {
     }
 
     static reserveOffer = async (payload: ReservationRequestPayload) => {
+        return Math.floor(Math.random() * 2);
+
         return await axiosInstance.post('reservations/reservation', payload);
     }
 }

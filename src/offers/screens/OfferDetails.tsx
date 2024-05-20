@@ -1,7 +1,7 @@
 import {Link, useLocation} from "react-router-dom";
 import {Box, Button, CardMedia, Checkbox, FormControlLabel, IconButton, Paper, Typography} from "@mui/material";
 import React, {useEffect, useState} from "react";
-import {Add, ArrowBack, Bookmark, Close, Lens, Place, Remove} from "@mui/icons-material";
+import {Add, ArrowBack, Bookmark, Close, DirectionsBus, Flight, Lens, Place, Remove} from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import {ApiRequests} from "../../core/apiConfig";
 import {CateringOption, Location, Offer, Room, Transport} from "../../core/domain/DomainInterfaces";
@@ -338,12 +338,23 @@ const OfferDetails = () => {
                     <div className='mb-8'>
                         <h3>Departure</h3>
 
-                        <FormControlLabel className='select-none' control={
-                            <Checkbox
-                                checked={selectedTransport === offerDetails.departure}
-                                onChange={() => {onTransportSelection(offerDetails.departure)}}
-                            />
-                        } label={offerDetails.departure.transportCourse.departureFromLocation.region}/>
+                        <div className='flex flex-row gap-1 items-center'>
+                            <FormControlLabel className='select-none' control={
+                                <Checkbox
+                                    checked={selectedTransport === offerDetails.departure}
+                                    onChange={() => {onTransportSelection(offerDetails.departure)}}
+                                />
+                            } label={offerDetails.departure.transportCourse.departureFromLocation.region}/>
+
+                            {offerDetails.departure.transportCourse.type === 'PLANE' &&
+                                <Flight style={{fontSize: 16}}/>
+                            }
+                            {offerDetails.departure.transportCourse.type === 'BUS' &&
+                                <DirectionsBus style={{fontSize: 16}}/>
+                            }
+                        </div>
+
+
 
                         <div className='flex flex-col'>
                             {offerDetails.possibleDepartures.map((item, index) => (
@@ -355,8 +366,15 @@ const OfferDetails = () => {
                                         />
                                     } label={item.transportCourse.departureFromLocation.region}/>
 
+                                    {item.transportCourse.type === 'PLANE' &&
+                                        <Flight style={{fontSize: 16, marginRight: 6,}}/>
+                                    }
+                                    {item.transportCourse.type === 'BUS' &&
+                                        <DirectionsBus style={{fontSize: 16, marginRight: 6,}}/>
+                                    }
+
                                     <p className='text-sm'>
-                                        + {Math.ceil(item.pricePerAdult - offerDetails.departure.pricePerAdult)} zł
+                                        + {Math.ceil(item.pricePerAdult - offerDetails.departure.pricePerAdult)} zł / os
                                     </p>
                                 </div>
                             ))}
