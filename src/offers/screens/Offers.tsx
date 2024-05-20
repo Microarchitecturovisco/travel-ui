@@ -49,7 +49,9 @@ export default function Offers () {
                 onSearch={searchOffers}
             />
 
-            {offers.map((offer, index) => (
+            {offers
+                .sort((a, b) => a.price > b.price ? 1 : -1)
+                .map((offer, index) => (
                 <OfferComponent
                     idHotel={offer.idHotel}
                     name={offer.hotelName}
