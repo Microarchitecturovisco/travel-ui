@@ -1,6 +1,6 @@
 
 export interface Offer {
-    idOffer: string,
+    idHotel: string,
     hotelName: string,
     description: string,
     price: number,
@@ -23,7 +23,7 @@ export interface Location {
 }
 
 export interface Room {
-    idRoom: string,
+    roomId: string,
     name: string,
     description: string,
     guestCapacity: number,
@@ -49,5 +49,5 @@ export interface TransportCourse {
     idTransportCourse: string,
     type: 'PLANE' | 'BUS',
     departureFromLocation: Location,
-    arrivalToLocation: Location,
+    arrivalAtLocation: Location,
 }

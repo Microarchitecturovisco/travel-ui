@@ -1,7 +1,7 @@
-import {useLocation} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import {Box, Button, CardMedia, Checkbox, FormControlLabel, IconButton, Paper, Typography} from "@mui/material";
 import React, {useEffect, useState} from "react";
-import {Add, ArrowBack, Bookmark, Close, Lens, Place, Remove} from "@mui/icons-material";
+import {Add, ArrowBack, Bookmark, Close, DirectionsBus, Flight, Lens, Place, Remove} from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import {ApiRequests} from "../../core/apiConfig";
 import {CateringOption, Location, Offer, Room, Transport} from "../../core/domain/DomainInterfaces";
@@ -19,7 +19,7 @@ const OfferDetails = () => {
     const navigate = useNavigate();
 
     const [offerDetails, setOfferDetails] = useState<Offer>({
-        idOffer: location.state.idHotel,
+        idHotel: location.state.idHotel,
         hotelName: location.state.hotelName,
         description: '',
         price: 0.0,
@@ -32,7 +32,7 @@ const OfferDetails = () => {
         cateringOptions: [],
 
         departure: {idTransport: '', departureDate: new Date(), capacity: 0, pricePerAdult: 0,
-            transportCourse: {idTransportCourse: '', type: 'PLANE', arrivalToLocation: {idLocation: '', region: '', country: ''}, departureFromLocation: {idLocation: '', region: '', country: ''}}},
+            transportCourse: {idTransportCourse: '', type: 'PLANE', arrivalAtLocation: {idLocation: '', region: '', country: ''}, departureFromLocation: {idLocation: '', region: '', country: ''}}},
         possibleDepartures: [],
     });
 
@@ -50,6 +50,31 @@ const OfferDetails = () => {
 
     const [selectedDateFrom, setSelectedDateFrom] = useState(new Date(2024, 4, 1,));
     const [selectedDateTo, setSelectedDateTo] = useState(() => new Date(2024, 4, 3));
+
+    const [selectedRooms, setSelectedRooms] = useState<Room[]>([]);
+    const [selectedCatering, setSelectedCatering] = useState<CateringOption>({
+        idCateringOption: '',
+        type: 'ALL_INCLUSIVE',
+        rating: 0,
+        price: 0
+    });
+
+    const [selectedTransport, setSelectedTransport] = useState<Transport>(
+        {idTransport: '', departureDate: new Date(), capacity: 0, pricePerAdult: 0,
+            transportCourse: {idTransportCourse: '', type: 'PLANE', arrivalAtLocation: {idLocation: '', region: '', country: ''}, departureFromLocation: {idLocation: '', region: '', country: ''}}},
+    );
+
+    const onRoomSelection = (roomConfiguration: any) => {
+        setSelectedRooms(roomConfiguration);
+    }
+
+    const onCateringSelection = (cateringOption: CateringOption) => {
+        setSelectedCatering(cateringOption);
+    }
+
+    const onTransportSelection = (transport: Transport) => {
+        setSelectedTransport(transport);
+    }
 
     const onGuestsSelection = (key: 'adults' | 'teens' | 'kids' | 'infants', type: 'INC' | 'DEC') => {
         setSelectedGuests(prevState => {
@@ -91,7 +116,7 @@ const OfferDetails = () => {
         let searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
 
         searchParams = {...searchParams,
-            idHotel: offerDetails.idOffer,
+            idHotel: offerDetails.idHotel,
             departurePlane: searchParams.departurePlane ? searchParams.departurePlane.map((dpt: Location) => dpt.idLocation) : [],
             departureBus: searchParams.departureBus ? searchParams.departureBus.map((dpt: Location) => dpt.idLocation) : [],
             dateFrom: formatDate(searchParams.dateFrom ? new Date(searchParams.dateFrom) : new Date()),
@@ -101,6 +126,10 @@ const OfferDetails = () => {
         await ApiRequests.getOfferDetails(searchParams)
             .then(response => {
                 setOfferDetails(response.data);
+
+                setSelectedRooms(response.data.roomConfiguration);
+                setSelectedTransport(response.data.departure);
+                setSelectedCatering(response.data.cateringOptions[0]);
             })
             .catch(err => {
                 console.log(err);
@@ -112,9 +141,9 @@ const OfferDetails = () => {
         loadDataFromStorage();
     }, []);
 
-    useEffect(() => {
-        console.log(offerDetails);
-    }, [offerDetails]);
+    // useEffect(() => {
+    //     console.log(offerDetails);
+    // }, [offerDetails]);
 
 
     return(
@@ -123,7 +152,7 @@ const OfferDetails = () => {
                 <div className='flex flex-row items-center mb-6 hover:text-gray-700 hover:cursor-pointer'
                      onClick={() => navigate(-1)}>
                     <ArrowBack style={{fontSize: 20}}/>
-                    <p className='ml-1'>Back to offers</p>
+                    <p className='ml-1'>Powrót do ofert</p>
                 </div>
                 <div className='flex flex-row items-center justify-between mb-8'>
                     <Paper style={{borderRadius: 8}} elevation={2}>
@@ -153,7 +182,7 @@ const OfferDetails = () => {
                 </div>
 
                 <div className='mb-12'>
-                    <h3 className='text-2xl mb-2'>Gallery</h3>
+                    <h3 className='text-2xl mb-2'>Galeria</h3>
                     <div className='grid gap-3'>
                         {offerDetails.imageUrls.slice(1, offerDetails.imageUrls.length).map((url, index) => (
                             <CardMedia
@@ -168,13 +197,15 @@ const OfferDetails = () => {
                 </div>
 
                 <div className='mb-8'>
-                    <h3 className='text-2xl mb-2'>Room configurations</h3>
+                    <h3 className='text-2xl mb-2'>Konfiguracje pokoi</h3>
 
                     <div className='mb-6'>
                         <FormControlLabel className='select-none' control={
-                            <Checkbox checked={true} onChange={() => {
-                            }}/>
-                        } label={'Configuration 1'}/>
+                            <Checkbox
+                                checked={selectedRooms === offerDetails.roomConfiguration}
+                                onChange={() => {onRoomSelection(offerDetails.roomConfiguration)}}
+                            />
+                        } label={'Konfiguracja 1'}/>
 
                         <div className='flex flex-col gap-2'>
                             {offerDetails.roomConfiguration.map((room, index) => (
@@ -190,13 +221,15 @@ const OfferDetails = () => {
                         {offerDetails.possibleRoomConfigurations.map((item, index) => (
                             <div key={index} className=''>
                                 <FormControlLabel className='select-none' control={
-                                    <Checkbox checked={false} onChange={() => {
-                                    }}/>
-                                } label={'Configuration ' + (index + 2)}/>
+                                    <Checkbox
+                                        checked={selectedRooms === item}
+                                        onChange={() => {onRoomSelection(item)}}
+                                    />
+                                } label={'Konfiguracja ' + (index + 2)}/>
 
                                 <div className='flex flex-col gap-2'>
                                     {item.map((room, index) => (
-                                        <div>
+                                        <div key={index}>
                                             <h3 className='mb-1'>{room.name}</h3>
                                             <p className='text-xs'>{room.description}</p>
                                         </div>
@@ -208,13 +241,15 @@ const OfferDetails = () => {
                 </div>
 
                 <div className='mb-8'>
-                    <h3 className='text-2xl mb-2'>Catering</h3>
+                    <h3 className='text-2xl mb-2'>Katering</h3>
                     <div className=''>
                         {offerDetails.cateringOptions.map((item, index) => (
                             <div key={index} className='flex flex-row gap-3'>
                                 <FormControlLabel className='select-none' control={
-                                    <Checkbox checked={index === 0} onChange={() => {
-                                    }}/>
+                                    <Checkbox
+                                        checked={selectedCatering === item}
+                                        onChange={() => {onCateringSelection(item)}}
+                                    />
                                 } label={cateringToString(item.type)}/>
 
                                 <Box sx={{display: 'flex', alignItems: 'center'}}>
@@ -236,13 +271,13 @@ const OfferDetails = () => {
                     <div className='flex flex-col gap-4 mb-4'>
 
                         <DatePicker
-                            label="Departure date"
+                            label="Wyjazd"
                             value={dayjs(selectedDateFrom)}
                             onChange={(value) => onDateSelection(value ? value.toDate() : new Date(), 'FROM')}
                         />
 
                         <DatePicker
-                            label="Return date"
+                            label="Powrót"
                             value={dayjs(selectedDateTo)}
                             onChange={(value) => onDateSelection(value ? value.toDate() : new Date(), 'TO')}
                         />
@@ -251,7 +286,7 @@ const OfferDetails = () => {
                     {/* people selection */}
                     <div className='flex flex-col pl-2 mb-4'>
                         <div className='flex items-center justify-between gap-6'>
-                            <Typography className='select-none'>Adults</Typography>
+                            <Typography className='select-none'>Dorośli</Typography>
                             <div className='flex items-center'>
                                 <IconButton onClick={() => onGuestsSelection('adults', 'DEC')}>
                                     <Remove/>
@@ -263,7 +298,7 @@ const OfferDetails = () => {
                             </div>
                         </div>
                         <div className='flex items-center justify-between gap-6'>
-                            <Typography className='select-none'>Teens</Typography>
+                            <Typography className='select-none'>Nastolatkowie</Typography>
                             <div className='flex items-center'>
                                 <IconButton onClick={() => onGuestsSelection('teens', 'DEC')}>
                                     <Remove/>
@@ -275,7 +310,7 @@ const OfferDetails = () => {
                             </div>
                         </div>
                         <div className='flex items-center justify-between gap-6'>
-                            <Typography className='select-none'>Kids</Typography>
+                            <Typography className='select-none'>Dzieci</Typography>
                             <div className='flex items-center'>
                                 <IconButton onClick={() => onGuestsSelection('kids', 'DEC')}>
                                     <Remove/>
@@ -287,7 +322,7 @@ const OfferDetails = () => {
                             </div>
                         </div>
                         <div className='flex items-center justify-between gap-6'>
-                            <Typography className='select-none'>Infants</Typography>
+                            <Typography className='select-none'>Noworodki</Typography>
                             <div className='flex items-center'>
                                 <IconButton onClick={() => onGuestsSelection('infants', 'DEC')}>
                                     <Remove/>
@@ -301,23 +336,45 @@ const OfferDetails = () => {
                     </div>
 
                     <div className='mb-8'>
-                        <h3>Departure</h3>
+                        <h3>Wylot / wyjazd</h3>
 
-                        <FormControlLabel className='select-none' control={
-                            <Checkbox checked={true} onChange={() => {
-                            }}/>
-                        } label={offerDetails.departure.transportCourse.departureFromLocation.region}/>
+                        <div className='flex flex-row gap-1 items-center'>
+                            <FormControlLabel className='select-none' control={
+                                <Checkbox
+                                    checked={selectedTransport === offerDetails.departure}
+                                    onChange={() => {onTransportSelection(offerDetails.departure)}}
+                                />
+                            } label={offerDetails.departure.transportCourse.departureFromLocation.region}/>
+
+                            {offerDetails.departure.transportCourse.type === 'PLANE' &&
+                                <Flight style={{fontSize: 16}}/>
+                            }
+                            {offerDetails.departure.transportCourse.type === 'BUS' &&
+                                <DirectionsBus style={{fontSize: 16}}/>
+                            }
+                        </div>
+
+
 
                         <div className='flex flex-col'>
                             {offerDetails.possibleDepartures.map((item, index) => (
                                 <div key={index} className='flex flex-row gap-1 items-center'>
                                     <FormControlLabel className='select-none' control={
-                                        <Checkbox checked={false} onChange={() => {
-                                        }}/>
+                                        <Checkbox
+                                            checked={selectedTransport === item}
+                                            onChange={() => {onTransportSelection(item)}}
+                                        />
                                     } label={item.transportCourse.departureFromLocation.region}/>
 
+                                    {item.transportCourse.type === 'PLANE' &&
+                                        <Flight style={{fontSize: 16, marginRight: 6,}}/>
+                                    }
+                                    {item.transportCourse.type === 'BUS' &&
+                                        <DirectionsBus style={{fontSize: 16, marginRight: 6,}}/>
+                                    }
+
                                     <p className='text-sm'>
-                                        + {Math.ceil(item.pricePerAdult - offerDetails.departure.pricePerAdult)} zł
+                                        + {Math.ceil(item.pricePerAdult - offerDetails.departure.pricePerAdult)} zł / os
                                     </p>
                                 </div>
                             ))}
@@ -326,11 +383,20 @@ const OfferDetails = () => {
                     </div>
 
 
-                    <div className=''>
+                    <Link to='/buyOffer' state={{
+                        idHotel: offerDetails.idHotel,
+                        hotelName: offerDetails.hotelName,
+                        selectedDateFrom: selectedDateFrom,
+                        selectedDateTo: selectedDateTo,
+                        selectedRooms: selectedRooms,
+                        selectedTransport: selectedTransport,
+                        selectedGuests: selectedGuests,
+                        selectedCatering: selectedCatering,
+                    }}>
                         <Button variant='contained' startIcon={<Bookmark/>}>
                             Book and buy offer
                         </Button>
-                    </div>
+                    </Link>
                 </Paper>
             </div>
         </div>

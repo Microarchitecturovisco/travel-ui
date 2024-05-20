@@ -58,7 +58,7 @@ const OfferComponent: React.FC<OfferProps> = ({idHotel, name, location, rating, 
             <div className='flex flex-col justify-between px-6 py-6'>
                 <div className='flex flex-row items-center justify-end'>
                     <p className='text-xl font-semibold'>
-                        {pricePerPerson} zł
+                        {pricePerPerson.toLocaleString().replace(',', ' ')} zł
                     </p>
                     <p className='ml-1 text-sm'>
                         /os
@@ -68,7 +68,7 @@ const OfferComponent: React.FC<OfferProps> = ({idHotel, name, location, rating, 
                     to='/offerDetails'
                     state={{idHotel: idHotel, name: name, hotelLocation: location, rating: rating, pricePerPerson: pricePerPerson, photoURL: photoURL}}>
                     <Button variant="contained" color="primary">
-                        Check Details
+                        Szczegóły
                     </Button>
                 </Link>
             </div>
