@@ -35,14 +35,12 @@ const BuyOffer = () => {
             dateTo: formatDate(searchParams.dateFrom ? new Date(searchParams.dateTo) : new Date()),
         }
 
-        console.log(searchParams);
-
         await ApiRequests.reserveOffer({
             id: crypto.randomUUID(),
             hotelId: idHotel,
 
-            hotelDateFrom: selectedDateFrom,
-            hotelDateTo: selectedDateTo,
+            hotelTimeFrom: selectedDateFrom,
+            hotelTimeTo: selectedDateTo,
 
             adultsQuantity: selectedGuests.adults,
             childrenUnder18Quantity: selectedGuests.teens,
@@ -57,7 +55,7 @@ const BuyOffer = () => {
             transportReservationsIds: [selectedTransport.idTransport],
             userId: '',
         })
-            .then(response => response)
+            .then(response => console.log(response))
             .catch(e => console.log(e));
     }
 

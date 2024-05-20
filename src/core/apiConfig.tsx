@@ -26,8 +26,7 @@ export class ApiRequests {
     }
 
     static reserveOffer = async (payload: ReservationRequestPayload) => {
-        console.log(payload);
-        return await axiosInstance.post(`reservations/reservation`, payload);
+        return await axiosInstance.post('reservations/reservation', payload);
     }
 }
 
@@ -68,8 +67,8 @@ export interface GetOfferDetailsParams {
 export interface ReservationRequestPayload {
     id: string,
     hotelId: string,
-    hotelDateFrom: string,
-    hotelDateTo: string,
+    hotelTimeFrom: string,
+    hotelTimeTo: string,
 
     adultsQuantity: number,
     childrenUnder18Quantity: number,
