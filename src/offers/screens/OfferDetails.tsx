@@ -32,7 +32,7 @@ const OfferDetails = () => {
         cateringOptions: [],
 
         departure: {idTransport: '', departureDate: new Date(), capacity: 0, pricePerAdult: 0,
-            transportCourse: {idTransportCourse: '', type: 'PLANE', arrivalToLocation: {idLocation: '', region: '', country: ''}, departureFromLocation: {idLocation: '', region: '', country: ''}}},
+            transportCourse: {idTransportCourse: '', type: 'PLANE', arrivalAtLocation: {idLocation: '', region: '', country: ''}, departureFromLocation: {idLocation: '', region: '', country: ''}}},
         possibleDepartures: [],
     });
 
@@ -61,7 +61,7 @@ const OfferDetails = () => {
 
     const [selectedTransport, setSelectedTransport] = useState<Transport>(
         {idTransport: '', departureDate: new Date(), capacity: 0, pricePerAdult: 0,
-            transportCourse: {idTransportCourse: '', type: 'PLANE', arrivalToLocation: {idLocation: '', region: '', country: ''}, departureFromLocation: {idLocation: '', region: '', country: ''}}},
+            transportCourse: {idTransportCourse: '', type: 'PLANE', arrivalAtLocation: {idLocation: '', region: '', country: ''}, departureFromLocation: {idLocation: '', region: '', country: ''}}},
     );
 
     const onRoomSelection = (roomConfiguration: any) => {

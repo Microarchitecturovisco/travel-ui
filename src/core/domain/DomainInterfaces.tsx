@@ -49,5 +49,5 @@ export interface TransportCourse {
     idTransportCourse: string,
     type: 'PLANE' | 'BUS',
     departureFromLocation: Location,
-    arrivalToLocation: Location,
+    arrivalAtLocation: Location,
 }

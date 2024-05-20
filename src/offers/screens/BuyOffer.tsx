@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
 import Countdown from "react-countdown";
 import {CateringOption, Location, Room, Transport} from "../../core/domain/DomainInterfaces";
@@ -98,6 +98,8 @@ const BuyOffer = () => {
 
                     <div className='flex flex-row gap-3 items-center'>
                         <p>{selectedTransport.transportCourse.type}</p>
+                        <p>z: {selectedTransport.transportCourse.departureFromLocation.region}</p>
+                        <p>do: {selectedTransport.transportCourse.arrivalAtLocation.region}, {selectedTransport.transportCourse.arrivalAtLocation.country}</p>
                         <p className='text-xs'>{selectedTransport.idTransport}</p>
                     </div>
                 </div>
