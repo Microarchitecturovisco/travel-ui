@@ -41,7 +41,7 @@ export default function Offers () {
         <div className='flex flex-col py-16 px-[28rem] justify-center'>
             {offers.length > 0 &&
                 <div className='offersHeaderContainer'>
-                    <h1 className='text-2xl mb-8'>Excellent offers just for you!</h1>
+                    <h1 className='text-2xl mb-8'>Doskonałe oferty specjalnie dla Ciebie!</h1>
                 </div>
             }
 
@@ -58,7 +58,7 @@ export default function Offers () {
                     key={offer.hotelName}
                     location={offer.destination}
                     rating={offer.rating}
-                    pricePerPerson={offer.price}
+                    pricePerPerson={Math.ceil(offer.price)}
                     photoURL={offer.imageUrl}
                     bestSeller={index < 3}
                 />
@@ -70,7 +70,7 @@ export default function Offers () {
                         <SentimentVeryDissatisfied style={{fontSize: 36}}/>
                         <p className='text-2xl'>No results</p>
                     </div>
-                    <p>Change your search parameters and try again...</p>
+                    <p>Zmień parametry wyszukiwania i spróbuj ponownie...</p>
                 </div>
             }
         </div>

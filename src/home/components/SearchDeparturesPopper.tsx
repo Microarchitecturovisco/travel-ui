@@ -12,7 +12,7 @@ const SearchDeparturesPopper = ({departures, selectedPlaneDepartures, selectedBu
                 <div>
                     <div className='flex flex-row gap-2 items-center mb-2 ml-0.5'>
                         <Flight style={{fontSize: 16}}/>
-                        <h3 className='text-xs'>PLANE DEPARTURES</h3>
+                        <h3 className='text-xs'>WYLOT SAMOLOTEM</h3>
                     </div>
 
                     <FormGroup>
@@ -26,7 +26,7 @@ const SearchDeparturesPopper = ({departures, selectedPlaneDepartures, selectedBu
                 <div>
                     <div className='flex flex-row gap-2 items-center mb-2 ml-0.5'>
                         <DirectionsBus style={{fontSize: 16}}/>
-                        <h3 className='text-xs'>BUS DEPARTURES</h3>
+                        <h3 className='text-xs'>WYJAZD BUSEM</h3>
                     </div>
                     <FormGroup>
                         <FormGroup>

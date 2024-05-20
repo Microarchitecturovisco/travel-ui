@@ -21,9 +21,7 @@ const BuyOffer = () => {
     const [selectedCatering, setSelectedCatering] = useState<CateringOption>(location.state.selectedCatering);
     const [selectedTransport, setSelectedTransport] = useState<Transport>(location.state.selectedTransport);
 
-    const [transactionEnded, setTransactionEnded] = useState(false);
-
-    const [transactionSuccessful, setTransactionSuccessful] = useState(false);
+    const [transactionSuccessful, setTransactionSuccessful] = useState('IN_PROGRESS');
 
     const reserveOfferRequest = async () => {
         let searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
@@ -59,9 +57,13 @@ const BuyOffer = () => {
                 console.log(response);
                 if (response === 0) {
                     setTimeout(() => {
-                        setTransactionSuccessful(true);
-                        setTransactionEnded(true);
-                    }, 1000);
+                        setTransactionSuccessful('SUCCESS');
+                    }, 500);
+                }
+                else {
+                    setTimeout(() => {
+                        setTransactionSuccessful('FAILURE');
+                    }, 500);
                 }
             })
             .catch(e => console.log(e));
@@ -69,20 +71,20 @@ const BuyOffer = () => {
 
     return (
         <div className='flex flex-col px-[32rem] py-24'>
-            <p className='text-xl mb-6'>Trip details</p>
+            <p className='text-xl mb-6'>Szczegóły oferty</p>
 
             <div className='flex flex-col gap-3 mb-12'>
                 <p>ID hotel {idHotel}</p>
                 <p>{formatDate(selectedDateFrom)} - {formatDate(selectedDateTo)}</p>
                 <div>
-                    <h3>People:</h3>
-                    <p className='ml-2'>Adults {selectedGuests.adults}</p>
-                    <p className='ml-2'>Teenagers {selectedGuests.teens}</p>
-                    <p className='ml-2'>Kids {selectedGuests.kids}</p>
-                    <p className='ml-2'>Infants {selectedGuests.infants}</p>
+                    <h3>Podróżni:</h3>
+                    <p className='ml-2'>Dorośli {selectedGuests.adults}</p>
+                    <p className='ml-2'>Nastolatkowie {selectedGuests.teens}</p>
+                    <p className='ml-2'>Dzieci {selectedGuests.kids}</p>
+                    <p className='ml-2'>Noworodki {selectedGuests.infants}</p>
                 </div>
                 <div>
-                    <p>Rooms</p>
+                    <p>Pokoje</p>
                     {selectedRooms.map((item, index) => (
                         <div key={index} className='flex flex-row gap-3 items-center'>
                             <p>{item.name}</p>
@@ -103,32 +105,39 @@ const BuyOffer = () => {
 
             </div>
 
-            {!transactionEnded &&
+            {transactionSuccessful === 'IN_PROGRESS' &&
                 <div className='flex flex-col gap-3'>
-                    <p>Time to pay for offer:</p>
+                    <p>Czas na zakup rezerwacji:</p>
                     <Countdown
                         date={Date.now() + 60000}
                         onComplete={() => {
-                            setTransactionEnded(true)
+                            setTransactionSuccessful('ENDED');
                         }}
                     />
 
                     <div>
                         <Button variant='contained' startIcon={<CreditCard/>} onClick={reserveOfferRequest}>
-                            Pay by card
+                            Zapłać kartą
                         </Button>
                     </div>
                 </div>
             }
 
-            {transactionEnded && !transactionSuccessful &&
-                <p className='text-xl mt-2 text-red-500'>Time for the transaction has ended!</p>
+            {transactionSuccessful === 'ENDED' &&
+                <p className='text-xl mt-2 text-red-500'>Czas transakcji się skończył!</p>
             }
 
-            {transactionEnded && transactionSuccessful &&
+            {transactionSuccessful === 'SUCCESS' &&
                 <div>
-                    <p className='text-xl mt-2 text-green-400'>Transaction successful</p>
-                    <p>You can view your trip in the Reservations tab</p>
+                    <p className='text-xl mt-2 text-green-400'>Transakcja pomyślna</p>
+                    <p>Możesz zobaczyć swoją podróż w zakładce Rezerwacji</p>
+                </div>
+            }
+
+            {transactionSuccessful === 'FAILURE' &&
+                <div>
+                    <p className='text-xl mt-2 text-red-400'>Transakcja niepomyślna</p>
+                    <p>Sprawdź dane karty</p>
                 </div>
             }
         </div>

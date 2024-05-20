@@ -21,7 +21,7 @@ export default function Navbar () {
                             startIcon={<Explore style={{color: '#333'}}/>}
                             style={{color: '#333'}}
                         >
-                            Offers
+                            Oferty
                         </Button>
                     </Link>
                 </li>
@@ -31,7 +31,7 @@ export default function Navbar () {
                         startIcon={<Bookmarks style={{color: '#333'}}/>}
                         style={{color: '#333'}}
                     >
-                        Reservations
+                        Rezerwacje
                     </Button>
                 </li>
                 <li className='flex flex-row items-center'>
@@ -40,13 +40,13 @@ export default function Navbar () {
                         startIcon={<Person style={{color: '#333'}}/>}
                         style={{color: '#333'}}
                     >
-                        Account
+                        Konto
                     </Button>
                 </li>
 
             </ul>
             <div>
-                <Button variant='contained' startIcon={<LoginIcon/>}>Log in</Button>
+                <Button variant='contained' startIcon={<LoginIcon/>}>Zaloguj</Button>
             </div>
         </div>
     );

@@ -152,7 +152,7 @@ const OfferDetails = () => {
                 <div className='flex flex-row items-center mb-6 hover:text-gray-700 hover:cursor-pointer'
                      onClick={() => navigate(-1)}>
                     <ArrowBack style={{fontSize: 20}}/>
-                    <p className='ml-1'>Back to offers</p>
+                    <p className='ml-1'>Powrót do ofert</p>
                 </div>
                 <div className='flex flex-row items-center justify-between mb-8'>
                     <Paper style={{borderRadius: 8}} elevation={2}>
@@ -182,7 +182,7 @@ const OfferDetails = () => {
                 </div>
 
                 <div className='mb-12'>
-                    <h3 className='text-2xl mb-2'>Gallery</h3>
+                    <h3 className='text-2xl mb-2'>Galeria</h3>
                     <div className='grid gap-3'>
                         {offerDetails.imageUrls.slice(1, offerDetails.imageUrls.length).map((url, index) => (
                             <CardMedia
@@ -197,7 +197,7 @@ const OfferDetails = () => {
                 </div>
 
                 <div className='mb-8'>
-                    <h3 className='text-2xl mb-2'>Room configurations</h3>
+                    <h3 className='text-2xl mb-2'>Konfiguracje pokoi</h3>
 
                     <div className='mb-6'>
                         <FormControlLabel className='select-none' control={
@@ -205,7 +205,7 @@ const OfferDetails = () => {
                                 checked={selectedRooms === offerDetails.roomConfiguration}
                                 onChange={() => {onRoomSelection(offerDetails.roomConfiguration)}}
                             />
-                        } label={'Configuration 1'}/>
+                        } label={'Konfiguracja 1'}/>
 
                         <div className='flex flex-col gap-2'>
                             {offerDetails.roomConfiguration.map((room, index) => (
@@ -225,7 +225,7 @@ const OfferDetails = () => {
                                         checked={selectedRooms === item}
                                         onChange={() => {onRoomSelection(item)}}
                                     />
-                                } label={'Configuration ' + (index + 2)}/>
+                                } label={'Konfiguracja ' + (index + 2)}/>
 
                                 <div className='flex flex-col gap-2'>
                                     {item.map((room, index) => (
@@ -241,7 +241,7 @@ const OfferDetails = () => {
                 </div>
 
                 <div className='mb-8'>
-                    <h3 className='text-2xl mb-2'>Catering</h3>
+                    <h3 className='text-2xl mb-2'>Katering</h3>
                     <div className=''>
                         {offerDetails.cateringOptions.map((item, index) => (
                             <div key={index} className='flex flex-row gap-3'>
@@ -271,13 +271,13 @@ const OfferDetails = () => {
                     <div className='flex flex-col gap-4 mb-4'>
 
                         <DatePicker
-                            label="Departure date"
+                            label="Wyjazd"
                             value={dayjs(selectedDateFrom)}
                             onChange={(value) => onDateSelection(value ? value.toDate() : new Date(), 'FROM')}
                         />
 
                         <DatePicker
-                            label="Return date"
+                            label="Powrót"
                             value={dayjs(selectedDateTo)}
                             onChange={(value) => onDateSelection(value ? value.toDate() : new Date(), 'TO')}
                         />
@@ -286,7 +286,7 @@ const OfferDetails = () => {
                     {/* people selection */}
                     <div className='flex flex-col pl-2 mb-4'>
                         <div className='flex items-center justify-between gap-6'>
-                            <Typography className='select-none'>Adults</Typography>
+                            <Typography className='select-none'>Dorośli</Typography>
                             <div className='flex items-center'>
                                 <IconButton onClick={() => onGuestsSelection('adults', 'DEC')}>
                                     <Remove/>
@@ -298,7 +298,7 @@ const OfferDetails = () => {
                             </div>
                         </div>
                         <div className='flex items-center justify-between gap-6'>
-                            <Typography className='select-none'>Teens</Typography>
+                            <Typography className='select-none'>Nastolatkowie</Typography>
                             <div className='flex items-center'>
                                 <IconButton onClick={() => onGuestsSelection('teens', 'DEC')}>
                                     <Remove/>
@@ -310,7 +310,7 @@ const OfferDetails = () => {
                             </div>
                         </div>
                         <div className='flex items-center justify-between gap-6'>
-                            <Typography className='select-none'>Kids</Typography>
+                            <Typography className='select-none'>Dzieci</Typography>
                             <div className='flex items-center'>
                                 <IconButton onClick={() => onGuestsSelection('kids', 'DEC')}>
                                     <Remove/>
@@ -322,7 +322,7 @@ const OfferDetails = () => {
                             </div>
                         </div>
                         <div className='flex items-center justify-between gap-6'>
-                            <Typography className='select-none'>Infants</Typography>
+                            <Typography className='select-none'>Noworodki</Typography>
                             <div className='flex items-center'>
                                 <IconButton onClick={() => onGuestsSelection('infants', 'DEC')}>
                                     <Remove/>
@@ -336,7 +336,7 @@ const OfferDetails = () => {
                     </div>
 
                     <div className='mb-8'>
-                        <h3>Departure</h3>
+                        <h3>Wylot / wyjazd</h3>
 
                         <div className='flex flex-row gap-1 items-center'>
                             <FormControlLabel className='select-none' control={

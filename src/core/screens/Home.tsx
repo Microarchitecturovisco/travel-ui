@@ -14,9 +14,8 @@ export default function Home () {
             className='flex flex-col px-20 py-32 items-center homeContainer'
         >
             <div className='flex flex-col text-center gap-12 mb-28'>
-                <h1 className='text-5xl font-bold tracking-wide text-gray-900'>Explore. Discover. Travel.</h1>
-                <h3 className='text-gray-700'>Explore our handpicked experiences, delving into the world's most
-                    captivating destinations and unforgettable accommodations.</h3>
+                <h1 className='text-5xl font-bold tracking-wide text-gray-900'>Eksploruj. Odkrywaj. Podróżuj.</h1>
+                <h3 className='text-gray-700'>Odkryj nasze starannie wyselekcjonowane doświadczenia, zagłębiając się w najbardziej urzekające miejsca na świecie i rezerwuj zapadające w pamięć noclegi.</h3>
             </div>
 
             <SearchBar

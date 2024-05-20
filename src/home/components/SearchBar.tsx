@@ -195,7 +195,7 @@ const SearchBar = ({onSearch, hideClearSearch = false}) => {
                         onClick={event => handleClick(event, 'destination')}
                         endIcon={<ArrowDropDown/>}
                     >
-                        Destinations
+                        Cele podróży
                     </Button>
                     <Popper open={Boolean(anchorEl) && anchorType == 'destination'} anchorEl={anchorEl}>
                         <SearchDestinationsPopper
@@ -216,7 +216,7 @@ const SearchBar = ({onSearch, hideClearSearch = false}) => {
                         onClick={event => handleClick(event, 'guests')}
                         endIcon={<ArrowDropDown/>}
                     >
-                        Guests
+                        Ile osób
                     </Button>
                     <Popper open={Boolean(anchorEl) && anchorType == 'guests'} anchorEl={anchorEl}>
                         <SearchGuestQuantityPopper
@@ -236,7 +236,7 @@ const SearchBar = ({onSearch, hideClearSearch = false}) => {
                         onClick={event => handleClick(event, 'when')}
                         endIcon={<ArrowDropDown/>}
                     >
-                        When
+                        Kiedy
                     </Button>
                     <Popper open={Boolean(anchorEl) && anchorType == 'when'} anchorEl={anchorEl}>
                         <SearchDateRangePopper
@@ -257,7 +257,7 @@ const SearchBar = ({onSearch, hideClearSearch = false}) => {
                         onClick={event => handleClick(event, 'from')}
                         endIcon={<ArrowDropDown/>}
                     >
-                        From
+                        Skąd
                     </Button>
                     <Popper open={Boolean(anchorEl) && anchorType == 'from'} anchorEl={anchorEl}>
                         <SearchDeparturesPopper
@@ -278,7 +278,7 @@ const SearchBar = ({onSearch, hideClearSearch = false}) => {
                         <Button color='error' className='flex flex-row items-center gap-1'
                                 onClick={clearSearchParameters}>
                             <Close style={{fontSize: 18}}/>
-                            <p className='text-sm'>Clear search parameters</p>
+                            <p className='text-sm'>Wyczyść parametry wyszukiwania</p>
                         </Button>
                     </div>
                 }
