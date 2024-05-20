@@ -12,6 +12,7 @@ const BuyOffer = () => {
     const location = useLocation();
 
     const [idHotel, setIdHotel] = useState(location.state.idHotel);
+    const [hotelName, setHotelName] = useState(location.state.hotelName);
     const [selectedGuests, setSelectedGuests] = useState(location.state.selectedGuests);
 
     const [selectedDateFrom, setSelectedDateFrom] = useState(location.state.selectedDateFrom);
@@ -54,7 +55,6 @@ const BuyOffer = () => {
             userId: '',
         })
             .then(response => {
-                console.log(response);
                 if (response === 0) {
                     setTimeout(() => {
                         setTransactionSuccessful('SUCCESS');
@@ -74,19 +74,25 @@ const BuyOffer = () => {
             <p className='text-xl mb-6'>Szczegóły oferty</p>
 
             <div className='flex flex-col gap-3 mb-12'>
-                <p>ID hotel {idHotel}</p>
-                <p>{formatDate(selectedDateFrom)} - {formatDate(selectedDateTo)}</p>
+                <h3>Hotel</h3>
+                <div className='flex flex-row items-center gap-3 ml-4 mb-4'>
+                    <p>{hotelName}</p>
+                    <p className='text-xs'>{idHotel}</p>
+                </div>
+
+                <p className='mb-4'>{formatDate(selectedDateFrom)} - {formatDate(selectedDateTo)}</p>
+
                 <div>
                     <h3>Podróżni:</h3>
-                    <p className='ml-2'>Dorośli {selectedGuests.adults}</p>
-                    <p className='ml-2'>Nastolatkowie {selectedGuests.teens}</p>
-                    <p className='ml-2'>Dzieci {selectedGuests.kids}</p>
-                    <p className='ml-2'>Noworodki {selectedGuests.infants}</p>
+                    <p className='ml-4'>Dorośli {selectedGuests.adults}</p>
+                    <p className='ml-4'>Nastolatkowie {selectedGuests.teens}</p>
+                    <p className='ml-4'>Dzieci {selectedGuests.kids}</p>
+                    <p className='ml-4'>Noworodki {selectedGuests.infants}</p>
                 </div>
                 <div>
                     <p>Pokoje</p>
                     {selectedRooms.map((item, index) => (
-                        <div key={index} className='flex flex-row gap-3 items-center'>
+                        <div key={index} className='flex flex-row gap-3 items-center ml-4'>
                             <p>{item.name}</p>
                             <h3 className='text-xs'>{item.roomId}</h3>
                         </div>
@@ -96,7 +102,7 @@ const BuyOffer = () => {
                 <div>
                     <h3>Transport</h3>
 
-                    <div className='flex flex-row gap-3 items-center'>
+                    <div className='flex flex-row gap-3 items-center ml-4'>
                         <p>{selectedTransport.transportCourse.type}</p>
                         <p>z: {selectedTransport.transportCourse.departureFromLocation.region}</p>
                         <p>do: {selectedTransport.transportCourse.arrivalAtLocation.region}, {selectedTransport.transportCourse.arrivalAtLocation.country}</p>

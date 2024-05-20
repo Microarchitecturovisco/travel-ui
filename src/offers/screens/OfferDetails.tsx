@@ -385,6 +385,7 @@ const OfferDetails = () => {
 
                     <Link to='/buyOffer' state={{
                         idHotel: offerDetails.idHotel,
+                        hotelName: offerDetails.hotelName,
                         selectedDateFrom: selectedDateFrom,
                         selectedDateTo: selectedDateTo,
                         selectedRooms: selectedRooms,
