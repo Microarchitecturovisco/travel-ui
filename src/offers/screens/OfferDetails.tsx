@@ -365,7 +365,15 @@ const OfferDetails = () => {
                     </div>
 
 
-                    <Link to='/buyOffer' state={{idHotel: offerDetails.idHotel}}>
+                    <Link to='/buyOffer' state={{
+                        idHotel: offerDetails.idHotel,
+                        selectedDateFrom: selectedDateFrom,
+                        selectedDateTo: selectedDateTo,
+                        selectedRooms: selectedRooms,
+                        selectedTransport: selectedTransport,
+                        selectedGuests: selectedGuests,
+                        selectedCatering: selectedCatering,
+                    }}>
                         <Button variant='contained' startIcon={<Bookmark/>}>
                             Book and buy offer
                         </Button>

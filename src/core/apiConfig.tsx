@@ -24,6 +24,11 @@ export class ApiRequests {
     static getOfferDetails = async (params: GetOfferDetailsParams) => {
         return await axiosInstance.get(`offers/${params.idHotel}?departure_buses=${params.departureBus}&departure_planes=${params.departurePlane}&date_from=${params.dateFrom}&date_to=${params.dateTo}&adults=${params.adults}&teens=${params.teens}&kids=${params.kids}&infants=${params.infants}`)
     }
+
+    static reserveOffer = async (payload: ReservationRequestPayload) => {
+        console.log(payload);
+        return await axiosInstance.post(`reservations/reservation`, payload);
+    }
 }
 
 export interface GetOffersBySearchQueryOffer {
@@ -58,4 +63,24 @@ export interface GetOfferDetailsParams {
     teens: number,
     kids: number,
     infants: number,
+}
+
+export interface ReservationRequestPayload {
+    id: string,
+    hotelId: string,
+    hotelDateFrom: string,
+    hotelDateTo: string,
+
+    adultsQuantity: number,
+    childrenUnder18Quantity: number,
+    childrenUnder10Quantity: number,
+    childrenUnder3Quantity: number,
+
+    departureLocationIdsByPlane: string[],
+    departureLocationIdsByBus: string[],
+    arrivalLocationIds: string[],
+
+    roomReservationsIds: string[],
+    transportReservationsIds: string[],
+    userId: string,
 }

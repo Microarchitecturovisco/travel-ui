@@ -23,7 +23,7 @@ export interface Location {
 }
 
 export interface Room {
-    idRoom: string,
+    roomId: string,
     name: string,
     description: string,
     guestCapacity: number,
