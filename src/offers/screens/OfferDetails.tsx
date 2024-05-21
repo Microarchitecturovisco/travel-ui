@@ -147,6 +147,29 @@ const OfferDetails = () => {
     //     console.log(offerDetails);
     // }, [offerDetails]);
 
+    const [finalPrice, setFinalPrice] = useState(0);
+
+    const calculatePrice = () => {
+        if (!offerDetails.cateringOptions[0]) {
+            return;
+        }
+
+        const cateringExtraPrice = selectedCatering.price - offerDetails.cateringOptions[0].price;
+        const transportExtraPricePerAdult = selectedTransport.pricePerAdult - offerDetails.departure[0].pricePerAdult
+
+        const extraPricePerAdult = transportExtraPricePerAdult * selectedGuests.adults;
+        const extraPricePerTeen = transportExtraPricePerAdult * 0.7 * selectedGuests.teens;
+        const extraPricePerKid = transportExtraPricePerAdult * 0.6 * selectedGuests.kids;
+        const extraPricePerInfant = transportExtraPricePerAdult * 0.1 * selectedGuests.infants;
+
+        const finalPrice = offerDetails.price + cateringExtraPrice + extraPricePerTeen + extraPricePerKid + extraPricePerInfant + extraPricePerAdult;
+        setFinalPrice(Math.ceil(finalPrice));
+    }
+
+    useEffect(() => {
+        calculatePrice();
+    }, [selectedTransport, selectedCatering, selectedGuests, offerDetails]);
+
 
     return(
         <div className='flex flex-row justify-around px-96'>
@@ -357,7 +380,7 @@ const OfferDetails = () => {
                         </div>
 
 
-                        <div className='flex flex-col'>
+                        <div className='flex flex-col mb-1'>
                             {offerDetails.possibleDepartures[0].map((item, index) => (
                                 <div key={index} className='flex flex-row gap-1 items-center'>
                                     <FormControlLabel className='select-none' control={
@@ -381,10 +404,16 @@ const OfferDetails = () => {
                             ))}
                         </div>
 
+                        <div className='flex flex-row gap-2'>
+                            <p>Cena:</p>
+                            <p>{finalPrice.toLocaleString().replace(',', ' ')} zł</p>
+                        </div>
+
                     </div>
 
                     <Link to='/buyOffer' state={{
                         idHotel: offerDetails.idHotel,
+                        price: finalPrice,
                         hotelName: offerDetails.hotelName,
                         selectedDateFrom: selectedDateFrom,
                         selectedDateTo: selectedDateTo,

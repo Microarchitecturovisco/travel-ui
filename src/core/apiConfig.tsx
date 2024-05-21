@@ -78,6 +78,7 @@ export interface ReservationRequestPayload {
     childrenUnder18Quantity: number,
     childrenUnder10Quantity: number,
     childrenUnder3Quantity: number,
+    price: number,
 
     roomReservationsIds: string[],
     transportReservationsIds: string[],

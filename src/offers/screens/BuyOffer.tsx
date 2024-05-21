@@ -12,6 +12,7 @@ const BuyOffer = () => {
     const location = useLocation();
 
     const [idHotel, setIdHotel] = useState(location.state.idHotel);
+    const [price, setPrice] = useState(location.state.price);
     const [hotelName, setHotelName] = useState(location.state.hotelName);
     const [selectedGuests, setSelectedGuests] = useState(location.state.selectedGuests);
 
@@ -49,6 +50,8 @@ const BuyOffer = () => {
             childrenUnder10Quantity: selectedGuests.kids,
             childrenUnder3Quantity: selectedGuests.infants,
 
+            price: price,
+
             roomReservationsIds: selectedRooms.map(room => room.roomId),
             transportReservationsIds: [selectedTransport.idTransport, selectedReturnTransport.idTransport],
             userId: crypto.randomUUID(),
@@ -65,10 +68,10 @@ const BuyOffer = () => {
             .catch(e => console.log(e));
     }
 
-    const payForReservation = async () => {
+    const payForReservation = async (successful: boolean) => {
         await ApiRequests.payForReservation({
             reservationId: idReservation,
-            cardNumber: ('123456781234567' + Math.floor(Math.random() * 10).toString())
+            cardNumber: ('123456781234567' + (successful ? '4' : '5'))
         })
             .then(response => {
                 if (response.status === 200) {
@@ -76,7 +79,6 @@ const BuyOffer = () => {
                     return;
                 }
             }).catch(e => {
-                console.log(e);
                 setTransactionSuccessful('FAILURE');
             });
     }
@@ -153,9 +155,12 @@ const BuyOffer = () => {
                         }}
                     />
 
-                    <div>
-                        <Button variant='contained' startIcon={<CreditCard/>} onClick={payForReservation}>
-                            Zapłać kartą
+                    <div className='flex flex-row gap-3'>
+                        <Button variant='contained' startIcon={<CreditCard/>} onClick={() => payForReservation(true)}>
+                            Zapłać kartą poprawnie
+                        </Button>
+                        <Button variant='contained' startIcon={<CreditCard/>} color='error' onClick={() => payForReservation(false)}>
+                            Zapłać kartą niepoprawnie
                         </Button>
                     </div>
                 </div>
