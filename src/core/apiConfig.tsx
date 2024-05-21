@@ -28,6 +28,10 @@ export class ApiRequests {
     static reserveOffer = async (payload: ReservationRequestPayload) => {
         return await axiosInstance.post('reservations/reservation', payload);
     }
+
+    static payForReservation = async (payload: PaymentPayload) => {
+        return await axiosInstance.post('reservations/purchase', payload);
+    }
 }
 
 export interface GetOffersBySearchQueryOffer {
@@ -78,4 +82,9 @@ export interface ReservationRequestPayload {
     roomReservationsIds: string[],
     transportReservationsIds: string[],
     userId: string,
+}
+
+export interface PaymentPayload {
+    reservationId: string,
+    cardNumber: string,
 }

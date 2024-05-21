@@ -65,21 +65,6 @@ const OfferDetails = () => {
             transportCourse: {idTransportCourse: '', type: 'PLANE', arrivalAtLocation: {idLocation: '', region: '', country: ''}, departureFromLocation: {idLocation: '', region: '', country: ''}}},
     );
 
-    useEffect(() => {
-        console.log(offerDetails);
-
-        if (offerDetails.possibleDepartures[0])
-
-        offerDetails.possibleDepartures[0].forEach(
-            (t, index) => {
-                console.log(t.transportCourse.departureFromLocation.region + ' '
-                    + t.transportCourse.arrivalAtLocation.region + ' ... ' +
-                    offerDetails.possibleDepartures[1][index].transportCourse.departureFromLocation.region + ' '
-                    + offerDetails.possibleDepartures[1][index].transportCourse.arrivalAtLocation.region)
-            }
-        )
-    }, [offerDetails]);
-
     const onRoomSelection = (roomConfiguration: any) => {
         setSelectedRooms(roomConfiguration);
     }
@@ -89,11 +74,8 @@ const OfferDetails = () => {
     }
 
     const onTransportSelection = (transport: Transport, returnTransport: Transport) => {
-        console.log('on selection');
         setSelectedTransport(transport);
         setSelectedReturnTransport(returnTransport);
-        console.log(transport.transportCourse);
-        console.log(returnTransport.transportCourse);
     }
 
     const onGuestsSelection = (key: 'adults' | 'teens' | 'kids' | 'infants', type: 'INC' | 'DEC') => {
@@ -161,9 +143,9 @@ const OfferDetails = () => {
         loadDataFromStorage();
     }, []);
 
-    useEffect(() => {
-        console.log(offerDetails);
-    }, [offerDetails]);
+    // useEffect(() => {
+    //     console.log(offerDetails);
+    // }, [offerDetails]);
 
 
     return(

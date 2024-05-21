@@ -4,7 +4,7 @@ import Countdown from "react-countdown";
 import {CateringOption, Location, Room, Transport} from "../../core/domain/DomainInterfaces";
 import {ApiRequests} from "../../core/apiConfig";
 import {Button} from "@mui/material";
-import {CreditCard} from "@mui/icons-material";
+import {Book, Bookmark, Bookmarks, CreditCard} from "@mui/icons-material";
 import {formatDate} from "../../core/utils";
 
 const BuyOffer = () => {
@@ -24,6 +24,8 @@ const BuyOffer = () => {
     const [selectedReturnTransport, setSelectedReturnTransport] = useState<Transport>(location.state.selectedReturnTransport);
 
     const [transactionSuccessful, setTransactionSuccessful] = useState('NOT_STARTED');
+
+    const [idReservation, setIdReservation] = useState('');
 
     const reserveOfferRequest = async () => {
         let searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
@@ -49,22 +51,34 @@ const BuyOffer = () => {
 
             roomReservationsIds: selectedRooms.map(room => room.roomId),
             transportReservationsIds: [selectedTransport.idTransport, selectedReturnTransport.idTransport],
-            userId: '',
+            userId: crypto.randomUUID(),
         })
             .then(response => {
-                // if (response === 0) {
-                //     setTimeout(() => {
-                //         setTransactionSuccessful('SUCCESS');
-                //     }, 500);
-                // }
-                // else {
-                //     setTimeout(() => {
-                //         setTransactionSuccessful('FAILURE');
-                //     }, 500);
-                // }
-                console.log(response.data);
+
+                if (response.data.includes('exception')) {
+                    setTransactionSuccessful('BACKEND_FAILURE');
+                    return;
+                }
+
+                setIdReservation(response.data.split(' ').at(3));
             })
             .catch(e => console.log(e));
+    }
+
+    const payForReservation = async () => {
+        await ApiRequests.payForReservation({
+            reservationId: idReservation,
+            cardNumber: ('123456781234567' + Math.floor(Math.random() * 10).toString())
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    setTransactionSuccessful('SUCCESS');
+                    return;
+                }
+            }).catch(e => {
+                console.log(e);
+                setTransactionSuccessful('FAILURE');
+            });
     }
 
     return (
@@ -118,14 +132,16 @@ const BuyOffer = () => {
 
             </div>
 
-            <div>
-                <Button variant='contained' startIcon={<CreditCard/>} onClick={() => {
-                    reserveOfferRequest().then(r => r);
-                    setTransactionSuccessful('IN_PROGRESS');
-                }}>
-                    Rezerwacja
-                </Button>
-            </div>
+            {(transactionSuccessful === 'NOT_STARTED') &&
+                <div className='mb-4'>
+                    <Button variant='contained' startIcon={<Bookmark/>} onClick={() => {
+                        reserveOfferRequest().then(r => r);
+                        setTransactionSuccessful('IN_PROGRESS');
+                    }}>
+                        Rezerwacja
+                    </Button>
+                </div>
+            }
 
             {transactionSuccessful === 'IN_PROGRESS' &&
                 <div className='flex flex-col gap-3'>
@@ -138,7 +154,7 @@ const BuyOffer = () => {
                     />
 
                     <div>
-                        <Button variant='contained' startIcon={<CreditCard/>} onClick={() => {}}>
+                        <Button variant='contained' startIcon={<CreditCard/>} onClick={payForReservation}>
                             Zapłać kartą
                         </Button>
                     </div>
@@ -151,15 +167,22 @@ const BuyOffer = () => {
 
             {transactionSuccessful === 'SUCCESS' &&
                 <div>
-                    <p className='text-xl mt-2 text-green-400'>Transakcja pomyślna</p>
-                    <p>Możesz zobaczyć swoją podróż w zakładce Rezerwacji</p>
+                    <p className='text-xl mt-2 text-green-400'>Transakcja zakończona pomyślnie</p>
+                    <p>Zarezerwowano wybraną podróż!</p>
                 </div>
             }
 
             {transactionSuccessful === 'FAILURE' &&
                 <div>
-                    <p className='text-xl mt-2 text-red-400'>Transakcja niepomyślna</p>
-                    <p>Sprawdź dane karty</p>
+                    <p className='text-xl mt-2 text-red-400'>Transakcja zakończona niepomyślnie</p>
+                    <p>Nie masz środków na karcie lub skończył się czas na płatność</p>
+                </div>
+            }
+
+            {transactionSuccessful === 'BACKEND_FAILURE' &&
+                <div>
+                    <p className='text-xl mt-2 text-red-400'>Transakcja zakończona niepomyślnie</p>
+                    <p>Nie udało się znaleźć wolnych zasobów aby zarezerwować ofertę</p>
                 </div>
             }
         </div>
