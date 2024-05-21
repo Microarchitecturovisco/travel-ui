@@ -26,8 +26,6 @@ export class ApiRequests {
     }
 
     static reserveOffer = async (payload: ReservationRequestPayload) => {
-        return Math.floor(Math.random() * 2);
-
         return await axiosInstance.post('reservations/reservation', payload);
     }
 }
@@ -76,10 +74,6 @@ export interface ReservationRequestPayload {
     childrenUnder18Quantity: number,
     childrenUnder10Quantity: number,
     childrenUnder3Quantity: number,
-
-    departureLocationIdsByPlane: string[],
-    departureLocationIdsByBus: string[],
-    arrivalLocationIds: string[],
 
     roomReservationsIds: string[],
     transportReservationsIds: string[],

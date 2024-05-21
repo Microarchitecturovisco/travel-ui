@@ -148,6 +148,7 @@ const OfferDetails = () => {
                 setOfferDetails(response.data);
                 setSelectedRooms(response.data.roomConfiguration);
                 setSelectedTransport(response.data.departure[0]);
+                setSelectedReturnTransport(response.data.departure[1]);
                 setSelectedCatering(response.data.cateringOptions[0]);
             })
             .catch(err => {
@@ -160,9 +161,9 @@ const OfferDetails = () => {
         loadDataFromStorage();
     }, []);
 
-    // useEffect(() => {
-    //     console.log(offerDetails);
-    // }, [offerDetails]);
+    useEffect(() => {
+        console.log(offerDetails);
+    }, [offerDetails]);
 
 
     return(

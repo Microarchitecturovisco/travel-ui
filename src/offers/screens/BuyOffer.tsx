@@ -23,7 +23,7 @@ const BuyOffer = () => {
     const [selectedTransport, setSelectedTransport] = useState<Transport>(location.state.selectedTransport);
     const [selectedReturnTransport, setSelectedReturnTransport] = useState<Transport>(location.state.selectedReturnTransport);
 
-    const [transactionSuccessful, setTransactionSuccessful] = useState('IN_PROGRESS');
+    const [transactionSuccessful, setTransactionSuccessful] = useState('NOT_STARTED');
 
     const reserveOfferRequest = async () => {
         let searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
@@ -47,25 +47,22 @@ const BuyOffer = () => {
             childrenUnder10Quantity: selectedGuests.kids,
             childrenUnder3Quantity: selectedGuests.infants,
 
-            departureLocationIdsByBus: searchParams.departureBus,
-            departureLocationIdsByPlane: searchParams.departurePlane,
-            arrivalLocationIds: searchParams.arrivals.map((arr: any) => arr.idLocation),
-
             roomReservationsIds: selectedRooms.map(room => room.roomId),
-            transportReservationsIds: [selectedTransport.idTransport],
+            transportReservationsIds: [selectedTransport.idTransport, selectedReturnTransport.idTransport],
             userId: '',
         })
             .then(response => {
-                if (response === 0) {
-                    setTimeout(() => {
-                        setTransactionSuccessful('SUCCESS');
-                    }, 500);
-                }
-                else {
-                    setTimeout(() => {
-                        setTransactionSuccessful('FAILURE');
-                    }, 500);
-                }
+                // if (response === 0) {
+                //     setTimeout(() => {
+                //         setTransactionSuccessful('SUCCESS');
+                //     }, 500);
+                // }
+                // else {
+                //     setTimeout(() => {
+                //         setTransactionSuccessful('FAILURE');
+                //     }, 500);
+                // }
+                console.log(response.data);
             })
             .catch(e => console.log(e));
     }
@@ -121,6 +118,15 @@ const BuyOffer = () => {
 
             </div>
 
+            <div>
+                <Button variant='contained' startIcon={<CreditCard/>} onClick={() => {
+                    reserveOfferRequest().then(r => r);
+                    setTransactionSuccessful('IN_PROGRESS');
+                }}>
+                    Rezerwacja
+                </Button>
+            </div>
+
             {transactionSuccessful === 'IN_PROGRESS' &&
                 <div className='flex flex-col gap-3'>
                     <p>Czas na zakup rezerwacji:</p>
@@ -132,7 +138,7 @@ const BuyOffer = () => {
                     />
 
                     <div>
-                        <Button variant='contained' startIcon={<CreditCard/>} onClick={reserveOfferRequest}>
+                        <Button variant='contained' startIcon={<CreditCard/>} onClick={() => {}}>
                             Zapłać kartą
                         </Button>
                     </div>
