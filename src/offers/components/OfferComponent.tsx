@@ -57,6 +57,9 @@ const OfferComponent: React.FC<OfferProps> = ({idHotel, name, location, rating, 
             </div>
             <div className='flex flex-col justify-between px-6 py-6'>
                 <div className='flex flex-row items-center justify-end'>
+                    <p className='mr-1 text-sm'>
+                        do
+                    </p>
                     <p className='text-xl font-semibold'>
                         {pricePerPerson.toLocaleString().replace(',', ' ')} zł
                     </p>

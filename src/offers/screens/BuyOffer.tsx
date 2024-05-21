@@ -131,6 +131,10 @@ const BuyOffer = () => {
                     </div>
                 </div>
 
+                <div className='flex flex-col gap-3'>
+                    <h3>Cena całkowita</h3>
+                    <p className='font-semibold'>{price.toLocaleString().replace(',', ' ')} zł</p>
+                </div>
 
             </div>
 
