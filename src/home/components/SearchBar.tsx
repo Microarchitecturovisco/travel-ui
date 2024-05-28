@@ -287,4 +287,4 @@ const SearchBar = ({onSearch, hideClearSearch = false}) => {
     );
 }
 
-export default memo(SearchBar);
+export default SearchBar;

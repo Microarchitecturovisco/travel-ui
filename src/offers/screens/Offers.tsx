@@ -6,7 +6,7 @@ import SearchBar from "../../home/components/SearchBar";
 import {Location} from "../../core/domain/DomainInterfaces";
 import {formatDate} from "../../core/utils";
 
-export default function Offers () {
+const Offers = () => {
 
     const [offers, setOffers] = useState<GetOffersBySearchQueryOffer[]>([]);
 
@@ -76,3 +76,5 @@ export default function Offers () {
         </div>
     );
 }
+
+export default Offers;
