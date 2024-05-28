@@ -71,10 +71,10 @@ const Offers = () => {
                 ))}
 
             {noResults &&
-                <div className='flex flex-col gap-4 mt-12'>
+                <div className='flex flex-col gap-4 mt-4'>
                     <div className='flex flex-row items-center gap-2'>
                         <SentimentVeryDissatisfied style={{fontSize: 36}}/>
-                        <p className='text-2xl'>No results</p>
+                        <p className='text-2xl'>Nie znaleziono żadnych ofert</p>
                     </div>
                     <p>Zmień parametry wyszukiwania i spróbuj ponownie...</p>
                 </div>
