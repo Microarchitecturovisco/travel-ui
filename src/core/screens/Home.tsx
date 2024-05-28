@@ -1,5 +1,7 @@
 import SearchBar from "../../home/components/SearchBar";
 import {useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+import Snackbar from "@mui/material/Snackbar";
 
 export default function Home () {
 
@@ -8,6 +10,22 @@ export default function Home () {
     const onSearch = () => {
         navigate('/offers');
     }
+
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+
+    useEffect(() => {
+        const ws = new WebSocket('ws://localhost:8082/offers/ws/offerBought');
+
+        ws.onmessage = (event) => {
+            setSnackbarMessage(event.data);
+            setSnackbarOpen(true);
+        }
+
+        return () => {
+            ws.close();
+        }
+    }, []);
 
     return(
         <div
@@ -35,6 +53,14 @@ export default function Home () {
                 <img src={require('../../assets/holiday-assets/vicko-mozara-m82uh_vamhg-unsplash.jpg')} alt=''
                      style={{width: 300, height: 200, objectFit: 'cover'}} className='drop-shadow-lg pointer-events-none'/>
             </div>
+
+            <Snackbar
+                open={snackbarOpen}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center'}}
+                autoHideDuration={3000}
+                onClose={() => {setSnackbarOpen(false)}}
+                message={snackbarMessage}
+            />
         </div>
     );
 }
