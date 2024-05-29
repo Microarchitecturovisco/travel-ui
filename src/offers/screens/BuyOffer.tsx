@@ -53,6 +53,7 @@ const BuyOffer = () => {
             price: price,
 
             roomReservationsIds: selectedRooms.map(room => room.roomId),
+            roomReservationsNames: selectedRooms.map(room => room.name),
             transportReservationsIds: [selectedTransport.idTransport, selectedReturnTransport.idTransport],
             userId: crypto.randomUUID(),
         })
