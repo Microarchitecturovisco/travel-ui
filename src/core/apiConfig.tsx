@@ -83,9 +83,12 @@ export interface ReservationRequestPayload {
     price: number,
 
     roomReservationsIds: string[],
-    roomReservationsNames: string[],
     transportReservationsIds: string[],
     userId: string,
+
+    roomReservationsNames: string[],
+    locationNameFrom: string,
+    locationNameTo: string,
 }
 
 export interface PaymentPayload {

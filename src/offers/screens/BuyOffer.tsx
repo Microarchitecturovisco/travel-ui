@@ -53,9 +53,11 @@ const BuyOffer = () => {
             price: price,
 
             roomReservationsIds: selectedRooms.map(room => room.roomId),
-            roomReservationsNames: selectedRooms.map(room => room.name),
             transportReservationsIds: [selectedTransport.idTransport, selectedReturnTransport.idTransport],
             userId: crypto.randomUUID(),
+            roomReservationsNames: selectedRooms.map(room => room.name),
+            locationNameFrom: selectedTransport.transportCourse.departureFromLocation.region + ', Polska',
+            locationNameTo: selectedTransport.transportCourse.arrivalAtLocation.region + ', ' + selectedTransport.transportCourse.arrivalAtLocation.country,
         })
             .then(response => {
 
