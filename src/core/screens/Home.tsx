@@ -11,18 +11,6 @@ export default function Home () {
         navigate('/offers');
     }
 
-    // work in progress - booking information
-    useEffect(() => {
-        const ws = new WebSocket(`ws://localhost:8086/reservations/ws/offerBooked`);
-
-        ws.onmessage = (event) => {
-            console.log("Received Booking message " + event.data);
-        }
-
-        return () => {
-            ws.close();
-        }
-    }, []);
 
     return(
         <div
