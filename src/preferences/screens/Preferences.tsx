@@ -1,7 +1,22 @@
 import {Paper} from "@mui/material";
+import React, {useEffect, useState} from "react";
 import {ConnectingAirports, Explore, Flight, Hotel, KingBed, MeetingRoom} from "@mui/icons-material";
 
 const Preferences = () => {
+
+    useEffect(() => {
+        const ws = new WebSocket(`ws://localhost:8082/reservations/ws/offerBooked`);
+
+        ws.onmessage = (event) => {
+            console.log("Received Booking message " + event.data);
+            // update user preferences
+        }
+
+        return () => {
+            ws.close();
+        }
+    }, []);
+
     return(
         <div className='flex flex-col px-64 py-24'>
             <div>
@@ -16,7 +31,7 @@ const Preferences = () => {
 
 
                     <ul className='flex flex-col gap-3'>
-                    <li>Malta</li>
+                        <li>Malta</li>
                         <li>Egipt</li>
                         <li>Maroko</li>
                     </ul>
