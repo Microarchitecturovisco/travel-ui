@@ -1,11 +1,13 @@
 import axios from "axios";
 import {Location} from "./domain/DomainInterfaces";
 
+// deploying to docker cluster requires the 'gateway' hostname and probably a different port
+// export const baseAPIURL = 'http://gateway:8082/';
 export const baseAPIURL = 'http://localhost:8082/';
 
 export const axiosInstance = axios.create({
     baseURL: baseAPIURL,
-    timeout: 4000,
+    timeout: 10000,
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json; charset=utf-8',

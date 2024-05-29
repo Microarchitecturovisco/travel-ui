@@ -1,5 +1,5 @@
 import {Link, useLocation} from "react-router-dom";
-import {Box, Button, CardMedia, Checkbox, FormControlLabel, IconButton, Paper, Typography} from "@mui/material";
+import {Alert, Box, Button, CardMedia, Checkbox, FormControlLabel, IconButton, Paper, Typography} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {Add, ArrowBack, Bookmark, Close, DirectionsBus, Flight, Lens, Place, Remove} from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +10,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import {DatePicker} from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import StarIcon from "@mui/icons-material/Star";
+import Snackbar from "@mui/material/Snackbar";
 
 // @ts-ignore
 const OfferDetails = () => {
@@ -170,6 +171,22 @@ const OfferDetails = () => {
         calculatePrice();
     }, [selectedTransport, selectedCatering, selectedGuests, offerDetails]);
 
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+
+    useEffect(() => {
+        const ws = new WebSocket(`ws://localhost:8082/reservations/ws/offerBought?idHotel=${offerDetails.idHotel}`);
+
+        ws.onmessage = (event) => {
+            console.log("Received message " + event.data);
+            setSnackbarMessage(event.data);
+            setSnackbarOpen(true);
+        }
+
+        return () => {
+            ws.close();
+        }
+    }, []);
 
     return(
         <div className='flex flex-row justify-around px-96'>
@@ -429,6 +446,24 @@ const OfferDetails = () => {
                     </Link>
                 </Paper>
             </div>
+
+            <Snackbar
+                open={snackbarOpen}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right'}}
+                autoHideDuration={8000}
+                onClose={() => {setSnackbarOpen(false)}}
+                style={{
+                    marginTop: 64,
+                }}
+            >
+                <Alert
+                    severity='info'
+                    variant='standard'
+                    onClose={() => {setSnackbarOpen(false)}}
+                >
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
         </div>
     );
 }
