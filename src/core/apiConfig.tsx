@@ -89,6 +89,7 @@ export interface ReservationRequestPayload {
     roomReservationsNames: string[],
     locationNameFrom: string,
     locationNameTo: string,
+    transportType: string,
 }
 
 export interface PaymentPayload {
