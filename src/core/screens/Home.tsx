@@ -11,7 +11,6 @@ export default function Home () {
         navigate('/offers');
     }
 
-
     return(
         <div
             className='flex flex-col px-20 py-32 items-center homeContainer'

@@ -83,6 +83,19 @@ const BuyOffer = () => {
             });
     }
 
+    // work in progress - booking information
+    useEffect(() => {
+        const ws = new WebSocket(`ws://localhost:8082/reservations/ws/offerBooked`);
+
+        ws.onmessage = (event) => {
+            console.log("Received Booking message " + event.data);
+        }
+
+        return () => {
+            ws.close();
+        }
+    }, []);
+
     return (
         <div className='flex flex-col px-[32rem] py-24'>
             <p className='text-xl mb-6'>Szczegóły oferty</p>
