@@ -1,5 +1,6 @@
 import SearchBar from "../../home/components/SearchBar";
 import {useNavigate} from "react-router-dom";
+import {useEffect} from "react";
 
 export default function Home () {
 
@@ -8,6 +9,19 @@ export default function Home () {
     const onSearch = () => {
         navigate('/offers');
     }
+
+    // work in progress - booking information
+    useEffect(() => {
+        const ws = new WebSocket(`ws://localhost:8086/reservations/ws/offerBooked`);
+
+        ws.onmessage = (event) => {
+            console.log("Received Booking message " + event.data);
+        }
+
+        return () => {
+            ws.close();
+        }
+    }, []);
 
     return(
         <div
