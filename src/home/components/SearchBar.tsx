@@ -274,7 +274,7 @@ const SearchBar = ({onSearch, hideClearSearch = false}) => {
                 </div>
 
                 {!hideClearSearch &&
-                    <div className='mb-10'>
+                    <div className='mb-5'>
                         <Button color='error' className='flex flex-row items-center gap-1'
                                 onClick={clearSearchParameters}>
                             <Close style={{fontSize: 18}}/>
@@ -287,4 +287,4 @@ const SearchBar = ({onSearch, hideClearSearch = false}) => {
     );
 }
 
-export default memo(SearchBar);
+export default SearchBar;

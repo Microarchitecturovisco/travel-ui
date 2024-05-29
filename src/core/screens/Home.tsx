@@ -1,5 +1,7 @@
 import SearchBar from "../../home/components/SearchBar";
 import {useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+import Snackbar from "@mui/material/Snackbar";
 
 export default function Home () {
 

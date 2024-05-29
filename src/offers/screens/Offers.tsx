@@ -5,14 +5,18 @@ import {SentimentVeryDissatisfied} from "@mui/icons-material";
 import SearchBar from "../../home/components/SearchBar";
 import {Location} from "../../core/domain/DomainInterfaces";
 import {formatDate} from "../../core/utils";
+import {Box, LinearProgress} from "@mui/material";
 
-export default function Offers () {
+const Offers = () => {
 
     const [offers, setOffers] = useState<GetOffersBySearchQueryOffer[]>([]);
 
     const [noResults, setNoResults] = useState(false);
 
+    const [loading, setLoading] = useState(false);
+
     const searchOffers = async () => {
+        setLoading(true);
         let searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
 
         searchParams = {...searchParams,
@@ -27,9 +31,11 @@ export default function Offers () {
             .then(response => {
                 setOffers(response.data);
                 setNoResults(response.data.length === 0);
+                setLoading(false);
             })
             .catch(e => {
                 console.log(e);
+                setLoading(false);
             });
     }
 
@@ -39,36 +45,36 @@ export default function Offers () {
 
     return(
         <div className='flex flex-col py-16 px-[28rem] justify-center'>
-            {offers.length > 0 &&
-                <div className='offersHeaderContainer'>
-                    <h1 className='text-2xl mb-8'>Doskonałe oferty specjalnie dla Ciebie!</h1>
-                </div>
-            }
-
             <SearchBar
                 onSearch={searchOffers}
             />
 
+            <Box sx={{height: 5}} className='mb-7'>
+                {loading &&
+                    <LinearProgress/>
+                }
+            </Box>
+
             {offers
                 .sort((a, b) => a.price > b.price ? 1 : -1)
                 .map((offer, index) => (
-                <OfferComponent
-                    idHotel={offer.idHotel}
-                    name={offer.hotelName}
-                    key={offer.hotelName}
-                    location={offer.destination}
-                    rating={offer.rating}
-                    pricePerPerson={Math.ceil(offer.price)}
-                    photoURL={offer.imageUrl}
-                    bestSeller={index < 3}
-                />
-            ))}
+                    <OfferComponent
+                        idHotel={offer.idHotel}
+                        name={offer.hotelName}
+                        key={offer.hotelName}
+                        location={offer.destination}
+                        rating={offer.rating}
+                        pricePerPerson={Math.ceil(offer.price)}
+                        photoURL={offer.imageUrl}
+                        bestSeller={index < 3}
+                    />
+                ))}
 
             {noResults &&
-                <div className='flex flex-col gap-4 mt-12'>
+                <div className='flex flex-col gap-4 mt-4'>
                     <div className='flex flex-row items-center gap-2'>
                         <SentimentVeryDissatisfied style={{fontSize: 36}}/>
-                        <p className='text-2xl'>No results</p>
+                        <p className='text-2xl'>Nie znaleziono żadnych ofert</p>
                     </div>
                     <p>Zmień parametry wyszukiwania i spróbuj ponownie...</p>
                 </div>
@@ -76,3 +82,5 @@ export default function Offers () {
         </div>
     );
 }
+
+export default Offers;
