@@ -9,6 +9,7 @@ import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {useEffect} from "react";
 import BuyOffer from "./offers/screens/BuyOffer";
+import Preferences from "./preferences/screens/Preferences";
 
 function App() {
     useEffect(() => {
@@ -24,6 +25,7 @@ function App() {
                     <Route path='/offers' element={<Offers/>}/>
                     <Route path='/offerDetails' element={<OfferDetails/>}/>
                     <Route path='/buyOffer' element={<BuyOffer/>}/>
+                    <Route path='/clientPreferences' element={<Preferences/>}/>
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </Router>

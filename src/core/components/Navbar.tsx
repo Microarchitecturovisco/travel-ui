@@ -4,7 +4,7 @@ import logo from '../../assets/tourcentral.png'
 import LoginIcon from '@mui/icons-material/Login';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import {Link} from "react-router-dom";
-import {Bookmarks, Explore, Person} from "@mui/icons-material";
+import {Bookmarks, Explore, Person, Star} from "@mui/icons-material";
 import SearchDateRangePopper from "../../home/components/SearchDateRangePopper";
 import React, {useState} from "react";
 
@@ -40,6 +40,18 @@ export default function Navbar () {
                         </Link>
                     </li>
                     <li className='flex flex-row items-center'>
+                        <Link to='/clientPreferences'
+                        >
+                            <Button
+                                variant='text'
+                                startIcon={<Star style={{color: '#333'}}/>}
+                                style={{color: '#333'}}
+                            >
+                                Preferencje klientów
+                            </Button>
+                        </Link>
+                    </li>
+                    <li className='flex flex-row items-center'>
                         <Button
                             variant='text'
                             startIcon={<Bookmarks style={{color: '#333'}}/>}
@@ -69,7 +81,8 @@ export default function Navbar () {
 
             <ClickAwayListener onClickAway={() => setLoginAnchorEl(null)}>
                 <div>
-                    <Button variant='contained' startIcon={<LoginIcon/>} onClick={handleInactiveLoginClick}>Zaloguj</Button>
+                    <Button variant='contained' startIcon={<LoginIcon/>}
+                            onClick={handleInactiveLoginClick}>Zaloguj</Button>
                     <Popper open={Boolean(loginAnchorEl)} anchorEl={loginAnchorEl}>
                         <div className='px-10 py-5 mt-2 bg-white border-gray-200 rounded-xl' style={{borderWidth: 0.5}}>
                             <p className='text-lg text-red-500'>Nieaktywny element UI :(</p>
