@@ -12,27 +12,22 @@ type Reservation = {
 };
 
 const Preferences = () => {
-    const [reservations, setReservations] = useState<Reservation[]>(() => {
-        // Load initial state from localStorage
-        const savedReservations = localStorage.getItem('reservations');
-        return savedReservations ? JSON.parse(savedReservations) : [];
-    });
+    const [reservations, setReservations] = useState<Reservation[]>([]);
+    let ws: WebSocket | null = null;
 
     useEffect(() => {
         const ws = new WebSocket(`ws://localhost:8082/reservations/ws/offerBooked`);
 
         ws.onmessage = (event) => {
             console.log("Received Booking message: " + event.data);
-            
             // Parse the message
             const messageParts = event.data.split(' | ');
-            
             const hotelName = messageParts[0].split(': ')[2];
             const roomNames = messageParts[1].split(': ')[1].replace(/[\[\]]/g, '').split(', ');
             const locationFrom = messageParts[2].split(': ')[1];
             const locationTo = messageParts[3].split(': ')[1];
             const transportType = messageParts[4].split(': ')[1];
-
+    
             const newReservation: Reservation = {
                 hotelName,
                 roomNames,
@@ -40,16 +35,26 @@ const Preferences = () => {
                 locationTo,
                 transportType
             };
-
+    
             setReservations(prevReservations => {
-                const updatedReservations = [newReservation, ...prevReservations].slice(0, 3);
-                localStorage.setItem('reservations', JSON.stringify(updatedReservations)); // Save to localStorage
-                return updatedReservations;
+                const updatedReservations = [newReservation, ...prevReservations];
+                return updatedReservations.slice(0, 3); // Keep only the last 3 reservations
             });
         };
 
+        const closeWebSocket = () => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.close();
+            }
+        };
+
+        // Add event listener for page unload
+        window.addEventListener('beforeunload', closeWebSocket);
+
         return () => {
-            ws.close();
+            // Cleanup on component unmount
+            closeWebSocket();
+            window.removeEventListener('beforeunload', closeWebSocket);
         };
     }, []);
 
