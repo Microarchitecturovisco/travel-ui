@@ -19,44 +19,35 @@ const Preferences = () => {
         const ws = new WebSocket(`ws://localhost:8082/reservations/ws/offerBooked`);
 
         ws.onmessage = (event) => {
-            console.log("Received Booking message: " + event.data);
-            // Parse the message
             const messageParts = event.data.split(' | ');
-            const hotelName = messageParts[0].split(': ')[2];
-            const roomNames = messageParts[1].split(': ')[1].replace(/[\[\]]/g, '').split(', ');
-            const locationFrom = messageParts[2].split(': ')[1];
-            const locationTo = messageParts[3].split(': ')[1];
-            const transportType = messageParts[4].split(': ')[1];
     
-            const newReservation: Reservation = {
-                hotelName,
-                roomNames,
-                locationFrom,
-                locationTo,
-                transportType
-            };
+            if (messageParts.length === 5) {
+                console.log("Received Booking message: " + event.data);
+                const hotelName = messageParts[0].split(': ')[2];
+                const roomNames = messageParts[1].split(': ')[1].replace(/[\[\]]/g, '').split(', ');
+                const locationFrom = messageParts[2].split(': ')[1];
+                const locationTo = messageParts[3].split(': ')[1];
+                const transportType = messageParts[4].split(': ')[1];
     
-            setReservations(prevReservations => {
-                const updatedReservations = [newReservation, ...prevReservations];
-                return updatedReservations.slice(0, 3); // Keep only the last 3 reservations
-            });
-        };
-
-        const closeWebSocket = () => {
-            if (ws && ws.readyState === WebSocket.OPEN) {
-                ws.close();
+                const newReservation: Reservation = {
+                    hotelName,
+                    roomNames,
+                    locationFrom,
+                    locationTo,
+                    transportType
+                };
+    
+                setReservations(prevReservations => {
+                    const updatedReservations = [newReservation, ...prevReservations];
+                    return updatedReservations.slice(0, 3); // Keep only the last 3 reservations
+                });
+            } else {
+                console.log("Message was empty");
             }
         };
-
-        // Add event listener for page unload
-        window.addEventListener('beforeunload', closeWebSocket);
-
-        return () => {
-            // Cleanup on component unmount
-            closeWebSocket();
-            window.removeEventListener('beforeunload', closeWebSocket);
-        };
+    
     }, []);
+    
 
     return (
         <div className='flex flex-col px-64 py-24'>
