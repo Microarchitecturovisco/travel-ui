@@ -8,6 +8,7 @@ type Reservation = {
     locationFromNameRegionAndCountry: string;
     locationToNameRegionAndCountry: string;
     transportType: string;
+    reservationTime: string;
 };
 
 const Preferences = () => {
@@ -35,21 +36,23 @@ const Preferences = () => {
                     const locationFromNameRegionAndCountry = messageParts[2].split(': ')[1];
                     const locationToNameRegionAndCountry = messageParts[3].split(': ')[1];
                     const transportType = messageParts[4].split(': ')[1];
-    
+                    const reservationTime = messageParts[5].split(': ')[1]; 
+
                     const newReservation = {
                         hotelName,
                         roomNames,
                         locationFromNameRegionAndCountry,
                         locationToNameRegionAndCountry,
-                        transportType
+                        transportType,
+                        reservationTime 
                     };
-    
+
                     setReservations(prevReservations => {
                         const updatedReservations = [newReservation, ...prevReservations];
                         return updatedReservations;
                     });
-                    
                     break;
+
                 case "TopHotels":
                     const topHotels = event.data.split(':')[1].split('#').map((item: string) => item.trim());
                     setTopHotels(topHotels);
@@ -119,12 +122,13 @@ const Preferences = () => {
                 </Paper>
     
                 <div className='mt-8 col-span-2'>
-                    <h2 className='text-xl font-bold mb-4'>Nowa rezerwacja</h2>
+                    <h2 className='text-xl font-bold mb-4'>Nowe rezerwacje</h2>
                     <Paper elevation={3}>
                         <TableContainer>
                             <Table>
                                 <TableHead>
                                     <TableRow>
+                                        <TableCell className='border border-gray-500 p-2'>Data i godzina</TableCell>
                                         <TableCell className='border border-gray-500 p-2'>Hotel</TableCell>
                                         <TableCell className='border border-gray-500 p-2'>Pokoje</TableCell>
                                         <TableCell className='border border-gray-500 p-2'>Skąd</TableCell>
@@ -135,6 +139,7 @@ const Preferences = () => {
                                 <TableBody>
                                     {reservations.map((reservation, index) => (
                                         <TableRow key={index}>
+                                            <TableCell className='border border-gray-500 p-2'>{reservation.reservationTime}</TableCell> 
                                             <TableCell className='border border-gray-500 p-2'>{reservation.hotelName}</TableCell>
                                             <TableCell className='border border-gray-500 p-2'>{reservation.roomNames.join(', ')}</TableCell>
                                             <TableCell className='border border-gray-500 p-2'>{reservation.locationFromNameRegionAndCountry}</TableCell>
@@ -144,6 +149,7 @@ const Preferences = () => {
                                     ))}
                                     {newReservations && (
                                         <TableRow>
+                                            <TableCell className='border border-gray-500 p-2'>{newReservations.reservationTime}</TableCell> 
                                             <TableCell className='border border-gray-500 p-2'>{newReservations.hotelName}</TableCell>
                                             <TableCell className='border border-gray-500 p-2'>{newReservations.roomNames.join(', ')}</TableCell>
                                             <TableCell className='border border-gray-500 p-2'>{newReservations.locationFromNameRegionAndCountry}</TableCell>
