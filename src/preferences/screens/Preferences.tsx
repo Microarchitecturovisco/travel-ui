@@ -46,6 +46,10 @@ const Preferences = () => {
             }
         };
     
+        return () => {
+            ws.close();
+            console.log("WebSocket connection closed");
+        };
     }, []);
     
 
