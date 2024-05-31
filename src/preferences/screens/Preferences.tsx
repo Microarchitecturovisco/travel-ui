@@ -2,7 +2,6 @@ import { Paper } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { ConnectingAirports, Explore, Hotel, MeetingRoom } from "@mui/icons-material";
 
-// Define the Reservation type
 type Reservation = {
     hotelName: string;
     roomNames: string[];
