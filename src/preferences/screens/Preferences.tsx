@@ -58,7 +58,7 @@ const Preferences = () => {
                     setTopHotels(topHotels);
                     break;
                 case "TopRoomTypes":
-                    const topRoomTypes = event.data.split(':')[1].split('#').map((item: string) => item.trim());
+                    const topRoomTypes = event.data.split(':')[1].split('#').map((item: string) => item.replace(/[\[\]]/g, '').trim());
                     setTopRoomTypes(topRoomTypes);
                     break;
                 case "TopLocationNamesTo":
