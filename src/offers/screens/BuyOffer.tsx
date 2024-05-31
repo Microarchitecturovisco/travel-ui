@@ -59,8 +59,8 @@ const BuyOffer = () => {
 
             hotelName: hotelName,
             roomReservationsNames: selectedRooms.map(room => room.name),
-            locationNameFrom: selectedTransport.transportCourse.departureFromLocation.region + ', Polska',
-            locationNameTo: selectedTransport.transportCourse.arrivalAtLocation.region + ', ' + selectedTransport.transportCourse.arrivalAtLocation.country,
+            locationFromNameRegionAndCountry: selectedTransport.transportCourse.departureFromLocation.region + ', Polska',
+            locationToNameRegionAndCountry: selectedTransport.transportCourse.arrivalAtLocation.region + ', ' + selectedTransport.transportCourse.arrivalAtLocation.country,
             transportType: selectedTransport.transportCourse.type === 'PLANE' ? TransportType.Samolot : TransportType.Bus,
         })
             .then(response => {

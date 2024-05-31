@@ -93,8 +93,8 @@ export interface ReservationRequestPayload {
 
     hotelName: string,
     roomReservationsNames: string[],
-    locationNameFrom: string,
-    locationNameTo: string,
+    locationFromNameRegionAndCountry: string,
+    locationToNameRegionAndCountry: string,
     transportType: TransportType,
 }
 

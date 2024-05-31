@@ -25,15 +25,15 @@ const Preferences = () => {
                 console.log("Received Booking message: " + event.data);
                 const hotelName = messageParts[0].split(': ')[2];
                 const roomNames = messageParts[1].split(': ')[1].replace(/[\[\]]/g, '').split(', ');
-                const locationFrom = messageParts[2].split(': ')[1];
-                const locationTo = messageParts[3].split(': ')[1];
+                const locationFromNameRegionAndCountry = messageParts[2].split(': ')[1];
+                const locationToNameRegionAndCountry = messageParts[3].split(': ')[1];
                 const transportType = messageParts[4].split(': ')[1];
     
                 const newReservation: Reservation = {
                     hotelName,
                     roomNames,
-                    locationFrom,
-                    locationTo,
+                    locationFrom: locationFromNameRegionAndCountry,
+                    locationTo: locationToNameRegionAndCountry,
                     transportType
                 };
     
