@@ -5,8 +5,8 @@ import { ConnectingAirports, Explore, Hotel, MeetingRoom } from "@mui/icons-mate
 type Reservation = {
     hotelName: string;
     roomNames: string[];
-    locationFrom: string;
-    locationTo: string;
+    locationFromNameRegionAndCountry: string;
+    locationToNameRegionAndCountry: string;
     transportType: string;
 };
 
@@ -31,8 +31,8 @@ const Preferences = () => {
                 const newReservation: Reservation = {
                     hotelName,
                     roomNames,
-                    locationFrom: locationFromNameRegionAndCountry,
-                    locationTo: locationToNameRegionAndCountry,
+                    locationFromNameRegionAndCountry: locationFromNameRegionAndCountry,
+                    locationToNameRegionAndCountry: locationToNameRegionAndCountry,
                     transportType
                 };
     
@@ -62,7 +62,7 @@ const Preferences = () => {
                     </div>
                     <ul className='flex flex-col gap-3'>
                         {reservations.map((reservation, index) => (
-                            <li key={index}>{reservation.locationTo}</li>
+                            <li key={index}>{reservation.locationToNameRegionAndCountry}</li>
                         ))}
                     </ul>
                 </Paper>
