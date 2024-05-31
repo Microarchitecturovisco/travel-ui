@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import { Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { ConnectingAirports, Explore, Hotel, MeetingRoom } from "@mui/icons-material";
 
@@ -12,42 +12,69 @@ type Reservation = {
 
 const Preferences = () => {
     const [reservations, setReservations] = useState<Reservation[]>([]);
+    const [newReservations, setNewReservations] = useState<Reservation | null>(null);
+    const [topHotels, setTopHotels] = useState<string[]>([]);
+    const [topRoomTypes, setTopRoomTypes] = useState<string[]>([]);
+    const [topLocationNamesTo, setTopLocationNamesTo] = useState<string[]>([]);
+    const [topTransportTypes, setTopTransportTypes] = useState<string[]>([]);
     let ws: WebSocket | null = null;
 
     useEffect(() => {
         const ws = new WebSocket(`ws://localhost:8082/reservations/ws/offerBooked`);
 
         ws.onmessage = (event) => {
-            const messageParts = event.data.split(' | ');
+            console.log("Received message: " + event.data);
     
-            if (messageParts.length === 5) {
-                console.log("Received Booking message: " + event.data);
-                const hotelName = messageParts[0].split(': ')[2];
-                const roomNames = messageParts[1].split(': ')[1].replace(/[\[\]]/g, '').split(', ');
-                const locationFromNameRegionAndCountry = messageParts[2].split(': ')[1];
-                const locationToNameRegionAndCountry = messageParts[3].split(': ')[1];
-                const transportType = messageParts[4].split(': ')[1];
+            const messageType = event.data.split(':')[0];
     
-                const newReservation: Reservation = {
-                    hotelName,
-                    roomNames,
-                    locationFromNameRegionAndCountry: locationFromNameRegionAndCountry,
-                    locationToNameRegionAndCountry: locationToNameRegionAndCountry,
-                    transportType
-                };
+            switch (messageType) {
+                case "SingleReservation":
+                    const messageParts = event.data.split(' | ');
+                    const hotelName = messageParts[0].split(': ')[3];
+                    const roomNames = messageParts[1].split(': ')[1].replace(/[\[\]]/g, '').split(', ');
+                    const locationFromNameRegionAndCountry = messageParts[2].split(': ')[1];
+                    const locationToNameRegionAndCountry = messageParts[3].split(': ')[1];
+                    const transportType = messageParts[4].split(': ')[1];
     
-                setReservations(prevReservations => {
-                    const updatedReservations = [newReservation, ...prevReservations];
-                    return updatedReservations.slice(0, 3); // Keep only the last 3 reservations
-                });
-            } else {
-                console.log("Message was empty");
+                    const newReservation = {
+                        hotelName,
+                        roomNames,
+                        locationFromNameRegionAndCountry,
+                        locationToNameRegionAndCountry,
+                        transportType
+                    };
+    
+                    setReservations(prevReservations => {
+                        const updatedReservations = [newReservation, ...prevReservations];
+                        return updatedReservations;
+                    });
+                    
+                    break;
+                case "TopHotels":
+                    const topHotels = event.data.split(':')[1].split('#').map((item: string) => item.trim());
+                    setTopHotels(topHotels);
+                    break;
+                case "TopRoomTypes":
+                    const topRoomTypes = event.data.split(':')[1].split('#').map((item: string) => item.trim());
+                    setTopRoomTypes(topRoomTypes);
+                    break;
+                case "TopLocationNamesTo":
+                    const topLocationNamesTo = event.data.split(':')[1].split('#').map((item: string) => item.trim());
+                    setTopLocationNamesTo(topLocationNamesTo);
+                    break;
+                case "TopTransportTypes":
+                    const topTransportTypes = event.data.split(':')[1].split('#').map((item: string) => item.trim());
+                    setTopTransportTypes(topTransportTypes);
+                    break;
+                default:
+                    console.log("Wrong type of message");
+                    break;
             }
         };
     
         return () => {
             ws.close();
-            console.log("WebSocket connection closed");
+            console.error("WebSocket connection closed");
         };
     }, []);
     
@@ -56,60 +83,83 @@ const Preferences = () => {
         <div className='flex flex-col px-64 py-24'>
             <div className='grid grid-cols-2 grid-rows-2 gap-x-12 gap-y-8'>
                 <Paper elevation={2} className='flex flex-col justify-center items-center rounded-xl px-4 py-6'>
-                    <div className='mb-5 flex flex-row gap-2 items-center'>
-                        <Explore style={{fontSize: 18}} />
-                        <h3 className='text-xl'>Ostatnie kierunki podróży</h3>
-                    </div>
+                    <h3 className='text-xl'>Top 3 kierunki podróży</h3>
                     <ul className='flex flex-col gap-3'>
-                        {reservations.map((reservation, index) => (
-                            <li key={index}>{reservation.locationToNameRegionAndCountry}</li>
+                        {topLocationNamesTo.map((location, index) => (
+                            <li key={index}>{location}</li>
                         ))}
                     </ul>
                 </Paper>
-
+    
                 <Paper elevation={2} className='flex flex-col justify-center items-center rounded-xl px-4 py-6'>
-                    <div className='mb-5 flex flex-row gap-2 items-center'>
-                        <Hotel style={{fontSize: 18}} />
-                        <h3 className='text-xl'>Ostatnie hotele</h3>
-                    </div>
+                    <h3 className='text-xl'>Top 3 hotele</h3>
                     <ul className='flex flex-col gap-3'>
-                        {reservations.map((reservation, index) => (
-                            <li key={index}>{reservation.hotelName}</li>
+                        {topHotels.map((hotel, index) => (
+                            <li key={index}>{hotel}</li>
                         ))}
                     </ul>
                 </Paper>
-
+    
                 <Paper elevation={2} className='flex flex-col justify-center items-center rounded-xl px-4 py-6'>
-                    <div className='mb-5 flex flex-row gap-2 items-center'>
-                        <MeetingRoom style={{fontSize: 18}} />
-                        <h3 className='text-xl'>Ostatnie pokoje</h3>
-                    </div>
+                    <h3 className='text-xl'>Top 3 pokoje</h3>
                     <ul className='flex flex-col gap-3'>
-                        {reservations.flatMap((reservation, index) =>
-                            reservation.roomNames.map((roomName, roomIndex) => (
-                                <li key={`${index}-${roomIndex}`}>
-                                    <p>{roomName}</p>
-                                    <p className='text-xs ml-4'>{reservation.hotelName}</p>
-                                </li>
-                            ))
-                        )}
-                    </ul>
-                </Paper>
-
-                <Paper elevation={2} className='flex flex-col justify-center items-center rounded-xl px-4 py-6'>
-                    <div className='mb-5 flex flex-row gap-2 items-center'>
-                        <ConnectingAirports style={{fontSize: 18}} />
-                        <h3 className='text-xl'>Ostatnie typy transportu</h3>
-                    </div>
-                    <ul className='flex flex-col gap-3'>
-                        {reservations.map((reservation, index) => (
-                            <li key={index}>{reservation.transportType}</li>
+                        {topRoomTypes.map((roomType, index) => (
+                            <li key={index}>{roomType}</li>
                         ))}
                     </ul>
                 </Paper>
+    
+                <Paper elevation={2} className='flex flex-col justify-center items-center rounded-xl px-4 py-6'>
+                    <h3 className='text-xl'>Top 3 typy transportu</h3>
+                    <ul className='flex flex-col gap-3'>
+                        {topTransportTypes.map((transportType, index) => (
+                            <li key={index}>{transportType}</li>
+                        ))}
+                    </ul>
+                </Paper>
+    
+                <div className='mt-8 col-span-2'>
+                    <h2 className='text-xl font-bold mb-4'>Nowa rezerwacja</h2>
+                    <Paper elevation={3}>
+                        <TableContainer>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell className='border border-gray-500 p-2'>Hotel</TableCell>
+                                        <TableCell className='border border-gray-500 p-2'>Pokoje</TableCell>
+                                        <TableCell className='border border-gray-500 p-2'>Skąd</TableCell>
+                                        <TableCell className='border border-gray-500 p-2'>Dokąd</TableCell>
+                                        <TableCell className='border border-gray-500 p-2'>Typ transportu</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {reservations.map((reservation, index) => (
+                                        <TableRow key={index}>
+                                            <TableCell className='border border-gray-500 p-2'>{reservation.hotelName}</TableCell>
+                                            <TableCell className='border border-gray-500 p-2'>{reservation.roomNames.join(', ')}</TableCell>
+                                            <TableCell className='border border-gray-500 p-2'>{reservation.locationFromNameRegionAndCountry}</TableCell>
+                                            <TableCell className='border border-gray-500 p-2'>{reservation.locationToNameRegionAndCountry}</TableCell>
+                                            <TableCell className='border border-gray-500 p-2'>{reservation.transportType}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                    {newReservations && (
+                                        <TableRow>
+                                            <TableCell className='border border-gray-500 p-2'>{newReservations.hotelName}</TableCell>
+                                            <TableCell className='border border-gray-500 p-2'>{newReservations.roomNames.join(', ')}</TableCell>
+                                            <TableCell className='border border-gray-500 p-2'>{newReservations.locationFromNameRegionAndCountry}</TableCell>
+                                            <TableCell className='border border-gray-500 p-2'>{newReservations.locationToNameRegionAndCountry}</TableCell>
+                                            <TableCell className='border border-gray-500 p-2'>{newReservations.transportType}</TableCell>
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Paper>
+                </div>
             </div>
         </div>
     );
+    
 }
 
 export default Preferences;
