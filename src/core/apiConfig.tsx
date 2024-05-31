@@ -70,6 +70,11 @@ export interface GetOfferDetailsParams {
     infants: number,
 }
 
+export enum TransportType {
+    Samolot = "Samolot",
+    Bus = "Bus"
+}
+
 export interface ReservationRequestPayload {
     id: string,
     hotelId: string,
@@ -90,7 +95,7 @@ export interface ReservationRequestPayload {
     roomReservationsNames: string[],
     locationNameFrom: string,
     locationNameTo: string,
-    transportType: string,
+    transportType: TransportType,
 }
 
 export interface PaymentPayload {
