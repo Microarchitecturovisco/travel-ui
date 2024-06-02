@@ -30,45 +30,44 @@ const Preferences = () => {
     
             switch (messageType) {
                 case "SingleReservation":
-                    const messageParts = event.data.split(' | ');
-                    const hotelName = messageParts[0].split(': ')[3];
-                    const roomNames = messageParts[1].split(': ')[1].replace(/[\[\]]/g, '').split(', ');
-                    const locationFromNameRegionAndCountry = messageParts[2].split(': ')[1];
-                    const locationToNameRegionAndCountry = messageParts[3].split(': ')[1];
-                    const transportType = messageParts[4].split(': ')[1];
-                    const reservationTime = messageParts[5].split(': ')[1]; 
-
+                    const reservationData = event.data.split(': ')[1];
+                    const reservation = JSON.parse(reservationData);
+    
                     const newReservation = {
-                        hotelName,
-                        roomNames,
-                        locationFromNameRegionAndCountry,
-                        locationToNameRegionAndCountry,
-                        transportType,
-                        reservationTime 
+                        hotelName: reservation.hotelName,
+                        roomNames: reservation.roomReservationsNames,
+                        locationFromNameRegionAndCountry: reservation.locationFromNameRegionAndCountry,
+                        locationToNameRegionAndCountry: reservation.locationToNameRegionAndCountry,
+                        transportType: reservation.transportType,
+                        reservationTime: reservation.reservationTime
                     };
-
+    
                     setReservations(prevReservations => {
                         const updatedReservations = [newReservation, ...prevReservations];
                         return updatedReservations;
                     });
                     break;
-
+    
                 case "TopHotels":
                     const topHotels = event.data.split(':')[1].split('#').map((item: string) => item.trim());
                     setTopHotels(topHotels);
                     break;
+    
                 case "TopRoomTypes":
                     const topRoomTypes = event.data.split(':')[1].split('#').map((item: string) => item.replace(/[\[\]]/g, '').trim());
                     setTopRoomTypes(topRoomTypes);
                     break;
+    
                 case "TopLocationNamesTo":
                     const topLocationNamesTo = event.data.split(':')[1].split('#').map((item: string) => item.trim());
                     setTopLocationNamesTo(topLocationNamesTo);
                     break;
+    
                 case "TopTransportTypes":
                     const topTransportTypes = event.data.split(':')[1].split('#').map((item: string) => item.trim());
                     setTopTransportTypes(topTransportTypes);
                     break;
+    
                 default:
                     console.log("Wrong type of message");
                     break;
