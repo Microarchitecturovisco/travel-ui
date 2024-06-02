@@ -18,7 +18,7 @@ const Preferences = () => {
     const [topTransportTypes, setTopTransportTypes] = useState<string[]>([]);
 
     useEffect(() => {
-        const ws = new WebSocket(`ws://localhost:8082/reservations/ws/offerBooked`);
+        const ws = new WebSocket(`ws://localhost:8082/reservations/ws/reservationPreferences`);
 
         ws.onmessage = (event) => {
             console.log("Received message: " + event.data);
