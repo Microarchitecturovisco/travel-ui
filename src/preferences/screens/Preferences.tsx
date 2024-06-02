@@ -81,7 +81,7 @@ const Preferences = () => {
         <div className='flex flex-col px-64 py-24'>
             <div className='grid grid-cols-2 grid-rows-2 gap-x-12 gap-y-8'>
                 <Paper elevation={2} className='flex flex-col justify-center items-center rounded-xl px-4 py-6'>
-                    <h3 className='text-xl'>Top 3 kierunki podróży</h3>
+                    <h3 className='text-xl'>Popularne kierunki podróży</h3>
                     <ul className='flex flex-col gap-3'>
                         {topLocationNamesTo.map((location, index) => (
                             <li key={index}>{location}</li>
@@ -90,7 +90,7 @@ const Preferences = () => {
                 </Paper>
 
                 <Paper elevation={2} className='flex flex-col justify-center items-center rounded-xl px-4 py-6'>
-                    <h3 className='text-xl'>Top 3 hotele</h3>
+                    <h3 className='text-xl'>Popularne hotele</h3>
                     <ul className='flex flex-col gap-3'>
                         {topHotels.map((hotel, index) => (
                             <li key={index}>{hotel}</li>
@@ -99,7 +99,7 @@ const Preferences = () => {
                 </Paper>
 
                 <Paper elevation={2} className='flex flex-col justify-center items-center rounded-xl px-4 py-6'>
-                    <h3 className='text-xl'>Top 3 pokoje</h3>
+                    <h3 className='text-xl'>Popularne pokoje</h3>
                     <ul className='flex flex-col gap-3'>
                         {topRoomTypes.map((roomType, index) => (
                             <li key={index}>
@@ -111,7 +111,7 @@ const Preferences = () => {
                 </Paper>
 
                 <Paper elevation={2} className='flex flex-col justify-center items-center rounded-xl px-4 py-6'>
-                    <h3 className='text-xl'>Top 3 typy transportu</h3>
+                    <h3 className='text-xl'>Popularne typy transportu</h3>
                     <ul className='flex flex-col gap-3'>
                         {topTransportTypes.map((transportType, index) => (
                             <li key={index}>{transportType}</li>
