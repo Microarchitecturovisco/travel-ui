@@ -1,6 +1,5 @@
 import { Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { ConnectingAirports, Explore, Hotel, MeetingRoom } from "@mui/icons-material";
 
 type Reservation = {
     hotelName: string;
@@ -13,26 +12,24 @@ type Reservation = {
 
 const Preferences = () => {
     const [reservations, setReservations] = useState<Reservation[]>([]);
-    const [newReservations, setNewReservations] = useState<Reservation | null>(null);
     const [topHotels, setTopHotels] = useState<string[]>([]);
-    const [topRoomTypes, setTopRoomTypes] = useState<string[]>([]);
+    const [topRoomTypes, setTopRoomTypes] = useState<{ room: string, hotel: string }[]>([]);
     const [topLocationNamesTo, setTopLocationNamesTo] = useState<string[]>([]);
     const [topTransportTypes, setTopTransportTypes] = useState<string[]>([]);
-    let ws: WebSocket | null = null;
 
     useEffect(() => {
         const ws = new WebSocket(`ws://localhost:8082/reservations/ws/offerBooked`);
 
         ws.onmessage = (event) => {
             console.log("Received message: " + event.data);
-    
+
             const messageType = event.data.split(':')[0];
-    
+
             switch (messageType) {
                 case "SingleReservation":
                     const reservationData = event.data.split(': ')[1];
                     const reservation = JSON.parse(reservationData);
-    
+
                     const newReservation = {
                         hotelName: reservation.hotelName,
                         roomNames: reservation.roomReservationsNames,
@@ -41,45 +38,44 @@ const Preferences = () => {
                         transportType: reservation.transportType,
                         reservationTime: reservation.reservationTime
                     };
-    
-                    setReservations(prevReservations => {
-                        const updatedReservations = [newReservation, ...prevReservations];
-                        return updatedReservations;
-                    });
+
+                    setReservations(prevReservations => [newReservation, ...prevReservations]);
                     break;
-    
+
                 case "TopHotels":
                     const topHotels = event.data.split(':')[1].split('#').map((item: string) => item.trim());
                     setTopHotels(topHotels);
                     break;
-    
+
                 case "TopRoomTypes":
-                    const topRoomTypes = event.data.split(':')[1].split('#').map((item: string) => item.replace(/[\[\]]/g, '').trim());
+                    const topRoomTypes = event.data.split(':')[1].split('#').map((item: string) => {
+                        const [hotel, room] = item.split(' - ').map(part => part.trim());
+                        return { hotel, room };
+                    });
                     setTopRoomTypes(topRoomTypes);
                     break;
-    
+
                 case "TopLocationNamesTo":
                     const topLocationNamesTo = event.data.split(':')[1].split('#').map((item: string) => item.trim());
                     setTopLocationNamesTo(topLocationNamesTo);
                     break;
-    
+
                 case "TopTransportTypes":
                     const topTransportTypes = event.data.split(':')[1].split('#').map((item: string) => item.trim());
                     setTopTransportTypes(topTransportTypes);
                     break;
-    
+
                 default:
                     console.log("Wrong type of message");
                     break;
             }
         };
-    
+
         return () => {
             ws.close();
             console.error("WebSocket connection closed");
         };
     }, []);
-    
 
     return (
         <div className='flex flex-col px-64 py-24'>
@@ -92,7 +88,7 @@ const Preferences = () => {
                         ))}
                     </ul>
                 </Paper>
-    
+
                 <Paper elevation={2} className='flex flex-col justify-center items-center rounded-xl px-4 py-6'>
                     <h3 className='text-xl'>Top 3 hotele</h3>
                     <ul className='flex flex-col gap-3'>
@@ -101,16 +97,19 @@ const Preferences = () => {
                         ))}
                     </ul>
                 </Paper>
-    
+
                 <Paper elevation={2} className='flex flex-col justify-center items-center rounded-xl px-4 py-6'>
                     <h3 className='text-xl'>Top 3 pokoje</h3>
                     <ul className='flex flex-col gap-3'>
                         {topRoomTypes.map((roomType, index) => (
-                            <li key={index}>{roomType}</li>
+                            <li key={index}>
+                                <p>{roomType.room}</p>
+                                <p className='text-xs ml-4'>{roomType.hotel}</p>
+                            </li>
                         ))}
                     </ul>
                 </Paper>
-    
+
                 <Paper elevation={2} className='flex flex-col justify-center items-center rounded-xl px-4 py-6'>
                     <h3 className='text-xl'>Top 3 typy transportu</h3>
                     <ul className='flex flex-col gap-3'>
@@ -119,7 +118,7 @@ const Preferences = () => {
                         ))}
                     </ul>
                 </Paper>
-    
+
                 <div className='mt-8 col-span-2'>
                     <h2 className='text-xl font-bold mb-4'>Nowe rezerwacje</h2>
                     <Paper elevation={3}>
@@ -138,7 +137,7 @@ const Preferences = () => {
                                 <TableBody>
                                     {reservations.map((reservation, index) => (
                                         <TableRow key={index}>
-                                            <TableCell className='border border-gray-500 p-2'>{reservation.reservationTime}</TableCell> 
+                                            <TableCell className='border border-gray-500 p-2'>{reservation.reservationTime}</TableCell>
                                             <TableCell className='border border-gray-500 p-2'>{reservation.hotelName}</TableCell>
                                             <TableCell className='border border-gray-500 p-2'>{reservation.roomNames.join(', ')}</TableCell>
                                             <TableCell className='border border-gray-500 p-2'>{reservation.locationFromNameRegionAndCountry}</TableCell>
@@ -146,16 +145,6 @@ const Preferences = () => {
                                             <TableCell className='border border-gray-500 p-2'>{reservation.transportType}</TableCell>
                                         </TableRow>
                                     ))}
-                                    {newReservations && (
-                                        <TableRow>
-                                            <TableCell className='border border-gray-500 p-2'>{newReservations.reservationTime}</TableCell> 
-                                            <TableCell className='border border-gray-500 p-2'>{newReservations.hotelName}</TableCell>
-                                            <TableCell className='border border-gray-500 p-2'>{newReservations.roomNames.join(', ')}</TableCell>
-                                            <TableCell className='border border-gray-500 p-2'>{newReservations.locationFromNameRegionAndCountry}</TableCell>
-                                            <TableCell className='border border-gray-500 p-2'>{newReservations.locationToNameRegionAndCountry}</TableCell>
-                                            <TableCell className='border border-gray-500 p-2'>{newReservations.transportType}</TableCell>
-                                        </TableRow>
-                                    )}
                                 </TableBody>
                             </Table>
                         </TableContainer>
@@ -164,7 +153,6 @@ const Preferences = () => {
             </div>
         </div>
     );
-    
 }
 
 export default Preferences;
