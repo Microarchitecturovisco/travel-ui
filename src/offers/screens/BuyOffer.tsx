@@ -6,6 +6,7 @@ import {ApiRequests} from "../../core/apiConfig";
 import {Button} from "@mui/material";
 import {Book, Bookmark, Bookmarks, CreditCard} from "@mui/icons-material";
 import {formatDate} from "../../core/utils";
+import { TransportType } from "../../core/apiConfig";
 
 const BuyOffer = () => {
 
@@ -55,6 +56,12 @@ const BuyOffer = () => {
             roomReservationsIds: selectedRooms.map(room => room.roomId),
             transportReservationsIds: [selectedTransport.idTransport, selectedReturnTransport.idTransport],
             userId: crypto.randomUUID(),
+
+            hotelName: hotelName,
+            roomReservationsNames: selectedRooms.map(room => room.name),
+            locationFromNameRegionAndCountry: selectedTransport.transportCourse.departureFromLocation.region + ', Polska',
+            locationToNameRegionAndCountry: selectedTransport.transportCourse.arrivalAtLocation.region + ', ' + selectedTransport.transportCourse.arrivalAtLocation.country,
+            transportType: selectedTransport.transportCourse.type === 'PLANE' ? TransportType.Samolot : TransportType.Bus,
         })
             .then(response => {
 
