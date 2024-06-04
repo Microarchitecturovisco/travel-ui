@@ -42,7 +42,7 @@ const TOUpdates = () => {
     return (
         <div className='flex flex-col px-16 py-24'>
             <div className='grid grid-cols-2 gap-6'>
-                <Paper elevation={2}>
+                <Paper elevation={2} style={{height: 'fit-content'}}>
                     <div className='mt-4 mb-6 flex flex-row gap-2 items-center justify-center'>
                         <ConnectingAirports style={{fontSize: 18}}/>
                         <h3 className='text-xl'>Aktualizacje transportów</h3>
@@ -79,7 +79,7 @@ const TOUpdates = () => {
                     </TableContainer>
                 </Paper>
 
-                <Paper elevation={2}>
+                <Paper elevation={2} style={{height: 'fit-content'}}>
                     <div className='mt-4 mb-6 flex flex-row gap-2 items-center justify-center'>
                         <Hotel style={{fontSize: 18}}/>
                         <h3 className='text-xl'>Aktualizacje hoteli</h3>
