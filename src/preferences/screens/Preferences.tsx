@@ -1,5 +1,6 @@
 import { Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import {ConnectingAirports, Explore, Hotel, MeetingRoom} from "@mui/icons-material";
 
 type Reservation = {
     hotelName: string;
@@ -81,7 +82,10 @@ const Preferences = () => {
         <div className='flex flex-col px-64 py-24'>
             <div className='grid grid-cols-2 grid-rows-2 gap-x-12 gap-y-8'>
                 <Paper elevation={2} className='flex flex-col justify-center items-center rounded-xl px-4 py-6'>
-                    <h3 className='text-xl'>Popularne kierunki podróży</h3>
+                    <div className='mb-5 flex flex-row gap-2 items-center'>
+                        <Explore style={{fontSize: 18}}/>
+                        <h3 className='text-xl'>Popularne kierunki podróży</h3>
+                    </div>
                     <ul className='flex flex-col gap-3'>
                         {topLocationNamesTo.map((location, index) => (
                             <li key={index}>{location}</li>
@@ -90,7 +94,10 @@ const Preferences = () => {
                 </Paper>
 
                 <Paper elevation={2} className='flex flex-col justify-center items-center rounded-xl px-4 py-6'>
-                    <h3 className='text-xl'>Popularne hotele</h3>
+                    <div className='mb-5 flex flex-row gap-2 items-center'>
+                        <Hotel style={{fontSize: 18}}/>
+                        <h3 className='text-xl'>Popularne hotele</h3>
+                    </div>
                     <ul className='flex flex-col gap-3'>
                         {topHotels.map((hotel, index) => (
                             <li key={index}>{hotel}</li>
@@ -99,7 +106,10 @@ const Preferences = () => {
                 </Paper>
 
                 <Paper elevation={2} className='flex flex-col justify-center items-center rounded-xl px-4 py-6'>
-                    <h3 className='text-xl'>Popularne pokoje</h3>
+                    <div className='mb-5 flex flex-row gap-2 items-center'>
+                        <MeetingRoom style={{fontSize: 18}}/>
+                        <h3 className='text-xl'>Popularne pokoje</h3>
+                    </div>
                     <ul className='flex flex-col gap-3'>
                         {topRoomTypes.map((roomType, index) => (
                             <li key={index}>
@@ -111,7 +121,10 @@ const Preferences = () => {
                 </Paper>
 
                 <Paper elevation={2} className='flex flex-col justify-center items-center rounded-xl px-4 py-6'>
-                    <h3 className='text-xl'>Popularne typy transportu</h3>
+                    <div className='mb-5 flex flex-row gap-2 items-center'>
+                        <ConnectingAirports style={{fontSize: 18}}/>
+                        <h3 className='text-xl'>Popularne typy transportu</h3>
+                    </div>
                     <ul className='flex flex-col gap-3'>
                         {topTransportTypes.map((transportType, index) => (
                             <li key={index}>{transportType}</li>
@@ -126,23 +139,23 @@ const Preferences = () => {
                             <Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell className='border border-gray-500 p-2'>Data i godzina</TableCell>
-                                        <TableCell className='border border-gray-500 p-2'>Hotel</TableCell>
-                                        <TableCell className='border border-gray-500 p-2'>Pokoje</TableCell>
-                                        <TableCell className='border border-gray-500 p-2'>Skąd</TableCell>
-                                        <TableCell className='border border-gray-500 p-2'>Dokąd</TableCell>
-                                        <TableCell className='border border-gray-500 p-2'>Typ transportu</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>Data i godzina</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>Hotel</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>Pokoje</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>Skąd</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>Dokąd</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>Typ transportu</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {reservations.map((reservation, index) => (
                                         <TableRow key={index}>
-                                            <TableCell className='border border-gray-500 p-2'>{reservation.reservationTime}</TableCell>
-                                            <TableCell className='border border-gray-500 p-2'>{reservation.hotelName}</TableCell>
-                                            <TableCell className='border border-gray-500 p-2'>{reservation.roomNames.join(', ')}</TableCell>
-                                            <TableCell className='border border-gray-500 p-2'>{reservation.locationFromNameRegionAndCountry}</TableCell>
-                                            <TableCell className='border border-gray-500 p-2'>{reservation.locationToNameRegionAndCountry}</TableCell>
-                                            <TableCell className='border border-gray-500 p-2'>{reservation.transportType}</TableCell>
+                                            <TableCell className='border border-gray-300 p-2'>{reservation.reservationTime}</TableCell>
+                                            <TableCell className='border border-gray-300 p-2'>{reservation.hotelName}</TableCell>
+                                            <TableCell className='border border-gray-300 p-2'>{reservation.roomNames.join(', ')}</TableCell>
+                                            <TableCell className='border border-gray-300 p-2'>{reservation.locationFromNameRegionAndCountry}</TableCell>
+                                            <TableCell className='border border-gray-300 p-2'>{reservation.locationToNameRegionAndCountry}</TableCell>
+                                            <TableCell className='border border-gray-300 p-2'>{reservation.transportType}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>

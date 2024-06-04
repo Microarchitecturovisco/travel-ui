@@ -4,7 +4,7 @@ import logo from '../../assets/tourcentral.png'
 import LoginIcon from '@mui/icons-material/Login';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import {Link} from "react-router-dom";
-import {Bookmarks, Explore, Person, Star} from "@mui/icons-material";
+import {Apartment, Bookmarks, Explore, Person, Star} from "@mui/icons-material";
 import SearchDateRangePopper from "../../home/components/SearchDateRangePopper";
 import React, {useState} from "react";
 
@@ -48,6 +48,18 @@ export default function Navbar () {
                                 style={{color: '#333'}}
                             >
                                 Preferencje klientów
+                            </Button>
+                        </Link>
+                    </li>
+                    <li className='flex flex-row items-center'>
+                        <Link to='/TOUpdates'
+                        >
+                            <Button
+                                variant='text'
+                                startIcon={<Apartment style={{color: '#333'}}/>}
+                                style={{color: '#333'}}
+                            >
+                                Aktualizacje organizatora wycieczek
                             </Button>
                         </Link>
                     </li>
