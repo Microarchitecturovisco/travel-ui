@@ -139,23 +139,23 @@ const Preferences = () => {
                             <Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell className='border border-gray-500 p-2'>Data i godzina</TableCell>
-                                        <TableCell className='border border-gray-500 p-2'>Hotel</TableCell>
-                                        <TableCell className='border border-gray-500 p-2'>Pokoje</TableCell>
-                                        <TableCell className='border border-gray-500 p-2'>Skąd</TableCell>
-                                        <TableCell className='border border-gray-500 p-2'>Dokąd</TableCell>
-                                        <TableCell className='border border-gray-500 p-2'>Typ transportu</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>Data i godzina</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>Hotel</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>Pokoje</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>Skąd</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>Dokąd</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>Typ transportu</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {reservations.map((reservation, index) => (
                                         <TableRow key={index}>
-                                            <TableCell className='border border-gray-500 p-2'>{reservation.reservationTime}</TableCell>
-                                            <TableCell className='border border-gray-500 p-2'>{reservation.hotelName}</TableCell>
-                                            <TableCell className='border border-gray-500 p-2'>{reservation.roomNames.join(', ')}</TableCell>
-                                            <TableCell className='border border-gray-500 p-2'>{reservation.locationFromNameRegionAndCountry}</TableCell>
-                                            <TableCell className='border border-gray-500 p-2'>{reservation.locationToNameRegionAndCountry}</TableCell>
-                                            <TableCell className='border border-gray-500 p-2'>{reservation.transportType}</TableCell>
+                                            <TableCell className='border border-gray-300 p-2'>{reservation.reservationTime}</TableCell>
+                                            <TableCell className='border border-gray-300 p-2'>{reservation.hotelName}</TableCell>
+                                            <TableCell className='border border-gray-300 p-2'>{reservation.roomNames.join(', ')}</TableCell>
+                                            <TableCell className='border border-gray-300 p-2'>{reservation.locationFromNameRegionAndCountry}</TableCell>
+                                            <TableCell className='border border-gray-300 p-2'>{reservation.locationToNameRegionAndCountry}</TableCell>
+                                            <TableCell className='border border-gray-300 p-2'>{reservation.transportType}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
