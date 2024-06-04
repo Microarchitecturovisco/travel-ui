@@ -10,6 +10,7 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {useEffect} from "react";
 import BuyOffer from "./offers/screens/BuyOffer";
 import Preferences from "./preferences/screens/Preferences";
+import TOUpdates from "./tour-operator-updates/screens/TOUpdates";
 
 function App() {
     useEffect(() => {
@@ -26,6 +27,7 @@ function App() {
                     <Route path='/offerDetails' element={<OfferDetails/>}/>
                     <Route path='/buyOffer' element={<BuyOffer/>}/>
                     <Route path='/clientPreferences' element={<Preferences/>}/>
+                    <Route path='/TOUpdates' element={<TOUpdates/>}/>
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </Router>
