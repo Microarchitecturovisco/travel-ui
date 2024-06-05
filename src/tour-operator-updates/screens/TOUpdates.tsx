@@ -11,28 +11,27 @@ type HotelUpdate = {
     capacityChange: number;
 };
 
+type TransportUpdate = {
+    updateDateTime: string;
+    updateType: string;
+    departureRegionAndCountry: string;
+    arrivalRegionAndCountry: string;
+    transportTypeName: string;
+    priceChange: number;
+    capacityChange: number;
+};
+
 const TOUpdates = () => {
 
-    const transportChanges = [
-        {
-            date: new Date(),
-            locationFrom: {idLocation: '123', region: 'Gdańsk', country: 'Polska'},
-            locationTo: {idLocation: '345', region: 'Warszawa', country: 'Polska'},
-            type: 'BUS',
-            changes: {
-                capacityDiff: -20,
-                priceDiff: -48,
-            }
-        }
-    ]
-
     const [hotelUpdates, setHotelUpdates] = useState<HotelUpdate[]>([]);
+    const [transportUpdates, setTransportUpdates] = useState<TransportUpdate[]>([]);
 
     useEffect(() => {
-        const ws = new WebSocket(`ws://localhost:8086/data-generator/ws/hotel`);
+        const hotelWs = new WebSocket(`ws://localhost:8086/data-generator/ws/hotel`);
+        const transportWs = new WebSocket(`ws://localhost:8086/data-generator/ws/transport`);
 
-        ws.onmessage = (event) => {
-            console.log("Received message: " + event.data);
+        hotelWs.onmessage = (event) => {
+            console.log("Received hotel message: " + event.data);
         
             const messageType = event.data.split(':')[0];
             const messageData = event.data.split(': ')[1];
@@ -48,7 +47,7 @@ const TOUpdates = () => {
                         hotelUpdate.updateDateTime[2],
                         hotelUpdate.updateDateTime[3],
                         hotelUpdate.updateDateTime[4]
-                    );
+                    ).toISOString();
         
                     setHotelUpdates((prevUpdates) => [hotelUpdate, ...prevUpdates]);
                     break;
@@ -56,14 +55,41 @@ const TOUpdates = () => {
                     console.log("Unexpected message type");
                     break;
             }
-        };        
+        };
+
+        transportWs.onmessage = (event) => {
+            console.log("Received transport message: " + event.data);
+
+            const messageType = event.data.split(':')[0];
+            const messageData = event.data.split(': ')[1];
+
+            switch (messageType) {
+                case "SingleTransport":
+                    const transportUpdate = JSON.parse(messageData);
+
+                    // Convert the updateDateTime array to a Date object
+                    transportUpdate.updateDateTime = new Date(
+                        transportUpdate.updateDateTime[0],
+                        transportUpdate.updateDateTime[1] - 1, // JavaScript months are 0-based
+                        transportUpdate.updateDateTime[2],
+                        transportUpdate.updateDateTime[3],
+                        transportUpdate.updateDateTime[4]
+                    ).toISOString();
+
+                    setTransportUpdates((prevUpdates) => [transportUpdate, ...prevUpdates]);
+                    break;
+                default:
+                    console.log("Unexpected message type");
+                    break;
+            }
+        };
 
         return () => {
-            ws.close();
+            hotelWs.close();
+            transportWs.close();
             console.error("WebSocket connection closed");
         };
     }, []);
-
 
     return (
         <div className='flex flex-col px-16 py-24'>
@@ -86,16 +112,16 @@ const TOUpdates = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {transportChanges.map((transport, index) => (
+                                {transportUpdates.map((transport, index) => (
                                     <TableRow key={index}>
-                                        <TableCell className='border border-gray-300 p-2'>{transport.date.toDateString()}</TableCell>
-                                        <TableCell className='border border-gray-300 p-2'>{transport.locationFrom.country}, {transport.locationFrom.region}</TableCell>
-                                        <TableCell className='border border-gray-300 p-2'>{transport.locationTo.country}, {transport.locationTo.region}</TableCell>
-                                        <TableCell className='border border-gray-300 p-2'>{transport.type === 'PLANE' ? 'Samolot' : 'Bus'}</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>{new Date(transport.updateDateTime).toLocaleString()}</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>{transport.departureRegionAndCountry}</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>{transport.arrivalRegionAndCountry}</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>{transport.transportTypeName}</TableCell>
                                         <TableCell className='border border-gray-300 p-2'>
                                             <div className='flex flex-col gap-1'>
-                                                <p>Cena: {transport.changes.priceDiff >= 0 ? '+' : ''}{transport.changes.priceDiff}</p>
-                                                <p>Miejsca: {transport.changes.capacityDiff >= 0 ? '+' : ''}{transport.changes.capacityDiff}</p>
+                                                <p>Cena: {transport.priceChange > 0 ? '+' : ''}{transport.priceChange}</p>
+                                                <p>Miejsca: {transport.capacityChange > 0 ? '+' : ''}{transport.capacityChange}</p>
                                             </div>
                                         </TableCell>
                                     </TableRow>
