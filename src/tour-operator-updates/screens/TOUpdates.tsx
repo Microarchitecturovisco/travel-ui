@@ -27,8 +27,8 @@ const TOUpdates = () => {
     const [transportUpdates, setTransportUpdates] = useState<TransportUpdate[]>([]);
 
     useEffect(() => {
-        const hotelWs = new WebSocket(`ws://localhost:8086/data-generator/ws/hotel`);
-        const transportWs = new WebSocket(`ws://localhost:8086/data-generator/ws/transport`);
+        const hotelWs = new WebSocket(`ws://localhost:8082/data-generator/ws/hotel`);
+        const transportWs = new WebSocket(`ws://localhost:8082/data-generator/ws/transport`);
 
         hotelWs.onmessage = (event) => {
             console.log("Received hotel message: " + event.data);
@@ -104,10 +104,11 @@ const TOUpdates = () => {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell className='border border-gray-300 p-2'>Data</TableCell>
+                                    <TableCell className='border border-gray-300 p-2'>Data zmiany</TableCell>
                                     <TableCell className='border border-gray-300 p-2'>Skąd</TableCell>
                                     <TableCell className='border border-gray-300 p-2'>Dokąd</TableCell>
                                     <TableCell className='border border-gray-300 p-2'>Typ transportu</TableCell>
+                                    <TableCell className='border border-gray-300 p-2'>Typ zmiany</TableCell>
                                     <TableCell className='border border-gray-300 p-2'>Zmiany</TableCell>
                                 </TableRow>
                             </TableHead>
@@ -118,6 +119,7 @@ const TOUpdates = () => {
                                         <TableCell className='border border-gray-300 p-2'>{transport.departureRegionAndCountry}</TableCell>
                                         <TableCell className='border border-gray-300 p-2'>{transport.arrivalRegionAndCountry}</TableCell>
                                         <TableCell className='border border-gray-300 p-2'>{transport.transportTypeName}</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>{transport.updateType}</TableCell>
                                         <TableCell className='border border-gray-300 p-2'>
                                             <div className='flex flex-col gap-1'>
                                                 <p>Cena: {transport.priceChange > 0 ? '+' : ''}{transport.priceChange}</p>
@@ -141,20 +143,20 @@ const TOUpdates = () => {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell className='border border-gray-300 p-2'>Data</TableCell>
-                                    <TableCell className='border border-gray-300 p-2'>Typ zmiany</TableCell>
+                                    <TableCell className='border border-gray-300 p-2'>Data zmiany</TableCell>
                                     <TableCell className='border border-gray-300 p-2'>Hotel</TableCell>
                                     <TableCell className='border border-gray-300 p-2'>Pokój</TableCell>
                                     <TableCell className='border border-gray-300 p-2'>Zmiany</TableCell>
+                                    <TableCell className='border border-gray-300 p-2'>Typ zmiany</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {hotelUpdates.map((hotel, index) => (
                                     <TableRow key={index}>
                                         <TableCell className='border border-gray-300 p-2'>{new Date(hotel.updateDateTime).toLocaleString()}</TableCell>
-                                        <TableCell className='border border-gray-300 p-2'>{hotel.updateType}</TableCell>
                                         <TableCell className='border border-gray-300 p-2'>{hotel.hotelName}</TableCell>
                                         <TableCell className='border border-gray-300 p-2'>{hotel.roomName}</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>{hotel.updateType}</TableCell>
                                         <TableCell className='border border-gray-300 p-2'>
                                             <div className='flex flex-col gap-1'>
                                                 <p>Cena: {hotel.priceChange > 0 ? '+' : ''}{hotel.priceChange}</p>
