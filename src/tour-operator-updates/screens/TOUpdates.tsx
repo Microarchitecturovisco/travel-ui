@@ -116,6 +116,7 @@ const TOUpdates = () => {
                             <TableHead>
                                 <TableRow>
                                     <TableCell className='border border-gray-300 p-2'>Data</TableCell>
+                                    <TableCell className='border border-gray-300 p-2'>Typ zmiany</TableCell>
                                     <TableCell className='border border-gray-300 p-2'>Hotel</TableCell>
                                     <TableCell className='border border-gray-300 p-2'>Pokój</TableCell>
                                     <TableCell className='border border-gray-300 p-2'>Zmiany</TableCell>
@@ -125,12 +126,13 @@ const TOUpdates = () => {
                                 {hotelUpdates.map((hotel, index) => (
                                     <TableRow key={index}>
                                         <TableCell className='border border-gray-300 p-2'>{new Date(hotel.updateDateTime).toLocaleString()}</TableCell>
+                                        <TableCell className='border border-gray-300 p-2'>{hotel.updateType}</TableCell>
                                         <TableCell className='border border-gray-300 p-2'>{hotel.hotelName}</TableCell>
                                         <TableCell className='border border-gray-300 p-2'>{hotel.roomName}</TableCell>
                                         <TableCell className='border border-gray-300 p-2'>
                                             <div className='flex flex-col gap-1'>
-                                                <p>Cena: {hotel.priceChange >= 0 ? '+' : ''}{hotel.priceChange}</p>
-                                                <p>Miejsca: {hotel.capacityChange >= 0 ? '+' : ''}{hotel.capacityChange}</p>
+                                                <p>Cena: {hotel.priceChange > 0 ? '+' : ''}{hotel.priceChange}</p>
+                                                <p>Miejsca: {hotel.capacityChange > 0 ? '+' : ''}{hotel.capacityChange}</p>
                                             </div>
                                         </TableCell>
                                     </TableRow>
