@@ -7,6 +7,7 @@ import {Button} from "@mui/material";
 import {Book, Bookmark, Bookmarks, CreditCard} from "@mui/icons-material";
 import {formatDate} from "../../core/utils";
 import { TransportType } from "../../core/apiConfig";
+import { v4 as uuidv4 } from 'uuid';
 
 const BuyOffer = () => {
 
@@ -40,7 +41,7 @@ const BuyOffer = () => {
         }
 
         await ApiRequests.reserveOffer({
-            id: crypto.randomUUID(),
+            id: uuidv4(),
             hotelId: idHotel,
 
             hotelTimeFrom: selectedDateFrom,
@@ -55,7 +56,7 @@ const BuyOffer = () => {
 
             roomReservationsIds: selectedRooms.map(room => room.roomId),
             transportReservationsIds: [selectedTransport.idTransport, selectedReturnTransport.idTransport],
-            userId: crypto.randomUUID(),
+            userId: uuidv4(),
 
             hotelName: hotelName,
             roomReservationsNames: selectedRooms.map(room => room.name),
