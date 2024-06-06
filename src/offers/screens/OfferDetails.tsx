@@ -175,7 +175,8 @@ const OfferDetails = () => {
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
     useEffect(() => {
-        const ws = new WebSocket(`ws://localhost:8082/reservations/ws/offerBought?idHotel=${offerDetails.idHotel}`);
+
+        const ws = new WebSocket(`ws://${process.env.REACT_APP_API_HOSTNAME}:${process.env.REACT_APP_API_PORT}/reservations/ws/offerBought?idHotel=${offerDetails.idHotel}`);
 
         ws.onmessage = (event) => {
             console.log("Received message " + event.data);
