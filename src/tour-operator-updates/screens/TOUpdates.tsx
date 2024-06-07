@@ -121,10 +121,16 @@ const TOUpdates = () => {
                                         <TableCell className='border border-gray-300 p-2'>{transport.transportTypeName}</TableCell>
                                         <TableCell className='border border-gray-300 p-2'>{transport.updateType}</TableCell>
                                         <TableCell className='border border-gray-300 p-2'>
-                                            <div className='flex flex-col gap-1'>
-                                                <p>Cena: {transport.priceChange > 0 ? '+' : ''}{transport.priceChange}</p>
-                                                <p>Miejsca: {transport.capacityChange > 0 ? '+' : ''}{transport.capacityChange}</p>
-                                            </div>
+                                            {transport.updateType === 'CREATE' ? (
+                                                <div className='flex flex-col gap-1'>
+                                                    {}
+                                                </div>
+                                            ) : (
+                                                <div className='flex flex-col gap-1'>
+                                                    <p>Cena: {transport.priceChange > 0 ? '+' : ''}{transport.priceChange}</p>
+                                                    <p>Miejsca: {transport.capacityChange > 0 ? '+' : ''}{transport.capacityChange}</p>
+                                                </div>
+                                            )}
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -158,10 +164,16 @@ const TOUpdates = () => {
                                         <TableCell className='border border-gray-300 p-2'>{hotel.roomName}</TableCell>
                                         <TableCell className='border border-gray-300 p-2'>{hotel.updateType}</TableCell>
                                         <TableCell className='border border-gray-300 p-2'>
-                                            <div className='flex flex-col gap-1'>
-                                                <p>Cena: {hotel.priceChange > 0 ? '+' : ''}{hotel.priceChange}</p>
-                                                <p>Miejsca: {hotel.capacityChange > 0 ? '+' : ''}{hotel.capacityChange}</p>
-                                            </div>
+                                            {hotel.updateType === 'CREATE' ? (
+                                                <div className='flex flex-col gap-1'>
+                                                    {}
+                                                </div>
+                                            ) : (
+                                                <div className='flex flex-col gap-1'>
+                                                    <p>Cena: {hotel.priceChange > 0 ? '+' : ''}{hotel.priceChange}</p>
+                                                    <p>Miejsca: {hotel.capacityChange > 0 ? '+' : ''}{hotel.capacityChange}</p>
+                                                </div>
+                                            )}
                                         </TableCell>
                                     </TableRow>
                                 ))}
