@@ -87,7 +87,7 @@ const TOUpdates = () => {
         return () => {
             hotelWs.close();
             transportWs.close();
-            console.error("WebSocket connection closed");
+            console.log("WebSocket connection closed");
         };
     }, []);
 
