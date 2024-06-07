@@ -152,8 +152,8 @@ const TOUpdates = () => {
                                     <TableCell className='border border-gray-300 p-2'>Data zmiany</TableCell>
                                     <TableCell className='border border-gray-300 p-2'>Hotel</TableCell>
                                     <TableCell className='border border-gray-300 p-2'>Pokój</TableCell>
-                                    <TableCell className='border border-gray-300 p-2'>Zmiany</TableCell>
                                     <TableCell className='border border-gray-300 p-2'>Typ zmiany</TableCell>
+                                    <TableCell className='border border-gray-300 p-2'>Zmiany</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
