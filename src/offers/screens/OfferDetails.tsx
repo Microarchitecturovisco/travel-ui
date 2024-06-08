@@ -189,7 +189,7 @@ const OfferDetails = () => {
         const priceWS = new WebSocket(`ws://${process.env.REACT_APP_API_HOSTNAME}:${process.env.REACT_APP_API_PORT}/offers/ws/offerPrice`);
 
         priceWS.onmessage = (ev) => {
-            setFinalPrice(ev.data);
+            setFinalPrice(Math.ceil(ev.data));
         }
 
         setPriceWebSocket(priceWS);
@@ -203,23 +203,6 @@ const OfferDetails = () => {
     }, []);
 
     const [finalPrice, setFinalPrice] = useState(0);
-
-    const calculatePrice = () => {
-        if (!offerDetails.cateringOptions[0]) {
-            return;
-        }
-
-        const cateringExtraPrice = selectedCatering.price - offerDetails.cateringOptions[0].price;
-        const transportExtraPricePerAdult = selectedTransport.pricePerAdult - offerDetails.departure[0].pricePerAdult
-
-        const extraPricePerAdult = transportExtraPricePerAdult * selectedGuests.adults;
-        const extraPricePerTeen = transportExtraPricePerAdult * 0.7 * selectedGuests.teens;
-        const extraPricePerKid = transportExtraPricePerAdult * 0.6 * selectedGuests.kids;
-        const extraPricePerInfant = transportExtraPricePerAdult * 0.1 * selectedGuests.infants;
-
-        const finalPrice = offerDetails.price + cateringExtraPrice + extraPricePerTeen + extraPricePerKid + extraPricePerInfant + extraPricePerAdult;
-        setFinalPrice(Math.ceil(finalPrice));
-    }
 
     useEffect(() => {
         const requestPriceDto = {
@@ -504,7 +487,7 @@ const OfferDetails = () => {
                                             }
 
                                             <p className='text-sm'>
-                                                + {Math.ceil(item.pricePerAdult - offerDetails.departure[0].pricePerAdult)} zł
+                                                + {Math.round((item.pricePerAdult + offerDetails.possibleDepartures[1][index].pricePerAdult) - (offerDetails.departure[0].pricePerAdult + offerDetails.departure[1].pricePerAdult))} zł
                                                 / os
                                             </p>
                                         </div>
