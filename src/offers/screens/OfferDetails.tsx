@@ -11,11 +11,23 @@ import {
     Paper,
     Typography
 } from "@mui/material";
-import React, {useEffect, useState} from "react";
-import {Add, ArrowBack, Bookmark, Close, DirectionsBus, Flight, Lens, Place, Remove} from "@mui/icons-material";
+import React, {useEffect, useRef, useState} from "react";
+import {
+    Add,
+    ArrowBack,
+    AttachMoney,
+    Bookmark,
+    Close,
+    DirectionsBus,
+    Flight,
+    Lens,
+    Money,
+    Place,
+    Remove
+} from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import {ApiRequests} from "../../core/apiConfig";
-import {CateringOption, Location, Offer, Room, Transport} from "../../core/domain/DomainInterfaces";
+import {CateringOption, Location, Offer, Room, RoomConfiguration, Transport} from "../../core/domain/DomainInterfaces";
 import {cateringToString, formatDate} from "../../core/utils";
 import LoginIcon from "@mui/icons-material/Login";
 import {DatePicker} from "@mui/x-date-pickers";
@@ -40,8 +52,14 @@ const OfferDetails = () => {
         destination: {idLocation: '', region: '', country: ''},
         imageUrls: [],
 
-        roomConfiguration: [],
-        possibleRoomConfigurations: [[]],
+        roomConfiguration: {
+            rooms: [],
+            pricePerAdult: 0,
+        },
+        possibleRoomConfigurations: [{
+            rooms: [],
+            pricePerAdult: 0,
+        }],
 
         cateringOptions: [],
 
@@ -62,7 +80,10 @@ const OfferDetails = () => {
     const [selectedDateFrom, setSelectedDateFrom] = useState(new Date(2024, 4, 1,));
     const [selectedDateTo, setSelectedDateTo] = useState(() => new Date(2024, 4, 3));
 
-    const [selectedRooms, setSelectedRooms] = useState<Room[]>([]);
+    const [selectedRooms, setSelectedRooms] = useState<RoomConfiguration>({
+        rooms: [],
+        pricePerAdult: 0,
+    });
     const [selectedCatering, setSelectedCatering] = useState<CateringOption>({
         idCateringOption: '',
         type: 'ALL_INCLUSIVE',
@@ -128,42 +149,58 @@ const OfferDetails = () => {
         setSelectedDateTo(new Date(searchParams.dateTo));
     }
 
-    const fetchOfferDetails = async () => {
-        setLoading(true);
-        let searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
-
-        searchParams = {...searchParams,
-            idHotel: offerDetails.idHotel,
-            departurePlane: searchParams.departurePlane ? searchParams.departurePlane.map((dpt: Location) => dpt.idLocation) : [],
-            departureBus: searchParams.departureBus ? searchParams.departureBus.map((dpt: Location) => dpt.idLocation) : [],
-            dateFrom: formatDate(searchParams.dateFrom ? new Date(searchParams.dateFrom) : new Date()),
-            dateTo: formatDate(searchParams.dateFrom ? new Date(searchParams.dateTo) : new Date()),
-        }
-
-        await ApiRequests.getOfferDetails(searchParams)
-            .then(response => {
-                setOfferDetails(response.data);
-                setSelectedRooms(response.data.roomConfiguration);
-                setSelectedTransport(response.data.departure[0]);
-                setSelectedReturnTransport(response.data.departure[1]);
-                setSelectedCatering(response.data.cateringOptions[0]);
-            })
-            .catch(err => {
-                console.log(err);
-            })
-            .finally(() => {
-                setLoading(false);
-            })
-    }
+    // @ts-ignore
+    const [priceWebSocket, setPriceWebSocket] = useState<WebSocket>(null);
 
     useEffect(() => {
-        fetchOfferDetails().then(r => r);
-        loadDataFromStorage();
-    }, []);
+        const offerDetailsWS = new WebSocket(`ws://${process.env.REACT_APP_API_HOSTNAME}:${process.env.REACT_APP_API_PORT}/offers/ws/offerDetails?idHotel=${offerDetails.idHotel}`);
 
-    // useEffect(() => {
-    //     console.log(offerDetails);
-    // }, [offerDetails]);
+        offerDetailsWS.onopen = () => {
+            setLoading(true);
+            const searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
+
+            const requestOfferDetailsDto = {
+                idHotel: offerDetails.idHotel,
+                departurePlanes: searchParams.departurePlane ? searchParams.departurePlane.map((dpt: Location) => dpt.idLocation) : [],
+                departureBuses: searchParams.departureBus ? searchParams.departureBus.map((dpt: Location) => dpt.idLocation) : [],
+                dateFrom: formatDate(searchParams.dateFrom ? new Date(searchParams.dateFrom) : new Date()),
+                dateTo: formatDate(searchParams.dateFrom ? new Date(searchParams.dateTo) : new Date()),
+                adults: searchParams.adults,
+                teens: searchParams.teens,
+                kids: searchParams.kids,
+                infants: searchParams.infants,
+            }
+
+            offerDetailsWS.send(JSON.stringify(requestOfferDetailsDto));
+        }
+
+        offerDetailsWS.onmessage = (ev) => {
+            const recvOfferDetails = JSON.parse(ev.data);
+
+            setOfferDetails(recvOfferDetails);
+            setSelectedRooms(recvOfferDetails.roomConfiguration);
+            setSelectedTransport(recvOfferDetails.departure[0]);
+            setSelectedReturnTransport(recvOfferDetails.departure[1]);
+            setSelectedCatering(recvOfferDetails.cateringOptions[0]);
+
+            setLoading(false);
+        }
+
+        const priceWS = new WebSocket(`ws://${process.env.REACT_APP_API_HOSTNAME}:${process.env.REACT_APP_API_PORT}/offers/ws/offerPrice`);
+
+        priceWS.onmessage = (ev) => {
+            setFinalPrice(ev.data);
+        }
+
+        setPriceWebSocket(priceWS);
+
+        loadDataFromStorage();
+
+        return () => {
+            offerDetailsWS.close();
+            priceWS.close();
+        }
+    }, []);
 
     const [finalPrice, setFinalPrice] = useState(0);
 
@@ -185,8 +222,23 @@ const OfferDetails = () => {
     }
 
     useEffect(() => {
-        calculatePrice();
-    }, [selectedTransport, selectedCatering, selectedGuests, offerDetails]);
+        const requestPriceDto = {
+            dateFrom: formatDate(selectedDateFrom),
+            dateTo: formatDate(selectedDateTo),
+            adults: selectedGuests.adults,
+            teens: selectedGuests.teens,
+            kids: selectedGuests.kids,
+            infants: selectedGuests.infants,
+
+            roomConfiguration: selectedRooms,
+            cateringOption: selectedCatering,
+            departure: [selectedTransport, selectedReturnTransport],
+        }
+
+        if (offerDetails.cateringOptions[0]) {
+            priceWebSocket.send(JSON.stringify(requestPriceDto));
+        }
+    }, [selectedRooms, selectedTransport, selectedCatering, selectedGuests, offerDetails, selectedDateTo, selectedDateFrom]);
 
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -196,7 +248,6 @@ const OfferDetails = () => {
         const ws = new WebSocket(`ws://${process.env.REACT_APP_API_HOSTNAME}:${process.env.REACT_APP_API_PORT}/reservations/ws/offerBought?idHotel=${offerDetails.idHotel}`);
 
         ws.onmessage = (event) => {
-            console.log("Received message " + event.data);
             setSnackbarMessage(event.data);
             setSnackbarOpen(true);
         }
@@ -280,7 +331,7 @@ const OfferDetails = () => {
                                 } label={'Konfiguracja 1'}/>
 
                                 <div className='flex flex-col gap-2'>
-                                    {offerDetails.roomConfiguration.map((room, index) => (
+                                    {offerDetails.roomConfiguration.rooms.map((room, index) => (
                                         <div key={index}>
                                             <h3 className='mb-1'>{room.name}</h3>
                                             <p className='text-xs'>{room.description}</p>
@@ -302,7 +353,7 @@ const OfferDetails = () => {
                                         } label={'Konfiguracja ' + (index + 2)}/>
 
                                         <div className='flex flex-col gap-2'>
-                                            {item.map((room, index) => (
+                                            {item.rooms.map((room, index) => (
                                                 <div key={index}>
                                                     <h3 className='mb-1'>{room.name}</h3>
                                                     <p className='text-xs'>{room.description}</p>
