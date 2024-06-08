@@ -46,7 +46,8 @@ const TOUpdates = () => {
                         hotelUpdate.updateDateTime[1] - 1, // JavaScript months are 0-based
                         hotelUpdate.updateDateTime[2],
                         hotelUpdate.updateDateTime[3],
-                        hotelUpdate.updateDateTime[4]
+                        hotelUpdate.updateDateTime[4],
+                        hotelUpdate.updateDateTime[5]
                     ).toISOString();
         
                     setHotelUpdates((prevUpdates) => [hotelUpdate, ...prevUpdates]);
@@ -73,7 +74,8 @@ const TOUpdates = () => {
                         transportUpdate.updateDateTime[1] - 1, // JavaScript months are 0-based
                         transportUpdate.updateDateTime[2],
                         transportUpdate.updateDateTime[3],
-                        transportUpdate.updateDateTime[4]
+                        transportUpdate.updateDateTime[4],
+                        transportUpdate.updateDateTime[5]
                     ).toISOString();
 
                     setTransportUpdates((prevUpdates) => [transportUpdate, ...prevUpdates]);
