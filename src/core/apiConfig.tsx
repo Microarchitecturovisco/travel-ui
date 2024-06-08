@@ -1,9 +1,6 @@
 import axios from "axios";
-import {Location} from "./domain/DomainInterfaces";
 
-// deploying to docker cluster requires the 'gateway' hostname and probably a different port
-// export const baseAPIURL = 'http://gateway:8082/';
-export const baseAPIURL = 'http://localhost:8082/';
+export const baseAPIURL = `http://${process.env.REACT_APP_API_HOSTNAME}:${process.env.REACT_APP_API_PORT}/`;
 
 export const axiosInstance = axios.create({
     baseURL: baseAPIURL,

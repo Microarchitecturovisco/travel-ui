@@ -18,6 +18,10 @@ yarn
 
 This project uses a modern version of `yarn` for package management
 
+### API host and port
+
+Configure the API connection in the `.env` file
+
 ## Available Scripts
 
 In the project directory, you can run:

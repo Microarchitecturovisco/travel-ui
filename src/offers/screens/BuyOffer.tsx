@@ -1,16 +1,20 @@
 import React, {useEffect, useState} from "react";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import Countdown from "react-countdown";
 import {CateringOption, Location, Room, Transport} from "../../core/domain/DomainInterfaces";
 import {ApiRequests} from "../../core/apiConfig";
 import {Button} from "@mui/material";
-import {Book, Bookmark, Bookmarks, CreditCard} from "@mui/icons-material";
+import {ArrowBack, Book, Bookmark, Bookmarks, CreditCard} from "@mui/icons-material";
 import {formatDate} from "../../core/utils";
 import { TransportType } from "../../core/apiConfig";
+import { v4 as uuidv4 } from 'uuid';
+import LoginIcon from "@mui/icons-material/Login";
 
 const BuyOffer = () => {
 
     const location = useLocation();
+
+    const navigate = useNavigate();
 
     const [idHotel, setIdHotel] = useState(location.state.idHotel);
     const [price, setPrice] = useState(location.state.price);
@@ -40,7 +44,7 @@ const BuyOffer = () => {
         }
 
         await ApiRequests.reserveOffer({
-            id: crypto.randomUUID(),
+            id: uuidv4(),
             hotelId: idHotel,
 
             hotelTimeFrom: selectedDateFrom,
@@ -55,7 +59,7 @@ const BuyOffer = () => {
 
             roomReservationsIds: selectedRooms.map(room => room.roomId),
             transportReservationsIds: [selectedTransport.idTransport, selectedReturnTransport.idTransport],
-            userId: crypto.randomUUID(),
+            userId: uuidv4(),
 
             hotelName: hotelName,
             roomReservationsNames: selectedRooms.map(room => room.name),
@@ -91,7 +95,7 @@ const BuyOffer = () => {
     }
 
     return (
-        <div className='flex flex-col px-[32rem] py-24'>
+        <div className='flex flex-col px-[32rem] py-16'>
             <p className='text-xl mb-6'>Szczegóły oferty</p>
 
             <div className='flex flex-col gap-3 mb-12'>
@@ -178,13 +182,37 @@ const BuyOffer = () => {
             }
 
             {transactionSuccessful === 'ENDED' &&
-                <p className='text-xl mt-2 text-red-500'>Czas transakcji się skończył!</p>
+                <div>
+                    <p className='text-xl mt-2 text-red-500'>Czas transakcji się skończył!</p>
+
+                    <div className='mt-4'>
+                        <Button
+                            className='mt-4'
+                            variant='contained'
+                            startIcon={<ArrowBack/>}
+                            onClick={() => navigate('/')}
+                        >
+                            Powrót do strony głównej
+                        </Button>
+                    </div>
+                </div>
             }
 
             {transactionSuccessful === 'SUCCESS' &&
                 <div>
                     <p className='text-xl mt-2 text-green-400'>Transakcja zakończona pomyślnie</p>
                     <p>Zarezerwowano wybraną podróż!</p>
+
+                    <div className='mt-4'>
+                        <Button
+                            className='mt-4'
+                            variant='contained'
+                            startIcon={<ArrowBack/>}
+                            onClick={() => navigate('/')}
+                        >
+                            Powrót do strony głównej
+                        </Button>
+                    </div>
                 </div>
             }
 
@@ -192,6 +220,17 @@ const BuyOffer = () => {
                 <div>
                     <p className='text-xl mt-2 text-red-400'>Transakcja zakończona niepomyślnie</p>
                     <p>Nie masz środków na karcie lub skończył się czas na płatność</p>
+
+                    <div className='mt-4'>
+                        <Button
+                            className='mt-4'
+                            variant='contained'
+                            startIcon={<ArrowBack/>}
+                            onClick={() => navigate('/')}
+                        >
+                            Powrót do strony głównej
+                        </Button>
+                    </div>
                 </div>
             }
 
@@ -199,6 +238,17 @@ const BuyOffer = () => {
                 <div>
                     <p className='text-xl mt-2 text-red-400'>Transakcja zakończona niepomyślnie</p>
                     <p>Nie udało się znaleźć wolnych zasobów aby zarezerwować ofertę</p>
+
+                    <div className='mt-4'>
+                        <Button
+                            className='mt-4'
+                            variant='contained'
+                            startIcon={<ArrowBack/>}
+                            onClick={() => navigate('/')}
+                        >
+                            Powrót do strony głównej
+                        </Button>
+                    </div>
                 </div>
             }
         </div>
