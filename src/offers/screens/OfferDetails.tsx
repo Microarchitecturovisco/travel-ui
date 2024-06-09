@@ -43,6 +43,7 @@ const OfferDetails = () => {
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
+    const [unObtrusiveLoading, setUnObtrusiveLoading] = useState(1);
 
     const [offerDetails, setOfferDetails] = useState<Offer>({
         idHotel: location.state.idHotel,
@@ -156,22 +157,22 @@ const OfferDetails = () => {
     const [detailsWebSocket, setDetailsWebSocket] = useState<WebSocket>(null);
 
     const requestOfferDetails = () => {
-        setLoading(true);
-        const searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
-
-        const requestOfferDetailsDto = {
-            idHotel: offerDetails.idHotel,
-            departurePlanes: searchParams.departurePlane ? searchParams.departurePlane.map((dpt: Location) => dpt.idLocation) : [],
-            departureBuses: searchParams.departureBus ? searchParams.departureBus.map((dpt: Location) => dpt.idLocation) : [],
-            dateFrom: formatDate(searchParams.dateFrom ? new Date(searchParams.dateFrom) : new Date()),
-            dateTo: formatDate(searchParams.dateFrom ? new Date(searchParams.dateTo) : new Date()),
-            adults: searchParams.adults,
-            teens: searchParams.teens,
-            kids: searchParams.kids,
-            infants: searchParams.infants,
-        }
-
         if (offerDetails.cateringOptions[0]) {
+            setUnObtrusiveLoading(prevState => prevState + 1);
+            const searchParams = JSON.parse(localStorage.getItem("searchParams") ?? '{}');
+
+            const requestOfferDetailsDto = {
+                idHotel: offerDetails.idHotel,
+                departurePlanes: searchParams.departurePlane ? searchParams.departurePlane.map((dpt: Location) => dpt.idLocation) : [],
+                departureBuses: searchParams.departureBus ? searchParams.departureBus.map((dpt: Location) => dpt.idLocation) : [],
+                dateFrom: formatDate(selectedDateFrom),
+                dateTo: formatDate(selectedDateTo),
+                adults: selectedGuests.adults,
+                teens: selectedGuests.teens,
+                kids: selectedGuests.kids,
+                infants: selectedGuests.infants,
+            }
+
             detailsWebSocket.send(JSON.stringify(requestOfferDetailsDto));
         }
     }
@@ -208,6 +209,7 @@ const OfferDetails = () => {
             setSelectedCatering(recvOfferDetails.cateringOptions[0]);
 
             setLoading(false);
+            setUnObtrusiveLoading(prevState => prevState - 1);
         }
 
         const priceWS = new WebSocket(`ws://${process.env.REACT_APP_API_HOSTNAME}:${process.env.REACT_APP_API_PORT}/offers/ws/offerPrice`);
@@ -250,7 +252,7 @@ const OfferDetails = () => {
 
     useEffect(() => {
         requestOfferDetails();
-    }, [selectedDateTo, selectedDateFrom]);
+    }, [selectedDateTo, selectedDateFrom, selectedGuests]);
 
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -271,9 +273,9 @@ const OfferDetails = () => {
 
     return(
         <div>
-            {loading &&
-                <div>
-                    <Box sx={{height: 5}} className='mb-7'>
+            {unObtrusiveLoading !== 0 &&
+                <div className='sticky top-0'>
+                    <Box sx={{height: 10}}>
                         <LinearProgress/>
                     </Box>
                 </div>
