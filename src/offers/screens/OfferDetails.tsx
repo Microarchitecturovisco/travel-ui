@@ -202,14 +202,21 @@ const OfferDetails = () => {
         offerDetailsWS.onmessage = (ev) => {
             const recvOfferDetails = JSON.parse(ev.data);
 
+            if (recvOfferDetails.dataGeneratorUpdate) {
+                setSnackbarMessage("Organizator wycieczek zaktualizował swoją ofertę, odświeżam aktualnie wyświetlaną wycieczkę");
+                setSnackbarOpen(true);
+            }
+
             setOfferDetails(recvOfferDetails);
             setSelectedRooms(recvOfferDetails.roomConfiguration);
             setSelectedTransport(recvOfferDetails.departure[0]);
             setSelectedReturnTransport(recvOfferDetails.departure[1]);
             setSelectedCatering(recvOfferDetails.cateringOptions[0]);
 
-            setLoading(false);
-            setUnObtrusiveLoading(prevState => prevState - 1);
+            if (!recvOfferDetails.dataGeneratorUpdate) {
+                setLoading(false);
+                setUnObtrusiveLoading(prevState => prevState - 1);
+            }
         }
 
         const priceWS = new WebSocket(`ws://${process.env.REACT_APP_API_HOSTNAME}:${process.env.REACT_APP_API_PORT}/offers/ws/offerPrice`);
