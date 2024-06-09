@@ -13,6 +13,8 @@ const Offers = () => {
 
     const [noResults, setNoResults] = useState(false);
 
+    const [error, setError] = useState(false);
+
     const [loading, setLoading] = useState(false);
 
     const searchOffers = async () => {
@@ -36,6 +38,7 @@ const Offers = () => {
             .catch(e => {
                 console.log(e);
                 setLoading(false);
+                setError(true);
             });
     }
 
@@ -77,6 +80,16 @@ const Offers = () => {
                         <p className='text-2xl'>Nie znaleziono żadnych ofert</p>
                     </div>
                     <p>Zmień parametry wyszukiwania i spróbuj ponownie...</p>
+                </div>
+            }
+
+            {error &&
+                <div className='flex flex-col gap-4 mt-4'>
+                    <div className='flex flex-row items-center gap-2'>
+                        <SentimentVeryDissatisfied style={{fontSize: 36}}/>
+                        <p className='text-2xl'>Wystąpił nieoczekiwany błąd</p>
+                    </div>
+                    <p>Spróbuj ponownie za chwilę...</p>
                 </div>
             }
         </div>
