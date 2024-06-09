@@ -7,8 +7,8 @@ export interface Offer {
     destination: Location,
     imageUrls: string[],
 
-    roomConfiguration: Room[],
-    possibleRoomConfigurations: Room[][],
+    roomConfiguration: RoomConfiguration,
+    possibleRoomConfigurations: RoomConfiguration[],
 
     cateringOptions: CateringOption[],
 
@@ -27,6 +27,11 @@ export interface Room {
     name: string,
     description: string,
     guestCapacity: number,
+}
+
+export interface RoomConfiguration {
+    rooms: Room[],
+    pricePerAdult: number,
 }
 
 export interface CateringOption {
