@@ -527,7 +527,7 @@ const OfferDetails = () => {
                                         ))}
                                     </div>
 
-                                    {finalPrice >= 0 &&
+                                    {finalPrice >= 0 && !unObtrusiveLoading &&
                                         <div className='flex flex-row gap-2'>
                                             <p>Cena:</p>
                                             <p>{finalPrice.toLocaleString().replace(',', ' ')} zł</p>
@@ -548,7 +548,7 @@ const OfferDetails = () => {
                                 selectedGuests: selectedGuests,
                                 selectedCatering: selectedCatering,
                             }}>
-                                {finalPrice >= 0 && offerDetails.price >= 0 && selectedDateTo >= selectedDateFrom &&
+                                {finalPrice >= 0 && offerDetails.price >= 0 && selectedDateTo >= selectedDateFrom && !unObtrusiveLoading &&
                                     <Button variant='contained' startIcon={<Bookmark/>}>
                                         Zarezerwuj i kup ofertę
                                     </Button>
