@@ -40,16 +40,6 @@ const TOUpdates = () => {
                 case "SingleHotel":
                     const hotelUpdate = JSON.parse(messageData);
         
-                    // Convert the updateDateTime array to a Date object
-                    hotelUpdate.updateDateTime = new Date(
-                        hotelUpdate.updateDateTime[0],
-                        hotelUpdate.updateDateTime[1] - 1, // JavaScript months are 0-based
-                        hotelUpdate.updateDateTime[2],
-                        hotelUpdate.updateDateTime[3],
-                        hotelUpdate.updateDateTime[4],
-                        hotelUpdate.updateDateTime[5]
-                    ).toISOString();
-        
                     setHotelUpdates((prevUpdates) => [hotelUpdate, ...prevUpdates]);
                     break;
                 default:
@@ -67,16 +57,6 @@ const TOUpdates = () => {
             switch (messageType) {
                 case "SingleTransport":
                     const transportUpdate = JSON.parse(messageData);
-
-                    // Convert the updateDateTime array to a Date object
-                    transportUpdate.updateDateTime = new Date(
-                        transportUpdate.updateDateTime[0],
-                        transportUpdate.updateDateTime[1] - 1, // JavaScript months are 0-based
-                        transportUpdate.updateDateTime[2],
-                        transportUpdate.updateDateTime[3],
-                        transportUpdate.updateDateTime[4],
-                        transportUpdate.updateDateTime[5]
-                    ).toISOString();
 
                     setTransportUpdates((prevUpdates) => [transportUpdate, ...prevUpdates]);
                     break;
