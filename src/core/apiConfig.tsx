@@ -4,7 +4,7 @@ export const baseAPIURL = `http://${process.env.REACT_APP_API_HOSTNAME}:${proces
 
 export const axiosInstance = axios.create({
     baseURL: baseAPIURL,
-    timeout: 10000,
+    timeout: 100000,
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json; charset=utf-8',
