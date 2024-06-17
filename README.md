@@ -1,4 +1,11 @@
-# Travel UI
+# Travel agency frontend
+
+This is a frontend for travel agency application based on microservices architecture
+which can be found [here](https://github.com/Microarchitecturovisco/travel-api) 
+
+<div align="center">
+  <img src="photos/main_view.png" width="800"/>
+</div>
 
 ## Setup
 
